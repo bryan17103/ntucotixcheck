@@ -552,6 +552,15 @@
             `;
         }
 
+        function renderRewardNames(names) {
+            if (!names || !names.length) return "—";
+        
+            return names.map(item => {
+                if (typeof item === "string") return item;
+                return item.name;
+            }).join("、");
+        }
+        
         function renderRewards(rewards) {
             if (!rewards.length) {
                 document.getElementById("reward-body").innerHTML = `
@@ -567,7 +576,7 @@
                     <td class="reward-main">${r.reward}</td>
                     <td>${renderConditionChips(r.requirement)}</td>
                     <td class="reward-count">${r.count}</td>
-                    <td class="reward-names">${r.names.length ? r.names.join("、") : "—"}</td>
+                    <td class="reward-names">${renderRewardNames(r.names)}</td>
                 </tr>
             `).join("");
         }
