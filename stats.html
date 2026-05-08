@@ -412,6 +412,78 @@
             }
         }
 
+        @media (max-width: 768px) {
+            .reward-table-scroll {
+                max-height: 430px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                padding-right: 4px;
+            }
+        
+            .reward-table {
+                table-layout: fixed;
+                width: 100%;
+                min-width: 0;
+            }
+        
+            .reward-table th {
+                height: 52px;
+                padding: 0 8px;
+                font-size: 14px;
+                line-height: 1.2;
+            }
+        
+            .reward-table td {
+                padding: 16px 8px;
+                font-size: 14px;
+                line-height: 1.45;
+            }
+        
+            .reward-table th:nth-child(1),
+            .reward-table td:nth-child(1) {
+                width: 34%;
+            }
+        
+            .reward-table th:nth-child(2),
+            .reward-table td:nth-child(2) {
+                width: 22%;
+                text-align: center;
+            }
+        
+            .reward-table th:nth-child(3),
+            .reward-table td:nth-child(3) {
+                width: 14%;
+                text-align: center;
+            }
+        
+            .reward-table th:nth-child(4),
+            .reward-table td:nth-child(4) {
+                width: 30%;
+                text-align: left;
+                word-break: break-word;
+            }
+        
+            .reward-main {
+                font-size: 15px;
+                line-height: 1.35;
+            }
+        
+            .reward-condition-chip {
+                min-height: 28px;
+                padding: 0 10px;
+                font-size: 12px;
+            }
+        
+            .reward-count {
+                font-size: 15px;
+            }
+        
+            .reward-names {
+                font-size: 13px;
+                line-height: 1.5;
+            }
+        }
+        
         .chart-wrap {
             width: 100%;
             max-width: 360px;
