@@ -328,16 +328,16 @@
             background: #fff;
             border: 1.5px solid #e8e8e8;
             border-radius: 24px;
-            padding: 18px 24px;
+            padding: 16px 22px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            min-height: 120px;
+            min-height: 100px;
         }
 
         .summary-label {
             font-size: 14px;
             color: #777;
             font-weight: 800;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
             line-height: 1;
         }
 
@@ -345,9 +345,7 @@
             font-size: 20px;
             font-weight: 900;
             line-height: 1.18;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
+            display: block;
         }
 
         .summary-line {
@@ -358,7 +356,7 @@
             font-size: 20px;
             font-weight: 900;
             color: #276fb7;
-            line-height: 1.18;
+            line-height: 1.05;
             display: flex;
             flex-direction: column;
             gap: 2px;
@@ -369,18 +367,17 @@
         }
         
         .ticket-stats-points {
-            margin-top: 0;
+            margin-top: 1px;
             font-size: 20px;
             line-height: 1.18;
             white-space: nowrap;
         }
 
-        .summary-paid {
-            color: #307550;
-        }
-        
-        .summary-unpaid {
-            color: #d86b43;
+        .summary-line,
+        .ticket-stats-row,
+        .ticket-stats-points {
+            margin: 0;
+            padding: 0;
         }
         
         @media (max-width: 980px) {
@@ -421,16 +418,16 @@
             <div class="summary-card">
                 <div class="summary-label">金額</div>
                 <div class="summary-value">
-                    <div class="summary-line summary-paid"> 已付：<span id="paid-amount">$0</span> </div>
-                    <div class="summary-line summary-unpaid"> 未付：<span id="unpaid-amount">$0</span> </div>
+                    <div class="summary-line"> 已付：<span id="paid-amount">$0</span> </div>
+                    <div class="summary-line"> 未付：<span id="unpaid-amount">$0</span> </div>
                 </div>
             </div>
         
             <div class="summary-card">
                 <div class="summary-label">票數</div>
                 <div class="summary-value">
-                    <div class="summary-line summary-paid"> 已取：<span id="picked-count">0</span>張 </div>
-                    <div class="summary-line summary-unpaid"> 未取：<span id="unpicked-count">0</span>張 </div>
+                    <div class="summary-line"> 已取：<span id="picked-count">0</span>張 </div>
+                    <div class="summary-line"> 未取：<span id="unpicked-count">0</span>張 </div>
                 </div>
             </div>
         
