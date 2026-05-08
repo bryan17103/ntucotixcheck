@@ -110,6 +110,7 @@
             overflow-x: hidden;
             min-height: 0;
             border-radius: 14px;
+            padding-right: 8px;
         }
         
         .hero-label {
@@ -340,26 +341,33 @@
             border-collapse: collapse;
         }
         
+        .reward-table th,
+        .reward-table td {
+            vertical-align: middle;
+        }
+        
         .reward-table th:nth-child(1),
         .reward-table td:nth-child(1) {
-            width: 200px;
+            width: 42%;
+            text-align: left;
         }
         
         .reward-table th:nth-child(2),
         .reward-table td:nth-child(2) {
-            width: 140px;
+            width: 18%;
             text-align: center;
         }
         
         .reward-table th:nth-child(3),
         .reward-table td:nth-child(3) {
-            width: 80px;
+            width: 12%;
             text-align: center;
         }
         
         .reward-table th:nth-child(4),
         .reward-table td:nth-child(4) {
-            width: auto;
+            width: 28%;
+            text-align: left;
             word-break: break-word;
             line-height: 1.5;
         }
