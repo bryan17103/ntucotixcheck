@@ -476,6 +476,10 @@
             let unpaidAmount = 0;
             let pickedCount = 0;
             let unpickedCount = 0;
+            let count500 = 0;
+            let count300 = 0;
+            let count200 = 0;
+            let totalPoints = 0;
 
             for (const order of orders) {
                 const price = Number(order.price || 0);
@@ -498,6 +502,14 @@
             document.getElementById("unpaid-amount").textContent = formatMoney(unpaidAmount);
             document.getElementById("picked-count").textContent = pickedCount;
             document.getElementById("unpicked-count").textContent = unpickedCount;
+            document.getElementById("count-500").textContent = count500;
+            document.getElementById("count-300").textContent = count300;
+            document.getElementById("count-200").textContent = count200;
+            
+            document.getElementById("total-points").textContent =
+                Number.isInteger(totalPoints)
+                    ? totalPoints
+                    : totalPoints.toFixed(1);
         }
 
         function renderOrdersTable(orders) {
