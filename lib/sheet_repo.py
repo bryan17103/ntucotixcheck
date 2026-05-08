@@ -646,9 +646,26 @@ def load_stats_config():
                 config["target_tickets"] = int(float(condition_text))
             except Exception:
                 config["target_tickets"] = 0
+            continue
+
+        if row_type == "reward":
+            try:
+                threshold = float(condition_text)
+            except Exception:
+                continue
+
+            if name and threshold > 0:
+                config["rewards"].append({
+                    "reward": name,
+                    "threshold": threshold
+                })
+
+    config["rewards"].sort(
+        key=lambda x: x["threshold"],
+        reverse=True
+    )
 
     return config
-
 
 def build_stats_summary():
     rows = get_all_records()
@@ -670,6 +687,7 @@ def build_stats_summary():
     unpicked_tickets = 0
 
     person_ticket_count = defaultdict(int)
+    person_points = defaultdict(float)
     person_points = defaultdict(float)
     section_ticket_count = defaultdict(int)
     section_members = defaultdict(lambda: defaultdict(int))
@@ -755,28 +773,26 @@ def build_stats_summary():
 
     reward_summary = []
     assigned_names = set()
-
-    for threshold, reward_name in reward_rules:
+    
+    for rule in stats_config["rewards"]:
         qualified = []
-
+        threshold = float(rule.get("threshold", 0))
+    
         for item in ranking:
             name = item["name"]
-
+    
             if name in assigned_names:
                 continue
-
+    
             total_points = person_points[name]
-
+    
             if total_points >= threshold:
-                qualified.append({
-                    "name": name,
-                    "points": format_points(total_points),
-                })
+                qualified.append(name)
                 assigned_names.add(name)
-
+    
         reward_summary.append({
-            "reward": reward_name,
-            "requirement": f"{threshold} 分",
+            "reward": rule["reward"],
+            "requirement": f"{threshold:g} 分",
             "count": len(qualified),
             "names": qualified
         })
