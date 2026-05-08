@@ -547,9 +547,10 @@ def get_section_members_rows():
         {
             "name": normalize_text(row.get("姓名")),
             "section": normalize_text(row.get("聲部")),
+            "manual_points": float(row.get("手動加分") or 0),
         }
         for row in rows
-        if normalize_text(row.get("姓名")) or normalize_text(row.get("聲部"))
+        if normalize_text(row.get("姓名")) or normalize_text(row.get("聲部")) or normalize_text(row.get("手動加分"))
     ]
 
 
@@ -567,23 +568,26 @@ def get_stats_config_rows():
         if normalize_text(row.get("類型")) or normalize_text(row.get("名稱")) or normalize_text(row.get("條件"))
     ]
 
-
 def save_section_members_rows(rows):
     ws = get_config_worksheet("section_members")
-    values = [["姓名", "聲部"]]
+    values = [["姓名", "聲部", "手動加分"]]
 
     for row in rows:
         name = normalize_text(row.get("name"))
         section = normalize_text(row.get("section"))
 
-        if not name and not section:
+        try:
+            manual_points = float(row.get("manual_points") or 0)
+        except Exception:
+            manual_points = 0
+
+        if not name and not section and manual_points == 0:
             continue
 
-        values.append([name, section])
+        values.append([name, section, manual_points])
 
     ws.clear()
     ws.update("A1", values)
-
 
 def save_stats_config_rows(rows):
     ws = get_config_worksheet("stats_config")
