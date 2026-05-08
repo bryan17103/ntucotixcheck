@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>《嶋聲》台北場訂單查詢</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body.orders-page {
             margin: 0;
@@ -49,14 +47,14 @@
         }
 
         .orders-note.main {
-          margin: 6px 0 2px;
-          font-weight: 500;
+            margin: 6px 0 2px;
+            font-weight: 500;
         }
-        
+
         .orders-note.sub {
-          font-size: 13px;
-          opacity: 0.75;
-          margin: 0;
+            font-size: 13px;
+            opacity: 0.75;
+            margin: 0;
         }
 
         .back-link-btn {
@@ -115,6 +113,72 @@
             background: #e95d31;
         }
 
+        .orders-summary-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.45fr;
+            gap: 18px;
+            margin-bottom: 22px;
+        }
+
+        .summary-card {
+            background: #fff;
+            border: 1.5px solid #e8e8e8;
+            border-radius: 24px;
+            padding: 16px 22px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            min-height: 100px;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: #777;
+            font-weight: 800;
+            margin-bottom: 6px;
+            line-height: 1;
+        }
+
+        .summary-value {
+            font-size: 18px;
+            font-weight: 900;
+            line-height: 1.25;
+            display: block;
+        }
+
+        .summary-line {
+            color: #276fb7;
+            white-space: nowrap;
+            margin: 0;
+            padding: 0;
+        }
+
+        .ticket-stats-value {
+            font-size: 18px;
+            font-weight: 900;
+            color: #276fb7;
+            line-height: 1.25;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .ticket-stats-row,
+        .ticket-stats-points {
+            white-space: nowrap;
+            margin: 0;
+            padding: 0;
+        }
+
+        .ticket-stats-points {
+            font-size: 18px;
+            line-height: 1.25;
+        }
+
+        #manual-points-note {
+            font-size: 13px;
+            font-weight: 700;
+            color: #777;
+        }
+
         .orders-table-card {
             border: 1.5px solid #e8e8e8;
             border-radius: 26px;
@@ -142,6 +206,7 @@
             padding: 16px 16px;
             border-bottom: 1px solid #ececec;
             white-space: nowrap;
+            letter-spacing: 0.5px;
         }
 
         .orders-table tbody td {
@@ -151,17 +216,7 @@
             text-align: center;
             font-size: 15px;
         }
-        
-        .orders-table th {
-          text-align: center;
-          font-weight: 600;
-          letter-spacing: 0.5px;
-        }
-        
-        .orders-table td {
-          text-align: center;
-        }
-        
+
         .orders-table tbody tr:last-child td {
             border-bottom: none;
             min-height: 88px;
@@ -169,10 +224,10 @@
 
         .orders-table th:nth-child(1),
         .orders-table td:nth-child(1) { width: 160px; }
-        
+
         .orders-table th:nth-child(2),
         .orders-table td:nth-child(2) { width: 110px; }
-        
+
         .orders-table th:nth-child(3),
         .orders-table td:nth-child(3) {
             width: 180px;
@@ -180,20 +235,23 @@
             word-break: break-word;
             line-height: 1.5;
         }
-        
+
         .orders-table th:nth-child(4),
         .orders-table td:nth-child(4) { width: 90px; }
-        
-        .orders-table th:nth-child(5) { width: 360px;}
-        
-        .orders-table td:nth-child(5) { width: 360px; text-align: left;}
-        
+
+        .orders-table th:nth-child(5) { width: 360px; }
+
+        .orders-table td:nth-child(5) {
+            width: 360px;
+            text-align: left;
+        }
+
         .orders-table th:nth-child(6),
         .orders-table td:nth-child(6) {
             width: 160px;
             text-align: center;
         }
-        
+
         .orders-table th:nth-child(7),
         .orders-table td:nth-child(7) {
             width: 210px;
@@ -295,6 +353,7 @@
             cursor: default;
             white-space: nowrap;
         }
+
         .pickup-pill.closed {
             background: #eeeeee;
             color: #8f8f8f;
@@ -317,72 +376,6 @@
             padding: 32px 20px;
         }
 
-        .orders-summary-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1.45fr;
-            gap: 18px;
-            margin-bottom: 22px;
-        }
-
-        .summary-card {
-            background: #fff;
-            border: 1.5px solid #e8e8e8;
-            border-radius: 24px;
-            padding: 16px 22px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            min-height: 100px;
-        }
-
-        .summary-label {
-            font-size: 14px;
-            color: #777;
-            font-weight: 800;
-            margin-bottom: 6px;
-            line-height: 1;
-        }
-
-        .summary-value {
-            font-size: 18px;
-            font-weight: 900;
-            line-height: 1.25;
-            display: block;
-        }
-
-        .summary-line {
-            color: #276fb7;
-            white-space: nowrap;
-            margin: 0;
-            padding: 0;
-        }
-
-        .ticket-stats-value {
-            font-size: 18px;
-            font-weight: 900;
-            color: #276fb7;
-            line-height: 1.25;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        
-        .ticket-stats-row {
-            white-space: nowrap;
-        }
-        
-        .ticket-stats-points {
-            margin-top: 4px;
-            font-size: 18px;
-            line-height: 1.25;
-            white-space: nowrap;
-        }
-
-        .summary-line,
-        .ticket-stats-row,
-        .ticket-stats-points {
-            margin: 0;
-            padding: 0;
-        }
-        
         @media (max-width: 980px) {
             .orders-summary-grid {
                 grid-template-columns: 1fr;
@@ -390,6 +383,7 @@
         }
     </style>
 </head>
+
 <body class="orders-page">
     <div class="orders-shell">
         <div class="orders-topbar">
@@ -399,7 +393,7 @@
                     票務每天晚上都會上來鎖定，鎖定後即無法刪除！
                 </p>
                 <p class="orders-note sub">
-                   目前僅能刪除整筆訂單，若需更改位子請整筆刪除後重新下單～
+                    目前僅能刪除整筆訂單，若需更改位子請整筆刪除後重新下單～
                 </p>
             </div>
             <a href="/" class="back-link-btn">回到選位頁</a>
@@ -421,26 +415,29 @@
             <div class="summary-card">
                 <div class="summary-label">金額</div>
                 <div class="summary-value">
-                    <div class="summary-line"> 已付：<span id="paid-amount">$0</span> </div>
-                    <div class="summary-line"> 未付：<span id="unpaid-amount">$0</span> </div>
+                    <div class="summary-line">已付：<span id="paid-amount">$0</span></div>
+                    <div class="summary-line">未付：<span id="unpaid-amount">$0</span></div>
                 </div>
             </div>
-        
+
             <div class="summary-card">
                 <div class="summary-label">票數</div>
                 <div class="summary-value">
-                    <div class="summary-line"> 已取：<span id="picked-count">0</span> 張</div>
-                    <div class="summary-line"> 未取：<span id="unpicked-count">0</span> 張</div>
+                    <div class="summary-line">已取：<span id="picked-count">0</span> 張</div>
+                    <div class="summary-line">未取：<span id="unpicked-count">0</span> 張</div>
                 </div>
             </div>
-        
+
             <div class="summary-card">
                 <div class="summary-label">推票統計</div>
                 <div class="ticket-stats-value">
                     <div class="ticket-stats-row">
                         500元：<span id="count-500">0</span>｜300元：<span id="count-300">0</span>｜200元：<span id="count-200">0</span>
                     </div>
-                    <div class="ticket-stats-points"> 累積推票積分： <span id="total-points">0</span> <span id="manual-points-note"></span> </div>
+                    <div class="ticket-stats-points">
+                        累積推票積分：<span id="total-points">0</span>
+                        <span id="manual-points-note"></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -481,6 +478,21 @@
                 .replaceAll("'", "&#039;");
         }
 
+        function formatNumber(value) {
+            const num = Number(value || 0);
+            return Number.isInteger(num) ? String(num) : num.toFixed(1);
+        }
+
+        function formatMoney(value) {
+            return `$${Number(value || 0).toLocaleString()}`;
+        }
+
+        function pickupClass(order) {
+            if (order.picked_up) return "done";
+            if (order.pickup_open) return "open";
+            return "closed";
+        }
+
         function pickupStatusHtml(order) {
             const paymentText = order.payment_done ? "已付款" : "未付款";
 
@@ -494,68 +506,71 @@
             return `<button class="pickup-pill ${pickupClass(order)}" type="button">${paymentText}｜${pickupText}</button>`;
         }
 
-        function pickupClass(order) {
-            if (order.picked_up) return "done";
-            if (order.pickup_open) return "open";
-            return "closed";
-        }
-
-        function formatMoney(value) {
-            return `$${value.toLocaleString()}`;
+        function priceToPoint(unitPrice) {
+            if (unitPrice === 500 || unitPrice === 400) return 3;
+            if (unitPrice === 300 || unitPrice === 240) return 1.5;
+            if (unitPrice === 200 || unitPrice === 160) return 1;
+            return 0;
         }
 
         function updateOrdersSummary(orders) {
+            orders = Array.isArray(orders) ? orders : [];
+
             let paidAmount = 0;
             let unpaidAmount = 0;
             let pickedCount = 0;
             let unpickedCount = 0;
-        
+
             let count500 = 0;
             let count300 = 0;
             let count200 = 0;
-            let totalPoints = 0;
-        
+            let basePoints = 0;
+
             for (const order of orders) {
                 const price = Number(order.price || 0);
-                const seatCount = Array.isArray(order.seats) ? order.seats.length : 0;
+                const seats = Array.isArray(order.seats) ? order.seats : [];
+                const seatCount = seats.length;
                 const unitPrice = seatCount > 0 ? price / seatCount : price;
-        
+
                 if (order.payment_done) {
                     paidAmount += price;
                 } else {
                     unpaidAmount += price;
                 }
-        
+
                 if (order.picked_up) {
                     pickedCount += seatCount;
                 } else {
                     unpickedCount += seatCount;
                 }
-        
+
                 if (unitPrice === 500 || unitPrice === 400) {
                     count500 += seatCount;
-                    totalPoints += seatCount * 3;
                 } else if (unitPrice === 300 || unitPrice === 240) {
                     count300 += seatCount;
-                    totalPoints += seatCount * 1.5;
                 } else if (unitPrice === 200 || unitPrice === 160) {
                     count200 += seatCount;
-                    totalPoints += seatCount * 1;
                 }
+
+                basePoints += seatCount * priceToPoint(unitPrice);
             }
-        
+
             document.getElementById("paid-amount").textContent = formatMoney(paidAmount);
             document.getElementById("unpaid-amount").textContent = formatMoney(unpaidAmount);
             document.getElementById("picked-count").textContent = pickedCount;
             document.getElementById("unpicked-count").textContent = unpickedCount;
-        
+
             document.getElementById("count-500").textContent = count500;
             document.getElementById("count-300").textContent = count300;
             document.getElementById("count-200").textContent = count200;
-        
+
+            document.getElementById("total-points").textContent = formatNumber(basePoints);
+            document.getElementById("manual-points-note").textContent = "";
         }
 
         function renderOrdersTable(orders) {
+            orders = Array.isArray(orders) ? orders : [];
+
             const tbody = document.getElementById("orders-tbody");
             if (!tbody) return;
 
@@ -569,89 +584,96 @@
                 return;
             }
 
-            tbody.innerHTML = orders.map(order => `
-                <tr>
-                    <td class="order-strong">${escapeHtml(order.datetime)}</td>
-                    <td class="order-strong">${escapeHtml(order.floor)}${escapeHtml(order.row_label)}排</td>
-                    <td class="order-strong">${order.seats.map(seat => `${seat}`).join("、")}</td>
-                    <td class="order-strong">$${order.price}</td>
-                    <td>
-                        <div class="note-wrap">
-                            <input
-                                id="note-${escapeHtml(order.order_id)}"
-                                class="note-input"
-                                type="text"
-                                value="${escapeHtml(order.note || "")}"
-                                placeholder="自行輸入備註"
-                            />
-                            <button class="save-btn" type="button" onclick="saveNote('${escapeHtml(order.order_id)}')">
-                                儲存
-                            </button>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="cell-center">
-                            ${
-                                order.order_status === "locked"
-                                    ? `<button class="delete-btn locked" type="button" disabled title="已鎖定！">已鎖定！</button>`
-                                    : `<button class="delete-btn" type="button" onclick="deleteOrder('${escapeHtml(order.order_id)}')">刪除</button>`
-                            }
-                        </div>
-                    </td>
-                    <td>
-                        <div class="cell-center">
-                            ${pickupStatusHtml(order)}
-                        </div>
-                    </td>
-                </tr>
-            `).join("");
+            tbody.innerHTML = orders.map(order => {
+                const seats = Array.isArray(order.seats) ? order.seats : [];
+
+                return `
+                    <tr>
+                        <td class="order-strong">${escapeHtml(order.datetime)}</td>
+                        <td class="order-strong">${escapeHtml(order.floor)}${escapeHtml(order.row_label)}排</td>
+                        <td class="order-strong">${seats.map(seat => `${escapeHtml(seat)}`).join("、")}</td>
+                        <td class="order-strong">$${Number(order.price || 0).toLocaleString()}</td>
+                        <td>
+                            <div class="note-wrap">
+                                <input
+                                    id="note-${escapeHtml(order.order_id)}"
+                                    class="note-input"
+                                    type="text"
+                                    value="${escapeHtml(order.note || "")}"
+                                    placeholder="自行輸入備註"
+                                />
+                                <button class="save-btn" type="button" onclick="saveNote('${escapeHtml(order.order_id)}')">
+                                    儲存
+                                </button>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="cell-center">
+                                ${
+                                    order.order_status === "locked"
+                                        ? `<button class="delete-btn locked" type="button" disabled title="已鎖定！">已鎖定！</button>`
+                                        : `<button class="delete-btn" type="button" onclick="deleteOrder('${escapeHtml(order.order_id)}')">刪除</button>`
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <div class="cell-center">
+                                ${pickupStatusHtml(order)}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join("");
         }
 
         async function searchOrders() {
             const input = document.getElementById("order-name-input");
             const name = input.value.trim();
-        
+
             if (!name) {
                 alert("請輸入姓名");
                 return;
             }
-        
+
             currentSearchName = name;
-        
+
             const res = await fetch(`/api/orders?name=${encodeURIComponent(name)}`);
-            const data = await res.json();
-        
+            const raw = await res.text();
+
+            let data;
+            try {
+                data = JSON.parse(raw);
+            } catch {
+                console.log(raw);
+                alert(`查詢回傳不是 JSON：${res.status}`);
+                return;
+            }
+
             if (!res.ok || !data.success) {
                 alert(data.message || "查詢失敗");
                 return;
             }
-        
-            const orders = data.orders || [];
-        
+
+            const orders = Array.isArray(data.orders) ? data.orders : [];
+
             renderOrdersTable(orders);
             updateOrdersSummary(orders);
-        
-            const totalPoints = Number(data.total_points || 0);
-        
-            document.getElementById("total-points").textContent =
-                Number.isInteger(totalPoints)
-                    ? totalPoints
-                    : totalPoints.toFixed(1);
-        
+
+            const finalTotalPoints = Number(data.total_points || 0);
             const manualPoints = Number(data.manual_points || 0);
-        
+
+            document.getElementById("total-points").textContent = formatNumber(finalTotalPoints);
+
             document.getElementById("manual-points-note").textContent =
                 manualPoints > 0
-                    ? `（含手動加分 ${manualPoints}）`
+                    ? `（含手動加分 ${formatNumber(manualPoints)}）`
                     : "";
         }
 
         async function saveNote(orderId) {
-            console.log("DEBUG saveNote orderId =", orderId);
-        
             const input = document.getElementById(`note-${orderId}`);
             const note = input ? input.value.trim() : "";
-        
+
             const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}/note`, {
                 method: "PATCH",
                 headers: {
@@ -659,25 +681,24 @@
                 },
                 body: JSON.stringify({ note })
             });
-        
+
             const raw = await res.text();
-            console.log("DEBUG saveNote status =", res.status);
-            console.log("DEBUG saveNote raw =", raw);
-        
+
             let data = {};
             try {
                 data = JSON.parse(raw);
-            } catch (e) {
+            } catch {
                 alert(`回傳不是 JSON：${raw}`);
                 return;
             }
-        
+
             if (!res.ok || !data.success) {
                 alert(data.message || "更新失敗");
                 return;
             }
-        
+
             alert("備註已更新");
+
             if (currentSearchName) {
                 searchOrders();
             }
@@ -687,11 +708,19 @@
             const ok = confirm("確定要刪除這筆訂單嗎？刪除後座位會重新釋出。");
             if (!ok) return;
 
-            const res = await fetch(`/api/orders/${orderId}`, {
+            const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}`, {
                 method: "DELETE"
             });
 
-            const data = await res.json();
+            const raw = await res.text();
+
+            let data = {};
+            try {
+                data = JSON.parse(raw);
+            } catch {
+                alert(`回傳不是 JSON：${raw}`);
+                return;
+            }
 
             if (!res.ok || !data.success) {
                 alert(data.message || "刪除失敗");
@@ -699,6 +728,7 @@
             }
 
             alert(data.message || "刪除成功");
+
             if (currentSearchName) {
                 searchOrders();
             }
