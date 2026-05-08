@@ -553,12 +553,6 @@
             document.getElementById("count-300").textContent = count300;
             document.getElementById("count-200").textContent = count200;
         
-            const totalPoints = Number(data.total_points || 0);
-            
-            document.getElementById("total-points").textContent =
-                Number.isInteger(totalPoints)
-                    ? totalPoints
-                    : totalPoints.toFixed(1);
         }
 
         function renderOrdersTable(orders) {
