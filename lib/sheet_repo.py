@@ -262,6 +262,15 @@ def group_order_rows(rows: List[dict]) -> List[dict]:
 
     return results
 
+def get_manual_points(name: str) -> float:
+    member_map = load_section_members()
+
+    info = member_map.get(name)
+
+    if not info:
+        return 0
+
+    return float(info.get("manual_points", 0))
 
 def get_orders_by_name(name: str) -> List[dict]:
     target = normalize_text(name)
@@ -273,7 +282,23 @@ def get_orders_by_name(name: str) -> List[dict]:
         if normalize_text(row.get("名字")) == target
     ]
 
-    return group_order_rows(rows)
+    orders = group_order_rows(rows)
+    manual_points = get_manual_points(target)
+    base_points = 0
+    
+    for order in orders:
+        seat_count = len(order.get("seats", []))
+        total_price = normalize_int(order.get("price")) or 0
+    
+        unit_price = total_price / seat_count if seat_count else total_price
+    
+        base_points += seat_count * price_to_points(unit_price)
+    
+    return {
+        "orders": orders,
+        "manual_points": manual_points,
+        "total_points": base_points + manual_points,
+    }
 
 
 def admin_search_orders(keyword: str) -> List[dict]:
