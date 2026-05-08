@@ -334,6 +334,36 @@
             font-size: 14px;
         }
 
+        .reward-table {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+        }
+        
+        .reward-table th:nth-child(1),
+        .reward-table td:nth-child(1) {
+            width: 260px;
+        }
+        
+        .reward-table th:nth-child(2),
+        .reward-table td:nth-child(2) {
+            width: 140px;
+            text-align: center;
+        }
+        
+        .reward-table th:nth-child(3),
+        .reward-table td:nth-child(3) {
+            width: 80px;
+            text-align: center;
+        }
+        
+        .reward-table th:nth-child(4),
+        .reward-table td:nth-child(4) {
+            width: auto;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+        
         @media (max-width: 1280px) {
             .panel-grid {
                 grid-template-columns: 1fr;
@@ -417,7 +447,7 @@
         <div class="panel-card">
             <div class="card-title">推票獎勵統計</div>
             <div class="reward-table-scroll">
-                <table>
+                <table class="reward-table">
                     <thead>
                         <tr>
                             <th>獎勵</th>
