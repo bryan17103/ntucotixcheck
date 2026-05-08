@@ -516,7 +516,7 @@ def admin_delete_order(order_id: str):
 # ===== config sheets for edit page =====
 def get_section_members_rows():
     ws = get_config_worksheet("section_members")
-    rows = ws.get_all_records(expected_headers=["姓名", "聲部"])
+    rows = ws.get_all_records(expected_headers=["姓名", "聲部", "手動加分"])
 
     return [
         {
@@ -583,7 +583,7 @@ def load_section_members():
 
     try:
         ws = get_config_worksheet("section_members")
-        rows = ws.get_all_records(expected_headers=["姓名", "聲部"])
+        rows = ws.get_all_records(expected_headers=["姓名", "聲部", "手動加分"])
     except Exception:
         return member_to_section
 
@@ -591,11 +591,18 @@ def load_section_members():
         name = normalize_text(row.get("姓名"))
         section = normalize_text(row.get("聲部"))
 
+        try:
+            manual_points = float(row.get("手動加分") or 0)
+        except Exception:
+            manual_points = 0
+
         if name and section:
-            member_to_section[name] = section
+            member_to_section[name] = {
+                "section": section,
+                "manual_points": manual_points,
+            }
 
     return member_to_section
-
 
 # ===== stats / points reward system =====
 def price_to_reward_zone(price: int) -> str:
@@ -722,7 +729,12 @@ def build_stats_summary():
         person_ticket_count[name] += 1
         person_points[name] += price_to_points(price)
 
-        section = member_to_section.get(name, "未分類")
+        member_info = member_to_section.get(name, {
+            "section": "未分類",
+            "manual_bonus": 0
+        })
+        
+        section = member_info["section"]
         section_ticket_count[section] += 1
         section_members[section][name] += 1
 
@@ -733,11 +745,17 @@ def build_stats_summary():
         elif section == "未分類":
             other_source_count += 1
 
+    for name, info in member_to_section.items():
+        manual_points = info.get("manual_points", 0)
+    
+        if manual_points > 0:
+            person_points[name] += manual_points
+    
     ranking = sorted(
         [
             {
                 "name": name,
-                "section": member_to_section.get(name, "未分類"),
+                "section": member_to_section.get(name, {}).get("section", "未分類"),
                 "tickets": count,
                 "points": person_points[name],
             }
