@@ -688,7 +688,6 @@ def build_stats_summary():
 
     person_ticket_count = defaultdict(int)
     person_points = defaultdict(float)
-    person_points = defaultdict(float)
     section_ticket_count = defaultdict(int)
     section_members = defaultdict(lambda: defaultdict(int))
 
@@ -761,15 +760,6 @@ def build_stats_summary():
             "subtotal": section_ticket_count.get(section, 0),
             "members": member_list
         })
-
-    reward_rules = [
-        (40, "免費慶功宴"),
-        (30, "7折慶功宴"),
-        (20, "USB"),
-        (15, "飲料"),
-        (10, "折抵"),
-        (5, "文宣品"),
-    ]
 
     reward_summary = []
     assigned_names = set()
