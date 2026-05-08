@@ -85,6 +85,25 @@
             padding: 20px;
         }
 
+        .panel-card {
+            height: 520px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .panel-card table {
+            flex: 1;
+        }
+
+        .ranking-table-scroll {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            min-height: 0;
+            border-radius: 14px;
+        }
+        
         .hero-label {
             font-size: 14px;
             color: #7a7a7a;
@@ -118,6 +137,7 @@
             grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
             gap: 18px;
             margin-bottom: 24px;
+            align-items: stretch;
         }
 
         .card-title {
@@ -362,17 +382,19 @@
         <div class="panel-grid">
             <div class="panel-card">
                 <div class="card-title">個人推票排行榜</div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>排名</th>
-                            <th>姓名</th>
-                            <th>聲部</th>
-                            <th>推票數</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ranking-body"></tbody>
-                </table>
+                <div class="ranking-table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>排名</th>
+                                <th>姓名</th>
+                                <th>聲部</th>
+                                <th>推票數</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ranking-body"></tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="panel-card">
