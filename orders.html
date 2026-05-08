@@ -616,25 +616,40 @@
         async function searchOrders() {
             const input = document.getElementById("order-name-input");
             const name = input.value.trim();
-
+        
             if (!name) {
                 alert("請輸入姓名");
                 return;
             }
-
+        
             currentSearchName = name;
-
+        
             const res = await fetch(`/api/orders?name=${encodeURIComponent(name)}`);
             const data = await res.json();
-
+        
             if (!res.ok || !data.success) {
                 alert(data.message || "查詢失敗");
                 return;
             }
-
+        
             const orders = data.orders || [];
+        
             renderOrdersTable(orders);
             updateOrdersSummary(orders);
+        
+            const totalPoints = Number(data.total_points || 0);
+        
+            document.getElementById("total-points").textContent =
+                Number.isInteger(totalPoints)
+                    ? totalPoints
+                    : totalPoints.toFixed(1);
+        
+            const manualPoints = Number(data.manual_points || 0);
+        
+            document.getElementById("manual-points-note").textContent =
+                manualPoints > 0
+                    ? `（含手動加分 ${manualPoints}）`
+                    : "";
         }
 
         async function saveNote(orderId) {
