@@ -69,24 +69,26 @@ def api_seats():
     active_sold_keys = build_active_sold_seat_keys()
 
     result_seats = []
+
     for seat in seats:
         seat_copy = seat.copy()
         seat_id = f"{seat_copy['excel_row']}-{seat_copy['excel_col']}"
         floor = get_floor_label_from_excel_row(seat_copy["excel_row"])
-        seat_key = (floor, str(seat_copy["row_label"]), int(seat_copy["seat_number"]))
+        seat_key = (
+            floor,
+            str(seat_copy["row_label"]),
+            int(seat_copy["seat_number"])
+        )
 
         seat_copy["seat_id"] = seat_id
         seat_copy["floor"] = floor
         seat_copy["sold"] = seat_key in active_sold_keys
+
         result_seats.append(seat_copy)
 
-    result = get_orders_by_name(name)
-    
     return jsonify({
-        "success": True,
-        "orders": result["orders"],
-        "manual_points": result["manual_points"],
-        "total_points": result["total_points"],
+        "seats": result_seats,
+        "row_labels": row_labels
     })
 
 @app.route("/api/confirm", methods=["POST"])
@@ -159,9 +161,13 @@ def api_orders():
             "orders": []
         }), 400
 
+    result = get_orders_by_name(name)
+
     return jsonify({
         "success": True,
-        "orders": get_orders_by_name(name)
+        "orders": result["orders"],
+        "manual_points": result["manual_points"],
+        "total_points": result["total_points"],
     })
 
 @app.route("/api/orders/<order_id>/note", methods=["PATCH"])
