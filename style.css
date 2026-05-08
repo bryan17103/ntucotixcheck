@@ -372,6 +372,23 @@ body {
     font-size: 15px;
 }
 
+.ticket-breakdown {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #444;
+}
+
+.points-line {
+    margin-top: 12px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #2f6fb7;
+}
+
 /* 金額與按鈕 */
 #summary {
     font-size: 18px;
@@ -717,4 +734,5 @@ body {
     height: 44px;
     font-size: 15px;
   }
+    
 }
