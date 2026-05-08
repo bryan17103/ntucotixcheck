@@ -496,6 +496,19 @@
                 } else {
                     unpickedCount += seatCount;
                 }
+
+                if (price === 500 || price === 400) {
+                    count500 += 1;
+                    totalPoints += 3;
+                }
+                else if (price === 300 || price === 240) {
+                    count300 += 1;
+                    totalPoints += 1.5;
+                }
+                else if (price === 200 || price === 160) {
+                    count200 += 1;
+                    totalPoints += 1;
+                }  
             }
 
             document.getElementById("paid-amount").textContent = formatMoney(paidAmount);
