@@ -80,11 +80,14 @@ def api_seats():
         seat_copy["sold"] = seat_key in active_sold_keys
         result_seats.append(seat_copy)
 
+    result = get_orders_by_name(name)
+    
     return jsonify({
-        "seats": result_seats,
-        "row_labels": row_labels
+        "success": True,
+        "orders": result["orders"],
+        "manual_points": result["manual_points"],
+        "total_points": result["total_points"],
     })
-
 
 @app.route("/api/confirm", methods=["POST"])
 def api_confirm():
