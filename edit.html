@@ -103,9 +103,18 @@
 
     .table-scroll {
       overflow-x: auto;
+      overflow-y: auto;
+      max-height: 560px;
+    
       border: 1.5px solid #eee;
       border-radius: 18px;
       background: #fff;
+    }
+
+    .edit-table thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
     }
 
     table.edit-table {
