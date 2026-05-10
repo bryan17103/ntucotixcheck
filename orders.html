@@ -4,515 +4,23 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>《嶋聲》台北場訂單查詢</title>
-    <style>
-        * { box-sizing: border-box; }
-
-        body.orders-page {
-            margin: 0;
-            font-family: Arial, "Noto Sans TC", sans-serif;
-            background: linear-gradient(135deg, #0f3b3a, #4b1f11);
-            min-height: 100vh;
-            padding: 12px;
-        }
-
-        .orders-shell {
-            background: rgba(255, 255, 255, 0.96);
-            border-radius: 28px;
-            padding: 24px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-            min-height: calc(100vh - 24px);
-        }
-
-        .orders-topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 16px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .orders-title-wrap h1 {
-            margin: 0;
-            font-size: 24px;
-            color: #222;
-            font-weight: 800;
-        }
-
-        .orders-title-wrap p {
-            margin: 8px 0 0 0;
-            color: #7a7a7a;
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        .orders-note.main {
-            margin: 6px 0 2px;
-            font-weight: 500;
-        }
-
-        .orders-note.sub {
-            font-size: 13px;
-            opacity: 0.75;
-            margin: 0;
-        }
-
-        .back-link-btn {
-            height: 44px;
-            padding: 0 20px;
-            border-radius: 16px;
-            border: 2px solid #dddddd;
-            background: #fff;
-            color: #4a4a4a;
-            font-size: 15px;
-            font-weight: 700;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .orders-search-card {
-            display: flex;
-            gap: 14px;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .orders-search-input {
-            width: 410px;
-            max-width: 100%;
-            height: 46px;
-            border: 2px solid #d8d8d8;
-            border-radius: 18px;
-            padding: 0 18px;
-            font-size: 15px;
-            outline: none;
-            background: #fff;
-        }
-
-        .orders-search-input:focus {
-            border-color: #f26c41;
-            box-shadow: 0 0 0 4px rgba(242, 108, 65, 0.12);
-        }
-
-        .orders-search-btn {
-            height: 46px;
-            padding: 0 24px;
-            border: none;
-            border-radius: 18px;
-            background: #f26c41;
-            color: white;
-            font-size: 15px;
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        .orders-search-btn:hover {
-            background: #e95d31;
-        }
-
-        .orders-summary-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1.45fr;
-            gap: 18px;
-            margin-bottom: 22px;
-        }
-
-        .summary-card {
-            background: #fff;
-            border: 1.5px solid #e8e8e8;
-            border-radius: 24px;
-            padding: 16px 22px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            min-height: 100px;
-        }
-
-        .summary-label {
-            font-size: 14px;
-            color: #777;
-            font-weight: 800;
-            margin-bottom: 6px;
-            line-height: 1;
-        }
-
-        .summary-value {
-            font-size: 18px;
-            font-weight: 900;
-            line-height: 1.25;
-            display: block;
-        }
-
-        .summary-line {
-            color: #276fb7;
-            white-space: nowrap;
-            margin: 0;
-            padding: 0;
-        }
-
-        .ticket-stats-value {
-            font-size: 18px;
-            font-weight: 900;
-            color: #276fb7;
-            line-height: 1.25;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .ticket-stats-row,
-        .ticket-stats-points {
-            white-space: nowrap;
-            margin: 0;
-            padding: 0;
-        }
-
-        .ticket-stats-points {
-            font-size: 18px;
-            line-height: 1.25;
-        }
-
-        #manual-points-note {
-            font-size: 13px;
-            font-weight: 700;
-            color: #777;
-        }
-
-        .orders-table-card {
-            border: 1.5px solid #e8e8e8;
-            border-radius: 26px;
-            overflow: hidden;
-            background: #fff;
-        }
-
-        .orders-table-scroll {
-            overflow-x: auto;
-        }
-
-        table.orders-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-            min-width: 100%;
-        }
-
-        .orders-table thead th {
-            background: #fafafa;
-            color: #2f2f2f;
-            font-size: 15px;
-            font-weight: 800;
-            text-align: center;
-            padding: 16px 16px;
-            border-bottom: 1px solid #ececec;
-            white-space: nowrap;
-            letter-spacing: 0.5px;
-        }
-
-        .orders-table tbody td {
-            padding: 14px 14px;
-            border-bottom: 1px solid #efefef;
-            vertical-align: middle;
-            text-align: center;
-            font-size: 15px;
-        }
-
-        .orders-table tbody tr:last-child td {
-            border-bottom: none;
-            min-height: 88px;
-        }
-
-        .orders-table th:nth-child(1),
-        .orders-table td:nth-child(1) { width: 160px; }
-
-        .orders-table th:nth-child(2),
-        .orders-table td:nth-child(2) { width: 110px; }
-
-        .orders-table th:nth-child(3),
-        .orders-table td:nth-child(3) {
-            width: 180px;
-            white-space: normal;
-            word-break: break-word;
-            line-height: 1.5;
-        }
-
-        .orders-table th:nth-child(4),
-        .orders-table td:nth-child(4) { width: 90px; }
-
-        .orders-table th:nth-child(5) { width: 360px; }
-
-        .orders-table td:nth-child(5) {
-            width: 360px;
-            text-align: left;
-        }
-
-        .orders-table th:nth-child(6),
-        .orders-table td:nth-child(6) {
-            width: 160px;
-            text-align: center;
-        }
-
-        .orders-table th:nth-child(7),
-        .orders-table td:nth-child(7) {
-            width: 210px;
-            text-align: center;
-        }
-
-        .order-strong {
-            color: #276fb7;
-            font-weight: 800;
-        }
-
-        .note-wrap {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-        }
-
-        .note-input {
-            width: 300px;
-            max-width: 100%;
-            height: 46px;
-            border: 2px solid #d5d5d5;
-            border-radius: 18px;
-            padding: 0 18px;
-            font-size: 15px;
-            color: #444;
-            outline: none;
-            background: #fff;
-        }
-
-        .note-input:focus {
-            border-color: #f26c41;
-            box-shadow: 0 0 0 4px rgba(242, 108, 65, 0.12);
-        }
-
-        .save-btn {
-            height: 46px;
-            min-width: 90px;
-            padding: 0 22px;
-            border: none;
-            border-radius: 18px;
-            background: #f26c41;
-            color: #fff;
-            font-size: 15px;
-            font-weight: 800;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-
-        .save-btn:hover {
-            background: #e85d31;
-        }
-
-        .cell-center {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .delete-btn {
-            height: 46px;
-            min-width: 90px;
-            padding: 0 22px;
-            border: 2px solid #f0a59a;
-            border-radius: 18px;
-            background: #fff8f7;
-            color: #e45c4a;
-            font-size: 15px;
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        .delete-btn:hover {
-            background: #fff2ef;
-        }
-
-        .delete-btn.locked {
-            height: 46px;
-            min-width: 90px;
-            padding: 0 22px;
-            border: 2px solid #dddddd;
-            border-radius: 18px;
-            background: #f3f3f3;
-            color: #9a9a9a;
-            font-size: 15px;
-            font-weight: 800;
-            cursor: not-allowed;
-        }
-
-        .pickup-pill {
-            height: 58px;
-            min-width: 220px;
-            padding: 0 24px;
-            border: none;
-            border-radius: 999px;
-            font-size: 15px;
-            font-weight: 800;
-            cursor: default;
-            white-space: nowrap;
-        }
-
-        .pickup-pill.closed {
-            background: #eeeeee;
-            color: #8f8f8f;
-        }
-
-        .pickup-pill.open {
-            background: #e9f7ef;
-            color: #249167;
-        }
-
-        .pickup-pill.done {
-            background: #e7efff;
-            color: #356fcb;
-        }
-
-        .empty-state {
-            text-align: center;
-            color: #888;
-            font-size: 16px;
-            padding: 32px 20px;
-        }
-
-        .stats-help-trigger {
-            border: none;
-            background: transparent;
-            padding: 0;
-            cursor: pointer;
-            text-align: left;
-        
-            font-size: 14px;
-            font-weight: 800;
-            color: #777;
-            line-height: 1;
-        }
-        
-        .stats-help-trigger:hover {
-            color: #276fb7;
-            text-decoration: underline;
-        }
-        
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.42);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            padding: 20px;
-        }
-        
-        .modal-overlay.hidden {
-            display: none;
-        }
-        
-        .modal-card {
-            position: relative;
-            width: min(520px, 100%);
-            background: #fff;
-            border-radius: 26px;
-            padding: 28px 30px;
-            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
-            color: #333;
-            animation: modalPop 0.16s ease-out;
-        }
-        
-        .modal-card h2 {
-            margin: 0 0 14px;
-            font-size: 22px;
-            font-weight: 900;
-            color: #222;
-        }
-        
-        .modal-card p {
-            margin: 12px 0;
-            font-size: 15px;
-            line-height: 1.7;
-            color: #555;
-        }
-        
-        .points-rule-list {
-            background: #f7f9fc;
-            border: 1.5px solid #e5ecf6;
-            border-radius: 18px;
-            padding: 14px 16px;
-            margin: 14px 0;
-            display: grid;
-            gap: 8px;
-            font-size: 15px;
-            color: #276fb7;
-            font-weight: 800;
-        }
-        
-        .modal-close-btn {
-            position: absolute;
-            top: 14px;
-            right: 16px;
-            width: 34px;
-            height: 34px;
-            border: none;
-            border-radius: 50%;
-            background: #f1f1f1;
-            color: #555;
-            font-size: 24px;
-            line-height: 1;
-            cursor: pointer;
-        }
-        
-        .modal-close-btn:hover {
-            background: #e5e5e5;
-        }
-        
-        @keyframes modalPop {
-            from {
-                opacity: 0;
-                transform: translateY(8px) scale(0.98);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        @media (max-width: 980px) {
-            .orders-summary-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="/orders.css">
 </head>
 
 <body class="orders-page">
     <div class="orders-shell">
-
         <div class="orders-topbar">
             <div class="orders-title-wrap">
                 <h1>《嶋聲》團內購票訂單查詢</h1>
-
-                <p class="orders-note main">
-                    票務每天晚上都會上來鎖定，鎖定後即無法刪除！
-                </p>
-
-                <p class="orders-note sub">
-                    關於修改位置：僅能同筆訂單內單排刪除，若需更改單一位置請單排刪除後重新劃位！
-                </p>
+                <p class="orders-note main">票務每天晚上都會上來鎖定，鎖定後即無法刪除！</p>
+                <p class="orders-note sub">關於修改位置：僅能同筆訂單內單排刪除，若需更改單一位置請單排刪除後重新劃位！</p>
             </div>
-
             <a href="/" class="back-link-btn">回到選位頁</a>
         </div>
+
         <div class="orders-search-card">
-            <input
-                id="order-name-input"
-                class="orders-search-input"
-                type="text"
-                placeholder="請輸入姓名"
-            />
-            <button id="order-search-btn" class="orders-search-btn" type="button">
-                查詢
-            </button>
+            <input id="order-name-input" class="orders-search-input" type="text" placeholder="請輸入姓名" />
+            <button id="order-search-btn" class="orders-search-btn" type="button">查詢</button>
         </div>
 
         <div class="orders-summary-grid" id="orders-summary-grid">
@@ -533,17 +41,18 @@
             </div>
 
             <div class="summary-card">
-                <button class="summary-label stats-help-trigger" type="button" id="stats-help-btn"> 推票統計（點我查看說明） </button>
+                <button class="summary-label stats-help-trigger" type="button" id="stats-help-btn">推票統計（點我查看說明）</button>
                 <div class="ticket-stats-value">
-                    <div class="ticket-stats-row">
-                        500元：<span id="count-500">0</span> | 300元：<span id="count-300">0</span> | 200元：<span id="count-200">0</span>
-                    </div>
-                    <div class="ticket-stats-points">
-                        累積推票積分：<span id="total-points">0</span>
-                        <span id="manual-points-note"></span>
-                    </div>
+                    <div class="ticket-stats-row">500元：<span id="count-500">0</span> | 300元：<span id="count-300">0</span> | 200元：<span id="count-200">0</span></div>
+                    <div class="ticket-stats-points">累積推票積分：<span id="total-points">0</span> <span id="manual-points-note"></span></div>
                 </div>
             </div>
+
+            <button class="summary-card seat-map-card" type="button" id="my-seat-map-btn">
+                <div class="summary-label">查看已購買座位</div>
+                <div class="seat-map-card-main">打開座位圖</div>
+                <div class="seat-map-card-sub">依票價顏色標示你的座位</div>
+            </button>
         </div>
 
         <div class="orders-table-card">
@@ -551,19 +60,11 @@
                 <table class="orders-table">
                     <thead>
                         <tr>
-                            <th>訂單日期與時間</th>
-                            <th>排數</th>
-                            <th>座位</th>
-                            <th>票價</th>
-                            <th>備註</th>
-                            <th>刪除</th>
-                            <th>取票狀態</th>
+                            <th>訂單日期與時間</th><th>排數</th><th>座位</th><th>票價</th><th>備註</th><th>刪除</th><th>取票狀態</th>
                         </tr>
                     </thead>
                     <tbody id="orders-tbody">
-                        <tr>
-                            <td colspan="7" class="empty-state">請先輸入姓名查詢訂單</td>
-                        </tr>
+                        <tr><td colspan="7" class="empty-state">請先輸入姓名查詢訂單</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -573,358 +74,295 @@
     <div id="stats-help-modal" class="modal-overlay hidden">
         <div class="modal-card">
             <button class="modal-close-btn" type="button" id="stats-help-close">×</button>
-    
             <h2>推票獎勵說明</h2>
-    
-            <p>
-                關於台北場之推票獎勵，積分計算方式如下：
-            </p>
-    
+            <p>關於台北場之推票獎勵，積分計算方式如下：</p>
             <div class="points-rule-list">
                 <div>200 元票區 = <strong>1 分</strong></div>
                 <div>300 元票區 = <strong>1.5 分</strong></div>
                 <div>500 元票區 = <strong>3 分</strong></div>
             </div>
-    
-            <p>
-                累積推票積分為「單場」推票積分加總。
-            </p>
-    
-            <p>
-                若親友於Opentix上使用文化幣購票，請務必私訊票務協助手動加分。
-                手動加分之計算方式與上述票區積分相同。
-            </p>
+            <p>累積推票積分為「單場」推票積分加總。</p>
+            <p>若親友於 Opentix 上使用文化幣購票，請務必私訊票務協助手動加分。手動加分之計算方式與上述票區積分相同。</p>
         </div>
     </div>
-    
+
+    <div id="my-seat-map-modal" class="modal-overlay hidden">
+        <div class="modal-card my-seat-map-modal-card">
+            <button class="modal-close-btn" type="button" id="my-seat-map-close">×</button>
+            <div class="my-seat-map-header">
+                <div>
+                    <h2>已購買座位圖</h2>
+                    <p id="my-seat-map-subtitle">請先查詢訂單後查看座位圖。</p>
+                </div>
+                <div class="my-seat-legend">
+                    <span><i class="legend-dot legend-500"></i>500 元區</span>
+                    <span><i class="legend-dot legend-300"></i>300 元區</span>
+                    <span><i class="legend-dot legend-200"></i>200 元區</span>
+                </div>
+            </div>
+            <div class="my-seat-map-scroll"><div id="my-seat-map" class="my-seat-map"></div></div>
+        </div>
+    </div>
+
     <script>
         let currentSearchName = "";
+        let currentOrders = [];
+        let cachedSeatMapData = null;
+        const SECOND_FLOOR_START_ROW = 33;
 
         function escapeHtml(text) {
-            return String(text ?? "")
-                .replaceAll("&", "&amp;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll('"', "&quot;")
-                .replaceAll("'", "&#039;");
+            return String(text ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
         }
-
-        function formatNumber(value) {
-            const num = Number(value || 0);
-            return Number.isInteger(num) ? String(num) : num.toFixed(1);
-        }
-
-        function formatMoney(value) {
-            return `$${Number(value || 0).toLocaleString()}`;
-        }
-
-        function pickupClass(order) {
-            if (order.picked_up) return "done";
-            if (order.pickup_open) return "open";
-            return "closed";
-        }
-
+        function formatNumber(value) { const num = Number(value || 0); return Number.isInteger(num) ? String(num) : num.toFixed(1); }
+        function formatMoney(value) { return `$${Number(value || 0).toLocaleString()}`; }
+        function pickupClass(order) { if (order.picked_up) return "done"; if (order.pickup_open) return "open"; return "closed"; }
         function pickupStatusHtml(order) {
             const paymentText = order.payment_done ? "已付款" : "未付款";
-
             let pickupText = "尚未開放取票";
-            if (order.picked_up) {
-                pickupText = "已取票";
-            } else if (order.pickup_open) {
-                pickupText = "已開放取票";
-            }
-
+            if (order.picked_up) pickupText = "已取票";
+            else if (order.pickup_open) pickupText = "已開放取票";
             return `<button class="pickup-pill ${pickupClass(order)}" type="button">${paymentText}｜${pickupText}</button>`;
         }
-
-        function priceToPoint(unitPrice) {
-            if (unitPrice === 500 || unitPrice === 400) return 3;
-            if (unitPrice === 300 || unitPrice === 240) return 1.5;
-            if (unitPrice === 200 || unitPrice === 160) return 1;
-            return 0;
+        function orderNoteInputId(order) { return `note-${order.order_id}-${order.floor}-${order.row_label}`; }
+        function makeSeatKey(floor, rowLabel, seatNumber) { return `${String(floor || "").trim()}|${String(rowLabel || "").trim()}|${Number(seatNumber)}`; }
+        function floorFromSeat(seat) { return seat.floor || (Number(seat.excel_row) >= SECOND_FLOOR_START_ROW ? "2樓" : "1樓"); }
+        function normalizePriceZone(price) {
+            const value = Number(price || 0);
+            if (value === 500 || value === 400) return "500";
+            if (value === 300 || value === 240) return "300";
+            if (value === 200 || value === 160) return "200";
+            return "";
         }
 
         function updateOrdersSummary(orders) {
             orders = Array.isArray(orders) ? orders : [];
-        
-            let paidAmount = 0;
-            let unpaidAmount = 0;
-            let pickedCount = 0;
-            let unpickedCount = 0;
-        
-            let count500 = 0;
-            let count300 = 0;
-            let count200 = 0;
-            let basePoints = 0;
-        
+            let paidAmount = 0, unpaidAmount = 0, pickedCount = 0, unpickedCount = 0;
+            let count500 = 0, count300 = 0, count200 = 0, basePoints = 0;
             for (const order of orders) {
                 const price = Number(order.price || 0);
                 const seats = Array.isArray(order.seats) ? order.seats : [];
                 const seatCount = seats.length;
-        
-                if (order.payment_done) {
-                    paidAmount += price;
-                } else {
-                    unpaidAmount += price;
-                }
-        
-                if (order.picked_up) {
-                    pickedCount += seatCount;
-                } else {
-                    unpickedCount += seatCount;
-                }
-        
+                if (order.payment_done) paidAmount += price; else unpaidAmount += price;
+                if (order.picked_up) pickedCount += seatCount; else unpickedCount += seatCount;
                 const priceCounts = order.price_counts || {};
-        
-                let c500 = Number(priceCounts["500"] || 0);
-                let c300 = Number(priceCounts["300"] || 0);
-                let c200 = Number(priceCounts["200"] || 0);
-        
-                // fallback：如果後端還沒給 price_counts，才用平均票價推估
+                let c500 = Number(priceCounts["500"] || 0), c300 = Number(priceCounts["300"] || 0), c200 = Number(priceCounts["200"] || 0);
                 if (c500 + c300 + c200 === 0 && seatCount > 0) {
                     const unitPrice = price / seatCount;
-        
-                    if (unitPrice === 500 || unitPrice === 400) {
-                        c500 = seatCount;
-                    } else if (unitPrice === 300 || unitPrice === 240) {
-                        c300 = seatCount;
-                    } else if (unitPrice === 200 || unitPrice === 160) {
-                        c200 = seatCount;
-                    }
+                    if (unitPrice === 500 || unitPrice === 400) c500 = seatCount;
+                    else if (unitPrice === 300 || unitPrice === 240) c300 = seatCount;
+                    else if (unitPrice === 200 || unitPrice === 160) c200 = seatCount;
                 }
-        
-                count500 += c500;
-                count300 += c300;
-                count200 += c200;
-        
+                count500 += c500; count300 += c300; count200 += c200;
                 basePoints += c500 * 3 + c300 * 1.5 + c200 * 1;
             }
-        
             document.getElementById("paid-amount").textContent = formatMoney(paidAmount);
             document.getElementById("unpaid-amount").textContent = formatMoney(unpaidAmount);
             document.getElementById("picked-count").textContent = pickedCount;
             document.getElementById("unpicked-count").textContent = unpickedCount;
-        
             document.getElementById("count-500").textContent = count500;
             document.getElementById("count-300").textContent = count300;
             document.getElementById("count-200").textContent = count200;
-        
             document.getElementById("total-points").textContent = formatNumber(basePoints);
             document.getElementById("manual-points-note").textContent = "";
         }
+
         function renderOrdersTable(orders) {
             orders = Array.isArray(orders) ? orders : [];
-
             const tbody = document.getElementById("orders-tbody");
             if (!tbody) return;
-
             if (!orders.length) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="7" class="empty-state">查無資料</td>
-                    </tr>
-                `;
+                tbody.innerHTML = `<tr><td colspan="7" class="empty-state">查無資料</td></tr>`;
                 updateOrdersSummary([]);
                 return;
             }
-
             tbody.innerHTML = orders.map(order => {
                 const seats = Array.isArray(order.seats) ? order.seats : [];
-
+                const noteInputId = orderNoteInputId(order);
                 return `
                     <tr>
                         <td class="order-strong">${escapeHtml(order.datetime)}</td>
                         <td class="order-strong">${escapeHtml(order.floor)}${escapeHtml(order.row_label)}排</td>
                         <td class="order-strong">${seats.map(seat => `${escapeHtml(seat)}`).join("、")}</td>
                         <td class="order-strong">$${Number(order.price || 0).toLocaleString()}</td>
-                        <td>
-                            <div class="note-wrap">
-                                <input
-                                    id="note-${escapeHtml(order.order_id)}"
-                                    class="note-input"
-                                    type="text"
-                                    value="${escapeHtml(order.note || "")}"
-                                    placeholder="自行輸入備註"
-                                />
-                                <button class="save-btn" type="button" onclick="saveNote('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">
-                                    儲存
-                                </button>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="cell-center">
-                                ${
-                                    order.order_status === "locked"
-                                        ? `<button class="delete-btn locked" type="button" disabled title="已鎖定！">已鎖定！</button>`
-                                        : `<button class="delete-btn" type="button" onclick="deleteOrder('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">刪除</button>`
-                                }
-                            </div>
-                        </td>
-                        <td>
-                            <div class="cell-center">
-                                ${pickupStatusHtml(order)}
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                        <td><div class="note-wrap"><input id="${escapeHtml(noteInputId)}" class="note-input" type="text" value="${escapeHtml(order.note || "")}" placeholder="自行輸入備註" /><button class="save-btn" type="button" onclick="saveNote('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">儲存</button></div></td>
+                        <td><div class="cell-center">${order.order_status === "locked" ? `<button class="delete-btn locked" type="button" disabled title="已鎖定！">已鎖定！</button>` : `<button class="delete-btn" type="button" onclick="deleteOrder('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">刪除</button>`}</div></td>
+                        <td><div class="cell-center">${pickupStatusHtml(order)}</div></td>
+                    </tr>`;
             }).join("");
         }
 
         async function searchOrders() {
             const input = document.getElementById("order-name-input");
             const name = input.value.trim();
-
-            if (!name) {
-                alert("請輸入姓名");
-                return;
-            }
-
+            if (!name) { alert("請輸入姓名"); return; }
             currentSearchName = name;
-
             const res = await fetch(`/api/orders?name=${encodeURIComponent(name)}`);
             const raw = await res.text();
-
             let data;
-            try {
-                data = JSON.parse(raw);
-            } catch {
-                console.log(raw);
-                alert(`查詢回傳不是 JSON：${res.status}`);
-                return;
-            }
-
-            if (!res.ok || !data.success) {
-                alert(data.message || "查詢失敗");
-                return;
-            }
-
+            try { data = JSON.parse(raw); } catch { console.log(raw); alert(`查詢回傳不是 JSON：${res.status}`); return; }
+            if (!res.ok || !data.success) { alert(data.message || "查詢失敗"); return; }
             const orders = Array.isArray(data.orders) ? data.orders : [];
-
+            currentOrders = orders;
             renderOrdersTable(orders);
             updateOrdersSummary(orders);
-
             const manualPoints = Number(data.manual_points || 0);
             const currentBasePoints = Number(document.getElementById("total-points").textContent || 0);
             const finalTotalPoints = currentBasePoints + manualPoints;
-            
             document.getElementById("total-points").textContent = formatNumber(finalTotalPoints);
-
-            document.getElementById("manual-points-note").textContent =
-                manualPoints > 0
-                    ? `（含手動加分 ${formatNumber(manualPoints)}）`
-                    : "";
+            document.getElementById("manual-points-note").textContent = manualPoints > 0 ? `（含手動加分 ${formatNumber(manualPoints)}）` : "";
         }
 
         async function saveNote(orderId, floor, rowLabel) {
-            const input = document.getElementById(`note-${orderId}`);
+            const input = document.getElementById(`note-${orderId}-${floor}-${rowLabel}`);
             const note = input ? input.value.trim() : "";
-        
-            const url =
-                `/api/orders/${encodeURIComponent(orderId)}/note` +
-                `?floor=${encodeURIComponent(floor)}` +
-                `&row_label=${encodeURIComponent(rowLabel)}`;
-        
-            const res = await fetch(url, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ note })
-            });
-        
+            const url = `/api/orders/${encodeURIComponent(orderId)}/note?floor=${encodeURIComponent(floor)}&row_label=${encodeURIComponent(rowLabel)}`;
+            const res = await fetch(url, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ note }) });
             const raw = await res.text();
-        
             let data = {};
-            try {
-                data = JSON.parse(raw);
-            } catch {
-                alert(`回傳不是 JSON：${raw}`);
-                return;
-            }
-        
-            if (!res.ok || !data.success) {
-                alert(data.message || "更新失敗");
-                return;
-            }
-        
+            try { data = JSON.parse(raw); } catch { alert(`回傳不是 JSON：${raw}`); return; }
+            if (!res.ok || !data.success) { alert(data.message || "更新失敗"); return; }
             alert("備註已更新");
-        
-            if (currentSearchName) {
-                searchOrders();
-            }
+            if (currentSearchName) searchOrders();
         }
 
         async function deleteOrder(orderId, floor, rowLabel) {
             const ok = confirm("確定要刪除這一排的座位嗎？刪除後座位會重新釋出。");
             if (!ok) return;
-        
-            const url =
-                `/api/orders/${encodeURIComponent(orderId)}` +
-                `?floor=${encodeURIComponent(floor)}` +
-                `&row_label=${encodeURIComponent(rowLabel)}`;
-        
-            const res = await fetch(url, {
-                method: "DELETE"
-            });
-        
+            const url = `/api/orders/${encodeURIComponent(orderId)}?floor=${encodeURIComponent(floor)}&row_label=${encodeURIComponent(rowLabel)}`;
+            const res = await fetch(url, { method: "DELETE" });
             const raw = await res.text();
-        
             let data = {};
-            try {
-                data = JSON.parse(raw);
-            } catch {
-                alert(`回傳不是 JSON：${raw}`);
-                return;
-            }
-        
-            if (!res.ok || !data.success) {
-                alert(data.message || "刪除失敗");
-                return;
-            }
-        
+            try { data = JSON.parse(raw); } catch { alert(`回傳不是 JSON：${raw}`); return; }
+            if (!res.ok || !data.success) { alert(data.message || "刪除失敗"); return; }
             alert(data.message || "刪除成功");
-        
-            if (currentSearchName) {
-                searchOrders();
+            if (currentSearchName) searchOrders();
+        }
+
+        async function fetchSeatMapData() {
+            if (cachedSeatMapData) return cachedSeatMapData;
+            const res = await fetch("/api/seats");
+            const raw = await res.text();
+            let data;
+            try { data = JSON.parse(raw); } catch { console.log(raw); alert(`座位圖回傳不是 JSON：${res.status}`); throw new Error("Seat map API returned non-JSON"); }
+            cachedSeatMapData = data;
+            return data;
+        }
+        function buildPurchasedSeatSet(orders) {
+            const purchased = new Set();
+            for (const order of orders) {
+                const seats = Array.isArray(order.seats) ? order.seats : [];
+                for (const seatNumber of seats) purchased.add(makeSeatKey(order.floor, order.row_label, seatNumber));
             }
+            return purchased;
+        }
+        function renderMySeatMap(allSeats, rowLabels, orders) {
+            const mapEl = document.getElementById("my-seat-map");
+            const subtitle = document.getElementById("my-seat-map-subtitle");
+            if (!mapEl) return;
+            allSeats = Array.isArray(allSeats) ? allSeats : [];
+            rowLabels = rowLabels || {};
+            mapEl.innerHTML = "";
+            if (!allSeats.length) { mapEl.innerHTML = `<div class="my-seat-map-empty">目前無法載入座位圖</div>`; return; }
+            const purchased = buildPurchasedSeatSet(orders);
+            subtitle.textContent = currentSearchName ? `${currentSearchName} 已購買座位以票價顏色標示` : "已購買座位以票價顏色標示";
+            const minCol = Math.min(...allSeats.map(s => Number(s.excel_col)));
+            const maxCol = Math.max(...allSeats.map(s => Number(s.excel_col)));
+            const minRow = Math.min(...allSeats.map(s => Number(s.excel_row)));
+            const maxRow = Math.max(...allSeats.map(s => Number(s.excel_row)));
+            const totalCols = (maxCol - minCol + 1) + 2;
+            const topTitleOffset = 1;
+            const totalRows = (maxRow - minRow + 1) + topTitleOffset;
+            const gridColSize = 24;
+            const gridRowSize = 22;
+            mapEl.style.gridTemplateColumns = `${gridColSize}px repeat(${maxCol - minCol + 1}, ${gridColSize}px) ${gridColSize}px`;
+            mapEl.style.gridTemplateRows = `repeat(${totalRows}, ${gridRowSize}px)`;
+            const firstFloorSeats = allSeats.filter(seat => floorFromSeat(seat) !== "2樓");
+            const secondFloorSeats = allSeats.filter(seat => floorFromSeat(seat) === "2樓");
+            if (firstFloorSeats.length > 0) {
+                const floor1 = document.createElement("div");
+                floor1.className = "my-map-floor-label";
+                floor1.textContent = "1樓";
+                floor1.style.gridColumn = `1 / ${totalCols + 1}`;
+                floor1.style.gridRow = 1;
+                mapEl.appendChild(floor1);
+            }
+            Object.entries(rowLabels).forEach(([excelRow, label]) => {
+                const displayRow = (Number(excelRow) - minRow + 1) + topTitleOffset;
+                const left = document.createElement("div");
+                left.className = "my-map-row-label"; left.textContent = label; left.style.gridColumn = 1; left.style.gridRow = displayRow; mapEl.appendChild(left);
+                const right = document.createElement("div");
+                right.className = "my-map-row-label"; right.textContent = label; right.style.gridColumn = totalCols; right.style.gridRow = displayRow; mapEl.appendChild(right);
+            });
+            if (secondFloorSeats.length > 0) {
+                const secondFloorTopExcelRow = Math.min(...secondFloorSeats.map(seat => Number(seat.excel_row)));
+                let secondFloorTitleRow = (secondFloorTopExcelRow - minRow) + topTitleOffset;
+                if (secondFloorTitleRow < 2) secondFloorTitleRow = 2;
+                const floor2 = document.createElement("div");
+                floor2.className = "my-map-floor-label";
+                floor2.textContent = "2樓";
+                floor2.style.gridColumn = `1 / ${totalCols + 1}`;
+                floor2.style.gridRow = secondFloorTitleRow;
+                mapEl.appendChild(floor2);
+            }
+            for (const seat of allSeats) {
+                const btn = document.createElement("button");
+                const floor = floorFromSeat(seat);
+                const seatKey = makeSeatKey(floor, seat.row_label, seat.seat_number);
+                const priceZone = normalizePriceZone(seat.price);
+                btn.type = "button";
+                btn.className = "my-map-seat";
+                btn.textContent = seat.seat_number || "";
+                btn.disabled = true;
+                btn.style.gridColumn = Number(seat.excel_col) - minCol + 2;
+                btn.style.gridRow = (Number(seat.excel_row) - minRow + 1) + topTitleOffset;
+                if (purchased.has(seatKey)) {
+                    btn.classList.add("my-seat-owned", `my-seat-${priceZone}`);
+                    btn.title = `${floor}${seat.row_label}排${seat.seat_number}號｜${priceZone} 元區`;
+                } else if (seat.sold) {
+                    btn.classList.add("my-seat-other-sold");
+                    btn.title = "其他已售座位";
+                } else {
+                    btn.classList.add("my-seat-not-owned");
+                    btn.title = "未購買座位";
+                }
+                mapEl.appendChild(btn);
+            }
+        }
+        async function openMySeatMapModal() {
+            if (!currentOrders.length) { alert("請先查詢姓名，並確認有訂單資料。"); return; }
+            const modal = document.getElementById("my-seat-map-modal");
+            if (!modal) return;
+            try {
+                const data = await fetchSeatMapData();
+                renderMySeatMap(data.seats || [], data.row_labels || {}, currentOrders);
+                modal.classList.remove("hidden");
+            } catch (error) { console.error(error); }
+        }
+        function closeMySeatMapModal() {
+            const modal = document.getElementById("my-seat-map-modal");
+            if (!modal) return;
+            modal.classList.add("hidden");
         }
 
         document.getElementById("order-search-btn").addEventListener("click", searchOrders);
-        document.getElementById("order-name-input").addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                searchOrders();
-            }
-        });
-
+        document.getElementById("order-name-input").addEventListener("keydown", (e) => { if (e.key === "Enter") searchOrders(); });
         const statsHelpBtn = document.getElementById("stats-help-btn");
         const statsHelpModal = document.getElementById("stats-help-modal");
         const statsHelpClose = document.getElementById("stats-help-close");
-        
-        function openStatsHelpModal() {
-            if (!statsHelpModal) return;
-            statsHelpModal.classList.remove("hidden");
-        }
-        
-        function closeStatsHelpModal() {
-            if (!statsHelpModal) return;
-            statsHelpModal.classList.add("hidden");
-        }
-        
+        function openStatsHelpModal() { if (!statsHelpModal) return; statsHelpModal.classList.remove("hidden"); }
+        function closeStatsHelpModal() { if (!statsHelpModal) return; statsHelpModal.classList.add("hidden"); }
         statsHelpBtn?.addEventListener("click", openStatsHelpModal);
         statsHelpClose?.addEventListener("click", closeStatsHelpModal);
-        
-        statsHelpModal?.addEventListener("click", (e) => {
-            if (e.target === statsHelpModal) {
-                closeStatsHelpModal();
-            }
-        });
-        
+        statsHelpModal?.addEventListener("click", (e) => { if (e.target === statsHelpModal) closeStatsHelpModal(); });
+        const mySeatMapBtn = document.getElementById("my-seat-map-btn");
+        const mySeatMapModal = document.getElementById("my-seat-map-modal");
+        const mySeatMapClose = document.getElementById("my-seat-map-close");
+        mySeatMapBtn?.addEventListener("click", openMySeatMapModal);
+        mySeatMapClose?.addEventListener("click", closeMySeatMapModal);
+        mySeatMapModal?.addEventListener("click", (e) => { if (e.target === mySeatMapModal) closeMySeatMapModal(); });
         document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") {
-                closeStatsHelpModal();
-            }
+            if (e.key === "Escape") { closeStatsHelpModal(); closeMySeatMapModal(); }
         });
-    
     </script>
 </body>
 </html>
