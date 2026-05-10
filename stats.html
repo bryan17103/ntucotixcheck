@@ -258,27 +258,35 @@
             document.getElementById("section-grid").innerHTML = sections.map(section => `
                 <div class="section-block">
         
-                    <div class="section-block-title">
-                        ${section.section}
-                    </div>
+                    <div class="section-inline-row">
         
-                    ${
-                        section.members.length
-                            ? `
-                                <div class="section-member-row">
-                                    ${section.members.map(m => `
-                                        <span>
-                                            ${m.name}
-                                            <strong>${m.tickets}</strong>
-                                        </span>
-                                    `).join(" / ")}
-                                </div>
-                            `
-                            : `<div class="empty-text">繼續加油努力推票！！</div>`
-                    }
+                        <div class="section-inline-title">
+                            ${section.section}
+                            <span class="section-inline-subtotal">
+                                ${section.subtotal}
+                            </span>
+                        </div>
         
-                    <div class="section-subtotal">
-                        小計：${section.subtotal}
+                        ${
+                            section.members.length
+                                ? `
+                                    <div class="section-inline-members">
+                                        ${section.members.map(m => `
+                                            <span class="section-member-chip">
+                                                <span class="section-member-name">
+                                                    ${m.name}
+                                                </span>
+        
+                                                <strong class="section-member-count">
+                                                    ${m.tickets}
+                                                </strong>
+                                            </span>
+                                        `).join(`<span class="section-separator"> / </span>`)}
+                                    </div>
+                                `
+                                : `<div class="empty-text">繼續加油努力推票！！</div>`
+                        }
+        
                     </div>
         
                 </div>
