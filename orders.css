@@ -44,6 +44,10 @@ body.orders-page {
 }
 .orders-search-btn:hover { background: #e95d31; }
 
+.orders-table tbody tr.empty-row { background: transparent; border: none; box-shadow: none; padding: 0; }
+.orders-table tbody tr.empty-row td { padding: 24px 0; margin: 0; }
+.orders-table tbody tr.empty-row td::before { display: none !important; }
+
 /* # Summary Cards */
 .orders-summary-grid { display: grid; grid-template-columns: 1fr 1fr 1.45fr 1.15fr; gap: 18px; margin-bottom: 22px; }
 .summary-card {
