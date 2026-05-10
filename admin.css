@@ -1,0 +1,255 @@
+```css
+/* # Reset */
+* {
+    box-sizing: border-box;
+}
+
+/* # Page */
+body.admin-page {
+    margin: 0;
+    font-family: Arial, "Noto Sans TC", sans-serif;
+    background: linear-gradient(135deg, #0f3b3a, #4b1f11);
+    min-height: 100vh;
+    padding: 12px;
+}
+
+/* # Shell */
+.admin-shell {
+    background: rgba(255,255,255,.96);
+    border-radius: 28px;
+    padding: 24px;
+    min-height: calc(100vh - 24px);
+    box-shadow: 0 8px 24px rgba(0,0,0,.18);
+}
+
+/* # Topbar */
+.admin-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.admin-title-wrap h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 900;
+    color: #222;
+}
+
+.admin-title-wrap p {
+    margin: 8px 0 0;
+    color: #7a7a7a;
+    font-size: 14px;
+}
+
+/* # Buttons */
+.back-link-btn {
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 16px;
+    border: 1.5px solid #ddd;
+    background: #fff;
+    color: #444;
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* # Search */
+.admin-search-card {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+}
+
+.admin-search-input {
+    width: 320px;
+    max-width: 100%;
+    height: 52px;
+
+    border: 2px solid #d8d8d8;
+    border-radius: 18px;
+
+    padding: 0 18px;
+    font-size: 16px;
+    outline: none;
+}
+
+.admin-search-btn {
+    height: 52px;
+    padding: 0 24px;
+
+    border: none;
+    border-radius: 18px;
+
+    background: #f26c41;
+    color: white;
+
+    font-size: 16px;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+/* # Table */
+.admin-table-card {
+    background: #fff;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.admin-table-scroll {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    min-width: 1550px;
+    border-collapse: collapse;
+}
+
+.admin-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    background: #fafafa;
+
+    padding: 18px 14px;
+
+    text-align: left;
+    font-size: 15px;
+    font-weight: 900;
+
+    border-bottom: 1px solid #ececec;
+}
+
+.admin-table tbody td {
+    padding: 16px 14px;
+    border-bottom: 1px solid #efefef;
+    vertical-align: middle;
+    font-size: 15px;
+}
+
+.admin-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* # Cells */
+.info-text {
+    color: #276fb7;
+    font-weight: 800;
+}
+
+.seats-cell {
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.5;
+}
+
+/* # Note */
+.note-input {
+    width: 220px;
+    height: 46px;
+
+    border: 2px solid #d5d5d5;
+    border-radius: 16px;
+
+    padding: 0 14px;
+    font-size: 15px;
+}
+
+/* # Pills */
+.cell-center {
+    display: flex;
+    justify-content: center;
+}
+
+.pill-btn {
+    min-width: 120px;
+    height: 56px;
+
+    padding: 0 18px;
+
+    border: none;
+    border-radius: 16px;
+
+    font-size: 15px;
+    font-weight: 900;
+
+    cursor: pointer;
+}
+
+.pill-btn.orange {
+    background: #f26c41;
+    color: #fff;
+}
+
+.pill-btn.gray {
+    background: #eeeeee;
+    color: #8f8f8f;
+}
+
+.pill-btn.green {
+    background: #e9f7ef;
+    color: #249167;
+}
+
+.pill-btn.blue {
+    background: #e7efff;
+    color: #356fcb;
+}
+
+.pill-btn.dark {
+    background: #333;
+    color: white;
+}
+
+.pill-btn.cyan {
+    background: #e7fbff;
+    color: #1493a5;
+    border: 2px solid #8adce7;
+}
+
+/* # Empty */
+.empty-state {
+    text-align: center;
+    padding: 36px 20px;
+    color: #888;
+}
+
+/* # Mobile */
+@media (max-width: 768px) {
+
+    body.admin-page {
+        padding: 8px;
+    }
+
+    .admin-shell {
+        padding: 16px;
+        border-radius: 22px;
+    }
+
+    .admin-topbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .admin-search-card {
+        flex-direction: column;
+    }
+
+    .admin-search-input,
+    .admin-search-btn {
+        width: 100%;
+    }
+}
+```
