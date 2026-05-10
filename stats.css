@@ -130,24 +130,41 @@ body {
     margin-left: 6px;
 }
 
-/* # Main Panels */
-.panel-grid {
+/* # Main Content Layout */
+.stats-content-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
+    grid-template-columns: minmax(0, 1.35fr) minmax(360px, 0.95fr);
     gap: 18px;
-    margin-bottom: 24px;
-    align-items: stretch;
+    align-items: start;
+}
+
+.stats-left-column,
+.stats-right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
 }
 
 .panel-card {
-    height: 460px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+
+    background: #fff;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 22px;
+    padding: 20px;
 }
 
 .reward-panel-card {
     height: 460px;
+}
+
+.ranking-panel-card,
+.chart-panel-card,
+.reward-panel-card,
+.section-summary-panel-card {
+    min-height: 420px;
 }
 
 .card-title {
@@ -239,12 +256,6 @@ tr:last-child td {
 }
 
 /* # Section Cards */
-.bottom-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.35fr) minmax(340px, 0.95fr);
-    gap: 18px;
-    align-items: stretch;
-}
 
 .section-summary-card {
     min-height: 420px;
