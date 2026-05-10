@@ -396,32 +396,32 @@
 
         function lockButtonHtml(order) {
             if (order.order_status === "locked") {
-                return `<button class="pill-btn dark" type="button" onclick="toggleLock('${escapeHtml(order.order_id)}')">鎖定</button>`;
+                return `<button class="pill-btn dark" type="button" onclick="toggleLock('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">鎖定</button>`;
             }
-            return `<button class="pill-btn cyan" type="button" onclick="toggleLock('${escapeHtml(order.order_id)}')">開放刪除</button>`;
+            return `<button class="pill-btn cyan" type="button" onclick="toggleLock('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">開放刪除</button>`;
         }
 
         function paymentButtonHtml(order) {
             if (order.payment_done) {
-                return `<button class="pill-btn green" type="button" onclick="togglePayment('${escapeHtml(order.order_id)}')">已付款</button>`;
+                return `<button class="pill-btn green" type="button" onclick="togglePayment('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">已付款</button>`;
             }
-            return `<button class="pill-btn gray" type="button" onclick="togglePayment('${escapeHtml(order.order_id)}')">未付款</button>`;
+            return `<button class="pill-btn gray" type="button" onclick="togglePayment('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">未付款</button>`;
         }
 
         function pickupButtonHtml(order) {
             if (order.picked_up) {
-                return `<button class="pill-btn blue" type="button" onclick="advancePickup('${escapeHtml(order.order_id)}')">已取</button>`;
+                return `<button class="pill-btn blue" type="button" onclick="advancePickup('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">已取</button>`;
             }
         
             if (order.pickup_open) {
-                return `<button class="pill-btn green" type="button" onclick="advancePickup('${escapeHtml(order.order_id)}')">已開放</button>`;
+                return `<button class="pill-btn green" type="button" onclick="advancePickup('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">已開放</button>`;
             }
         
             if (order.ticket_adjusted) {
-                return `<button class="pill-btn cyan" type="button" onclick="advancePickup('${escapeHtml(order.order_id)}')">已調票</button>`;
+                return `<button class="pill-btn cyan" type="button" onclick="advancePickup('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">已調票</button>`;
             }
         
-            return `<button class="pill-btn gray" type="button" onclick="toggleTicketAdjusted('${escapeHtml(order.order_id)}')">未開放</button>`;
+            return `<button class="pill-btn gray" type="button" onclick="toggleTicketAdjusted('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">未開放</button>`;
         }
 
         function renderAdminOrders(orders) {
