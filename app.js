@@ -107,9 +107,8 @@ function showSeatTooltip(event, seat, message = null) {
     const floorText = getFloorLabel(seat);
     const rowText = seat.row_label ? `${seat.row_label}排` : "";
     const title = message || `${floorText} ${rowText}${seat.seat_number}號`;
-    const sub = message
-        ? `${zoneDisplayName(seat.zone)}`
-        : `${zoneDisplayName(seat.zone)} / ${formatMoney(seat.price)}`;
+    const sub =
+        `${zoneDisplayName(seat.zone)} / ${formatMoney(seat.price)}`;
 
     tooltip.innerHTML = `
         <div class="tooltip-title">${title}</div>
