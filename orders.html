@@ -602,7 +602,7 @@
                                     value="${escapeHtml(order.note || "")}"
                                     placeholder="自行輸入備註"
                                 />
-                                <button class="save-btn" type="button" onclick="saveNote('${escapeHtml(order.order_id)}')">
+                                <button class="save-btn" type="button" onclick="saveNote('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">
                                     儲存
                                 </button>
                             </div>
@@ -612,7 +612,7 @@
                                 ${
                                     order.order_status === "locked"
                                         ? `<button class="delete-btn locked" type="button" disabled title="已鎖定！">已鎖定！</button>`
-                                        : `<button class="delete-btn" type="button" onclick="deleteOrder('${escapeHtml(order.order_id)}')">刪除</button>`
+                                        : `<button class="delete-btn" type="button" onclick="deleteOrder('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">刪除</button>`
                                 }
                             </div>
                         </td>
