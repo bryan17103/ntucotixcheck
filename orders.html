@@ -319,8 +319,28 @@
                 btn.style.gridColumn = Number(seat.excel_col) - minCol + 2;
                 btn.style.gridRow = (Number(seat.excel_row) - minRow + 1) + topTitleOffset;
                 if (purchased.has(seatKey)) {
+                
                     btn.classList.add("my-seat-owned", `my-seat-${priceZone}`);
+                
+                    const matchedOrder = orders.find(order => {
+                        const seats = Array.isArray(order.seats) ? order.seats : [];
+                
+                        return (
+                            order.floor === floor &&
+                            order.row_label === seat.row_label &&
+                            seats.includes(seat.seat_number)
+                        );
+                    });
+                
+                    if (matchedOrder?.picked_up) {
+                        btn.innerHTML = `
+                            ${seat.seat_number}
+                            <span class="seat-check">✓</span>
+                        `;
+                    }
+                
                     btn.title = `${floor}${seat.row_label}排${seat.seat_number}號｜${priceZone} 元區`;
+                }
                 } else if (seat.sold) {
                     btn.classList.add("my-seat-other-sold");
                     btn.title = "其他已售座位";
