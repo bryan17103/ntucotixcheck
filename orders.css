@@ -155,11 +155,34 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
 .my-map-seat { width: 22px; height: 22px; border-radius: 50%; border: none; font-size: 9px; line-height: 22px; text-align: center; padding: 0; user-select: none; display: flex; align-items: center; justify-content: center; }
 .my-seat-not-owned { background: #e5e5e5; color: #aaa; }
 .my-seat-other-sold { background: #9a9a9a; color: #fff; }
-.my-seat-owned { color: #fff; font-weight: 900; outline: 3px solid #263579; box-shadow: 0 0 0 2px rgba(38,53,121,.16); }
+.my-seat-owned { color: #fff; font-weight: 900; outline: 3px solid #263579; box-shadow: 0 0 0 2px rgba(38,53,121,.16); position: relative;}
 .my-seat-500 { background: #cf6f6d; }
 .my-seat-300 { background: #b9cf8c; }
 .my-seat-200 { background: #9fc3ea; }
 .my-seat-map-empty { color: #777; font-weight: 800; padding: 28px; }
+.seat-check {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+
+    width: 11px;
+    height: 11px;
+
+    border-radius: 50%;
+
+    background: #1f9d55;
+    color: #fff;
+
+    font-size: 8px;
+    font-weight: 900;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 1.5px solid #fff;
+}
+
 
 /* # Animations */
 @keyframes modalPop {
