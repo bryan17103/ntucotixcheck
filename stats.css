@@ -1,4 +1,3 @@
-/* # Reset / Base */
 * {
     box-sizing: border-box;
 }
@@ -511,7 +510,6 @@ tr:last-child td {
 }
 
 /* # Responsive */
-/* # Mobile */
 @media (max-width: 768px) {
     body {
         padding: 8px;
@@ -546,7 +544,7 @@ tr:last-child td {
         height: 42px;
     }
 
-    /* 五張小卡：手機直排 */
+    /* 五張小卡*/
     .hero-grid {
         grid-template-columns: 1fr;
         gap: 12px;
@@ -574,7 +572,7 @@ tr:last-child td {
         font-size: 17px;
     }
 
-    /* 主內容：全部單欄 */
+    /* 主內容 */
     .stats-content-grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -612,7 +610,7 @@ tr:last-child td {
         margin-bottom: 12px;
     }
 
-    /* 排行榜：手機表格不爆版 */
+    /* 排行榜*/
     .ranking-table-scroll {
         max-height: 360px;
         overflow-y: auto;
@@ -686,77 +684,81 @@ tr:last-child td {
         margin: 0 auto;
     }
 
+    /* 各聲部推票統計 */
     .section-summary-list {
         max-height: 360px;
         overflow-y: auto;
         overflow-x: hidden;
         display: flex;
         flex-direction: column;
-        gap: 0;
-        border-radius: 14px;
+        gap: 10px;
     }
-
+    
     .section-block {
         display: block;
-        padding: 12px 4px;
+        padding: 12px 14px;
+        border: 1px solid #eeeeee;
+        border-radius: 16px;
+        background: #fafafa;
+    }
+    
+    .section-block:last-child {
         border-bottom: 1px solid #eeeeee;
     }
-
-    .section-block:last-child {
-        border-bottom: none;
-    }
-
+    
     .section-name-cell,
     .section-inline-title {
-        display: inline-flex;
+        display: flex;
         align-items: center;
-        gap: 6px;
+        justify-content: space-between;
+    
         color: #276fb7;
         font-size: 15px;
         font-weight: 900;
-        margin-bottom: 6px;
+        margin-bottom: 8px;
     }
-
+    
     .section-total-cell,
     .section-inline-subtotal {
         color: #276fb7;
         font-size: 15px;
         font-weight: 900;
     }
-
+    
     .section-members-cell,
     .section-inline-members {
         display: flex;
         flex-wrap: wrap;
-        align-items: center;
-        gap: 5px;
-        font-size: 13px;
-        line-height: 1.55;
+        gap: 6px;
+        line-height: 1.6;
     }
-
+    
     .section-member-chip {
         display: inline-flex;
-        align-items: baseline;
-        gap: 3px;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        border-radius: 999px;
+        background: #ffffff;
+        border: 1px solid #eeeeee;
     }
-
+    
     .section-member-name {
         color: #333;
+        font-size: 13px;
         font-weight: 700;
     }
-
+    
     .section-member-count {
         color: #f5a623;
         font-size: 13px;
         font-weight: 900;
     }
-
+    
     .section-separator {
-        color: #aaa;
-        margin: 0 1px;
+        display: none;
     }
-
-    /* 獎勵統計：手機允許橫向 scroll，但不撐爆整頁 */
+    /* 獎勵統計*/
     .reward-table-scroll {
         max-height: 360px;
         overflow-y: auto;
