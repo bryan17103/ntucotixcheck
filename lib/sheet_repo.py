@@ -13,11 +13,8 @@ import gspread
 from google.oauth2.service_account import Credentials
 
 
-# ===== timezone =====
 TAIPEI_TZ = ZoneInfo("Asia/Taipei")
 
-
-# ===== Google Sheet settings =====
 SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/drive",
@@ -48,7 +45,6 @@ _sold_cache_time = 0
 _SOLD_CACHE_TTL = 2
 
 
-# ===== basic helpers =====
 def get_google_credentials():
     creds_dict = json.loads(os.environ["GOOGLE_CREDENTIALS_JSON"])
     return Credentials.from_service_account_info(creds_dict, scopes=SCOPES)
@@ -62,7 +58,6 @@ def get_spreadsheet():
 
 def get_worksheet():
     global _ws_cache
-
     if _ws_cache is not None:
         return _ws_cache
 
@@ -119,7 +114,37 @@ def normalize_bool(value) -> bool:
 
 def get_all_records() -> List[dict]:
     ws = get_worksheet()
-    return ws.get_all_records(expected_headers=HEADERS)
+    return ws.get_all_records()
+
+
+def row_matches_scope(row: dict, order_id: str, floor: str = "", row_label: str = "") -> bool:
+    if normalize_text(row.get("訂單ID")) != normalize_text(order_id):
+        return False
+
+    if floor and normalize_text(row.get("樓層")) != normalize_text(floor):
+        return False
+
+    if row_label and normalize_text(row.get("排數")) != normalize_text(row_label):
+        return False
+
+    return True
+
+
+def values_row_matches_scope(row: list, order_id: str, floor: str = "", row_label: str = "") -> bool:
+    current_order_id = normalize_text(row[1] if len(row) > 1 else "")
+    current_floor = normalize_text(row[4] if len(row) > 4 else "")
+    current_row_label = normalize_text(row[5] if len(row) > 5 else "")
+
+    if current_order_id != normalize_text(order_id):
+        return False
+
+    if floor and current_floor != normalize_text(floor):
+        return False
+
+    if row_label and current_row_label != normalize_text(row_label):
+        return False
+
+    return True
 
 
 def generate_order_id(name: str) -> str:
@@ -132,7 +157,6 @@ def generate_order_id(name: str) -> str:
     )
 
 
-# ===== order write/read =====
 def append_order_rows(name: str, seat_rows: List[Dict]) -> str:
     ws = get_worksheet()
     order_id = generate_order_id(name)
@@ -262,20 +286,23 @@ def group_order_rows(rows: List[dict]) -> List[dict]:
 
     return results
 
+
 def get_manual_points(name: str) -> float:
     member_map = load_section_members()
-
-    info = member_map.get(name)
-
+    info = member_map.get(normalize_text(name))
     if not info:
         return 0
-
     return float(info.get("manual_points", 0))
 
-def get_orders_by_name(name: str) -> List[dict]:
+
+def get_orders_by_name(name: str):
     target = normalize_text(name)
     if not target:
-        return []
+        return {
+            "orders": [],
+            "manual_points": 0,
+            "total_points": 0,
+        }
 
     rows = [
         row for row in get_all_records()
@@ -285,15 +312,13 @@ def get_orders_by_name(name: str) -> List[dict]:
     orders = group_order_rows(rows)
     manual_points = get_manual_points(target)
     base_points = 0
-    
+
     for order in orders:
         seat_count = len(order.get("seats", []))
         total_price = normalize_int(order.get("price")) or 0
-    
         unit_price = total_price / seat_count if seat_count else total_price
-    
         base_points += seat_count * price_to_points(unit_price)
-    
+
     return {
         "orders": orders,
         "manual_points": manual_points,
@@ -317,65 +342,58 @@ def admin_search_orders(keyword: str) -> List[dict]:
     return group_order_rows(rows)
 
 
-# ===== order update =====
-def update_order_note(order_id: str, note: str) -> bool:
+def update_order_note(order_id: str, note: str, floor: str = "", row_label: str = "") -> bool:
     ws = get_worksheet()
     records = get_all_records()
-
-    target_order_id = normalize_text(order_id)
     updated_any = False
 
     for idx, row in enumerate(records, start=2):
-        current_order_id = normalize_text(row.get("訂單ID"))
         status = normalize_text(row.get("訂單狀態")).lower()
 
-        if current_order_id == target_order_id and status in {"active", "locked"}:
+        if status in {"active", "locked"} and row_matches_scope(row, order_id, floor, row_label):
             ws.update_cell(idx, 9, note)
             updated_any = True
 
     return updated_any
 
 
-def mark_order_deleted(order_id: str) -> bool:
-    ws = get_worksheet()
-    all_values = ws.get_all_values()
-    target_order_id = normalize_text(order_id)
-
-    for row_idx in range(2, len(all_values) + 1):
-        row = all_values[row_idx - 1]
-        current_order_id = normalize_text(row[1] if len(row) > 1 else "")
-        current_status = normalize_text(row[2] if len(row) > 2 else "").lower()
-
-        if current_order_id == target_order_id and current_status == "locked":
-            return False
-
-    updated_any = False
-    for row_idx in range(2, len(all_values) + 1):
-        row = all_values[row_idx - 1]
-        current_order_id = normalize_text(row[1] if len(row) > 1 else "")
-
-        if current_order_id == target_order_id:
-            ws.update_cell(row_idx, 3, "deleted")
-            updated_any = True
-
-    if updated_any:
-        clear_caches()
-
-    return updated_any
-
-
-def update_order_pickup_status(order_id: str, pickup_open: bool = None, picked_up: bool = None) -> bool:
+def mark_order_deleted(order_id: str, floor: str = "", row_label: str = "") -> bool:
     ws = get_worksheet()
     records = get_all_records()
+    matched_rows = []
 
-    target_order_id = normalize_text(order_id)
+    for idx, row in enumerate(records, start=2):
+        if row_matches_scope(row, order_id, floor, row_label):
+            status = normalize_text(row.get("訂單狀態")).lower()
+            if status == "locked":
+                return False
+            matched_rows.append(idx)
+
+    if not matched_rows:
+        return False
+
+    for idx in matched_rows:
+        ws.update_cell(idx, 3, "deleted")
+
+    clear_caches()
+    return True
+
+
+def update_order_pickup_status(
+    order_id: str,
+    pickup_open: bool = None,
+    picked_up: bool = None,
+    floor: str = "",
+    row_label: str = "",
+) -> bool:
+    ws = get_worksheet()
+    records = get_all_records()
     updated_any = False
 
     for idx, row in enumerate(records, start=2):
-        current_order_id = normalize_text(row.get("訂單ID"))
         status = normalize_text(row.get("訂單狀態")).lower()
 
-        if current_order_id == target_order_id and status in {"active", "locked"}:
+        if status in {"active", "locked"} and row_matches_scope(row, order_id, floor, row_label):
             if pickup_open is not None:
                 ws.update_cell(idx, 10, bool(pickup_open))
             if picked_up is not None:
@@ -388,20 +406,18 @@ def update_order_pickup_status(order_id: str, pickup_open: bool = None, picked_u
     return updated_any
 
 
-def admin_toggle_lock_status(order_id: str):
+def admin_toggle_lock_status(order_id: str, floor: str = "", row_label: str = ""):
     ws = get_worksheet()
     all_values = ws.get_all_values()
-    target_order_id = normalize_text(order_id)
 
     target_rows = []
     current_status = None
 
     for row_idx in range(2, len(all_values) + 1):
         row = all_values[row_idx - 1]
-        current_order_id = normalize_text(row[1] if len(row) > 1 else "")
         status = normalize_text(row[2] if len(row) > 2 else "").lower()
 
-        if current_order_id == target_order_id:
+        if values_row_matches_scope(row, order_id, floor, row_label):
             target_rows.append(row_idx)
             current_status = status
 
@@ -417,20 +433,18 @@ def admin_toggle_lock_status(order_id: str):
     return True, f"訂單狀態已改為 {new_status}"
 
 
-def admin_toggle_payment_status(order_id: str):
+def admin_toggle_payment_status(order_id: str, floor: str = "", row_label: str = ""):
     ws = get_worksheet()
     all_values = ws.get_all_values()
-    target_order_id = normalize_text(order_id)
 
     target_rows = []
     current_payment = False
 
     for row_idx in range(2, len(all_values) + 1):
         row = all_values[row_idx - 1]
-        current_order_id = normalize_text(row[1] if len(row) > 1 else "")
         payment_done = normalize_bool(row[11] if len(row) > 11 else "")
 
-        if current_order_id == target_order_id:
+        if values_row_matches_scope(row, order_id, floor, row_label):
             target_rows.append(row_idx)
             current_payment = payment_done
 
@@ -445,20 +459,18 @@ def admin_toggle_payment_status(order_id: str):
     return True, "付款狀態已更新"
 
 
-def admin_toggle_ticket_adjusted_status(order_id: str):
+def admin_toggle_ticket_adjusted_status(order_id: str, floor: str = "", row_label: str = ""):
     ws = get_worksheet()
     all_values = ws.get_all_values()
-    target_order_id = normalize_text(order_id)
 
     target_rows = []
     current_adjusted = False
 
     for row_idx in range(2, len(all_values) + 1):
         row = all_values[row_idx - 1]
-        current_order_id = normalize_text(row[1] if len(row) > 1 else "")
         adjusted = normalize_bool(row[12] if len(row) > 12 else "")
 
-        if current_order_id == target_order_id:
+        if values_row_matches_scope(row, order_id, floor, row_label):
             target_rows.append(row_idx)
             current_adjusted = adjusted
 
@@ -473,10 +485,9 @@ def admin_toggle_ticket_adjusted_status(order_id: str):
     return True, "調票狀態已更新"
 
 
-def admin_advance_pickup_status(order_id: str):
+def admin_advance_pickup_status(order_id: str, floor: str = "", row_label: str = ""):
     ws = get_worksheet()
     all_values = ws.get_all_values()
-    target_order_id = normalize_text(order_id)
 
     target_rows = []
     pickup_open = False
@@ -484,9 +495,8 @@ def admin_advance_pickup_status(order_id: str):
 
     for row_idx in range(2, len(all_values) + 1):
         row = all_values[row_idx - 1]
-        current_order_id = normalize_text(row[1] if len(row) > 1 else "")
 
-        if current_order_id == target_order_id:
+        if values_row_matches_scope(row, order_id, floor, row_label):
             target_rows.append(row_idx)
             pickup_open = normalize_bool(row[9] if len(row) > 9 else "")
             picked_up = normalize_bool(row[10] if len(row) > 10 else "")
@@ -508,20 +518,18 @@ def admin_advance_pickup_status(order_id: str):
     return True, "取票狀態已更新"
 
 
-def admin_delete_order(order_id: str):
+def admin_delete_order(order_id: str, floor: str = "", row_label: str = ""):
     ws = get_worksheet()
     all_values = ws.get_all_values()
-    target_order_id = normalize_text(order_id)
 
     target_rows = []
     current_status = None
 
     for row_idx in range(2, len(all_values) + 1):
         row = all_values[row_idx - 1]
-        current_order_id = normalize_text(row[1] if len(row) > 1 else "")
         status = normalize_text(row[2] if len(row) > 2 else "").lower()
 
-        if current_order_id == target_order_id:
+        if values_row_matches_scope(row, order_id, floor, row_label):
             target_rows.append(row_idx)
             current_status = status
 
@@ -538,7 +546,6 @@ def admin_delete_order(order_id: str):
     return True, "訂單已刪除"
 
 
-# ===== config sheets for edit page =====
 def get_section_members_rows():
     ws = get_config_worksheet("section_members")
     rows = ws.get_all_records(expected_headers=["姓名", "聲部", "手動加分"])
@@ -568,6 +575,7 @@ def get_stats_config_rows():
         if normalize_text(row.get("類型")) or normalize_text(row.get("名稱")) or normalize_text(row.get("條件"))
     ]
 
+
 def save_section_members_rows(rows):
     ws = get_config_worksheet("section_members")
     values = [["姓名", "聲部", "手動加分"]]
@@ -588,6 +596,7 @@ def save_section_members_rows(rows):
 
     ws.clear()
     ws.update("A1", values)
+
 
 def save_stats_config_rows(rows):
     ws = get_config_worksheet("stats_config")
@@ -633,7 +642,7 @@ def load_section_members():
 
     return member_to_section
 
-# ===== stats / points reward system =====
+
 def price_to_reward_zone(price: int) -> str:
     if price in {500, 400}:
         return "500"
@@ -703,10 +712,10 @@ def load_stats_config():
 
     return config
 
+
 def build_stats_summary():
     rows = get_all_records()
     member_to_section = load_section_members()
-
     stats_config = load_stats_config()
 
     valid_rows = [
@@ -760,9 +769,9 @@ def build_stats_summary():
 
         member_info = member_to_section.get(name, {
             "section": "未分類",
-            "manual_bonus": 0
+            "manual_points": 0,
         })
-        
+
         section = member_info["section"]
         section_ticket_count[section] += 1
         section_members[section][name] += 1
@@ -776,10 +785,10 @@ def build_stats_summary():
 
     for name, info in member_to_section.items():
         manual_points = info.get("manual_points", 0)
-    
+
         if manual_points > 0:
             person_points[name] += manual_points
-    
+
     ranking = sorted(
         [
             {
@@ -810,23 +819,23 @@ def build_stats_summary():
 
     reward_summary = []
     assigned_names = set()
-    
+
     for rule in stats_config["rewards"]:
         qualified = []
         threshold = float(rule.get("threshold", 0))
-    
+
         for item in ranking:
             name = item["name"]
-    
+
             if name in assigned_names:
                 continue
-    
+
             total_points = person_points[name]
-    
+
             if total_points >= threshold:
                 qualified.append(name)
                 assigned_names.add(name)
-    
+
         reward_summary.append({
             "reward": rule["reward"],
             "requirement": f"{threshold:g} 分",
