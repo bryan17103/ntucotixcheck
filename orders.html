@@ -376,6 +376,102 @@
             padding: 32px 20px;
         }
 
+        .stats-help-trigger {
+            border: none;
+            background: transparent;
+            padding: 0;
+            cursor: pointer;
+            text-align: left;
+        }
+        
+        .stats-help-trigger:hover {
+            color: #276fb7;
+            text-decoration: underline;
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.42);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        
+        .modal-overlay.hidden {
+            display: none;
+        }
+        
+        .modal-card {
+            position: relative;
+            width: min(520px, 100%);
+            background: #fff;
+            border-radius: 26px;
+            padding: 28px 30px;
+            box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+            color: #333;
+            animation: modalPop 0.16s ease-out;
+        }
+        
+        .modal-card h2 {
+            margin: 0 0 14px;
+            font-size: 22px;
+            font-weight: 900;
+            color: #222;
+        }
+        
+        .modal-card p {
+            margin: 12px 0;
+            font-size: 15px;
+            line-height: 1.7;
+            color: #555;
+        }
+        
+        .points-rule-list {
+            background: #f7f9fc;
+            border: 1.5px solid #e5ecf6;
+            border-radius: 18px;
+            padding: 14px 16px;
+            margin: 14px 0;
+            display: grid;
+            gap: 8px;
+            font-size: 15px;
+            color: #276fb7;
+            font-weight: 800;
+        }
+        
+        .modal-close-btn {
+            position: absolute;
+            top: 14px;
+            right: 16px;
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 50%;
+            background: #f1f1f1;
+            color: #555;
+            font-size: 24px;
+            line-height: 1;
+            cursor: pointer;
+        }
+        
+        .modal-close-btn:hover {
+            background: #e5e5e5;
+        }
+        
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: translateY(8px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
         @media (max-width: 980px) {
             .orders-summary-grid {
                 grid-template-columns: 1fr;
@@ -386,7 +482,7 @@
 
 <body class="orders-page">
     <div class="orders-shell">
-        <div class="orders-topbar">
+        <div clas<button class="summary-label stats-help-trigger" type="button" id="stats-help-btn"> 推票統計（點我查看說明） </button>s="orders-topbar">
             <div class="orders-title-wrap">
                 <h1>《嶋聲》團內購票訂單查詢</h1>
                 <p class="orders-note main">
@@ -429,7 +525,7 @@
             </div>
 
             <div class="summary-card">
-                <div class="summary-label">推票統計</div>
+                <button class="summary-label stats-help-trigger" type="button" id="stats-help-btn"> 推票統計（點我查看說明） </button>
                 <div class="ticket-stats-value">
                     <div class="ticket-stats-row">
                         500元：<span id="count-500">0</span> | 300元：<span id="count-300">0</span> | 200元：<span id="count-200">0</span>
@@ -466,6 +562,33 @@
         </div>
     </div>
 
+    <div id="stats-help-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <button class="modal-close-btn" type="button" id="stats-help-close">×</button>
+    
+            <h2>推票獎勵說明</h2>
+    
+            <p>
+                關於台北場之推票獎勵，積分計算方式如下：
+            </p>
+    
+            <div class="points-rule-list">
+                <div>200 元票區 = <strong>1 分</strong></div>
+                <div>300 元票區 = <strong>1.5 分</strong></div>
+                <div>500 元票區 = <strong>3 分</strong></div>
+            </div>
+    
+            <p>
+                累積推票積分為「單場」推票積分加總。
+            </p>
+    
+            <p>
+                若親友使用文化幣購票，請務必私訊票務協助手動加分。
+                手動加分之計算方式與上述票區積分相同。
+            </p>
+        </div>
+    </div>
+    
     <script>
         let currentSearchName = "";
 
@@ -750,6 +873,36 @@
                 searchOrders();
             }
         });
+
+        const statsHelpBtn = document.getElementById("stats-help-btn");
+        const statsHelpModal = document.getElementById("stats-help-modal");
+        const statsHelpClose = document.getElementById("stats-help-close");
+        
+        function openStatsHelpModal() {
+            if (!statsHelpModal) return;
+            statsHelpModal.classList.remove("hidden");
+        }
+        
+        function closeStatsHelpModal() {
+            if (!statsHelpModal) return;
+            statsHelpModal.classList.add("hidden");
+        }
+        
+        statsHelpBtn?.addEventListener("click", openStatsHelpModal);
+        statsHelpClose?.addEventListener("click", closeStatsHelpModal);
+        
+        statsHelpModal?.addEventListener("click", (e) => {
+            if (e.target === statsHelpModal) {
+                closeStatsHelpModal();
+            }
+        });
+        
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") {
+                closeStatsHelpModal();
+            }
+        });
+    
     </script>
 </body>
 </html>
