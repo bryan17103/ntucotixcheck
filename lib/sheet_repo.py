@@ -323,10 +323,10 @@ def get_orders_by_name(name: str):
     base_points = 0
 
     for order in orders:
-        seat_count = len(order.get("seats", []))
-        total_price = normalize_int(order.get("price")) or 0
-        unit_price = total_price / seat_count if seat_count else total_price
-        base_points += seat_count * price_to_points(unit_price)
+        price_counts = order.get("price_counts", {}) or {}
+        base_points += float(price_counts.get("500", 0) or 0) * 3.0
+        base_points += float(price_counts.get("300", 0) or 0) * 1.5
+        base_points += float(price_counts.get("200", 0) or 0) * 1.0
 
     return {
         "orders": orders,
@@ -749,10 +749,11 @@ def build_stats_summary():
     person_points = defaultdict(float)
     section_ticket_count = defaultdict(int)
     section_members = defaultdict(lambda: defaultdict(int))
-
-    conductor_count = 0
-    fanpage_count = 0
-    other_source_count = 0
+    zone_ticket_count = {
+        "500": 0,
+        "300": 0,
+        "200": 0,
+    }
 
     for row in valid_rows:
         name = normalize_text(row.get("名字"))
@@ -766,6 +767,10 @@ def build_stats_summary():
 
         total_tickets += 1
         total_amount += price
+
+        zone_key = price_to_reward_zone(price)
+        if zone_key in zone_ticket_count:
+            zone_ticket_count[zone_key] += 1
 
         if payment_done:
             paid_tickets += 1
@@ -860,6 +865,7 @@ def build_stats_summary():
             "total_amount": total_amount,
             "picked_tickets": picked_tickets,
             "unpicked_tickets": unpicked_tickets,
+            "zone_tickets": zone_ticket_count,
         },
         "ranking": ranking,
         "sections": section_summary,
