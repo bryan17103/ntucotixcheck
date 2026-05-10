@@ -260,6 +260,7 @@
                 <th>姓名</th>
                 <th>聲部</th>
                 <th>手動加分_TP</th>
+                th>手動加分_KH</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -357,7 +358,10 @@
             <input class="cell-input section-value" type="text" value="${escapeHtml(row.section || "")}" placeholder="聲部" />
           </td>
           <td>
-            <input class="cell-input section-manual-points" type="number" step="0.5" min="0" value="${escapeHtml(row.manual_points ?? row.manualPoints ?? 0)}" placeholder="0" />
+            <input class="cell-input section-manual-points" type="number" step="0.5" min="0" value="${escapeHtml(row.manual_points ?? 0)}" placeholder="0" />
+          </td>
+          <td>
+            <input class="cell-input section-manual-points-kh" type="number" step="0.5" min="0" value="${escapeHtml(row.manual_points_kh ?? 0)}" placeholder="0" />
           </td>
           <td style="text-align:center;">
             <button class="delete-row-btn" type="button" onclick="this.closest('tr').remove()">刪除</button>
@@ -444,14 +448,18 @@
         const name = tr.querySelector(".section-name")?.value.trim() || "";
         const section = tr.querySelector(".section-value")?.value.trim() || "";
         const manualPointsRaw = tr.querySelector(".section-manual-points")?.value.trim() || "0";
-        const manualPoints = Number(manualPointsRaw || 0);
+        const manualPointsKhRaw = tr.querySelector(".section-manual-points-kh")?.value.trim() || "0";
     
-        if (!name && !section && !manualPoints) return;
+        const manualPoints = Number(manualPointsRaw || 0);
+        const manualPointsKh = Number(manualPointsKhRaw || 0);
+    
+        if (!name && !section && !manualPoints && !manualPointsKh) return;
     
         rows.push({
           name,
           section,
-          manual_points: Number.isFinite(manualPoints) ? manualPoints : 0
+          manual_points: Number.isFinite(manualPoints) ? manualPoints : 0,
+          manual_points_kh: Number.isFinite(manualPointsKh) ? manualPointsKh : 0
         });
       });
     
