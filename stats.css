@@ -415,6 +415,7 @@ tr:last-child td {
 .reward-condition-wrap {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 8px;
 }
 
