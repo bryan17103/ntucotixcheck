@@ -185,10 +185,26 @@ function updateSummary() {
 
     }).join("");
 
+    const zonePriceMap = {
+        "group-500": 400,
+        "group-300": 240,
+        "group-200": 160,
+    
+        "regular-500": 500,
+        "regular-300": 300,
+        "regular-200": 200
+    };
+    
     const zoneHtml = Object.entries(zoneCounts).map(([zone, count]) => {
+        const price = zonePriceMap[zone];
+    
         return `
             <div class="zone-summary-item">
-                <span class="zone-name">${zoneDisplayName(zone)}</span>
+                <span class="zone-name">
+                    ${zoneDisplayName(zone)}
+                    ${price ? ` / $${price}` : ""}
+                </span>
+    
                 <span class="zone-count">${count} 張</span>
             </div>
         `;
