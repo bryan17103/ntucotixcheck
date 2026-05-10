@@ -675,15 +675,17 @@
                     unpickedCount += seatCount;
                 }
 
-                if (unitPrice === 500 || unitPrice === 400) {
-                    count500 += seatCount;
-                } else if (unitPrice === 300 || unitPrice === 240) {
-                    count300 += seatCount;
-                } else if (unitPrice === 200 || unitPrice === 160) {
-                    count200 += seatCount;
-                }
-
-                basePoints += seatCount * priceToPoint(unitPrice);
+                const priceCounts = order.price_counts || {};
+                
+                const c500 = Number(priceCounts["500"] || 0);
+                const c300 = Number(priceCounts["300"] || 0);
+                const c200 = Number(priceCounts["200"] || 0);
+                
+                count500 += c500;
+                count300 += c300;
+                count200 += c200;
+                
+                basePoints += c500 * 3 + c300 * 1.5 + c200 * 1;
             }
 
             document.getElementById("paid-amount").textContent = formatMoney(paidAmount);
