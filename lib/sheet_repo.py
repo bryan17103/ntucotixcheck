@@ -776,13 +776,6 @@ def build_stats_summary():
         section_ticket_count[section] += 1
         section_members[section][name] += 1
 
-        if section == "指揮組":
-            conductor_count += 1
-        elif name == "粉專購票":
-            fanpage_count += 1
-        elif section == "未分類":
-            other_source_count += 1
-
     for name, info in member_to_section.items():
         manual_points = info.get("manual_points", 0)
 
@@ -804,7 +797,7 @@ def build_stats_summary():
     )
 
     section_summary = []
-    for section in ["吹管", "彈撥", "拉弦", "低音", "打擊", "特殊來源"]:
+    for section in ["吹管", "彈撥", "拉弦", "低音", "打擊", "指揮", "特殊來源"]:
         members = section_members.get(section, {})
         member_list = sorted(
             [{"name": n, "tickets": c} for n, c in members.items()],
@@ -853,11 +846,6 @@ def build_stats_summary():
             "total_amount": total_amount,
             "picked_tickets": picked_tickets,
             "unpicked_tickets": unpicked_tickets,
-        },
-        "special": {
-            "conductor_count": conductor_count,
-            "fanpage_count": fanpage_count,
-            "other_source_count": other_source_count,
         },
         "ranking": ranking,
         "sections": section_summary,
