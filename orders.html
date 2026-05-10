@@ -51,7 +51,7 @@
             <button class="summary-card seat-map-card" type="button" id="my-seat-map-btn">
                 <div class="summary-label">查看已購買座位</div>
                 <div class="seat-map-card-main">打開座位圖</div>
-                <div class="seat-map-card-sub">依票價顏色標示你的座位</div>
+                <div class="seat-map-card-sub">依票價顏色標示已購買的座位</div>
             </button>
         </div>
 
@@ -91,7 +91,7 @@
             <button class="modal-close-btn" type="button" id="my-seat-map-close">×</button>
             <div class="my-seat-map-header">
                 <div>
-                    <h2>已購買座位圖</h2>
+                    <h2>已購買座位</h2>
                     <p id="my-seat-map-subtitle">請先查詢訂單後查看座位圖。</p>
                 </div>
                 <div class="my-seat-legend">
@@ -264,7 +264,7 @@
             mapEl.innerHTML = "";
             if (!allSeats.length) { mapEl.innerHTML = `<div class="my-seat-map-empty">目前無法載入座位圖</div>`; return; }
             const purchased = buildPurchasedSeatSet(orders);
-            subtitle.textContent = currentSearchName ? `${currentSearchName} 已購買座位以票價顏色標示` : "已購買座位以票價顏色標示";
+            subtitle.textContent = currentSearchName ? `${currentSearchName} 已劃座位（以票價顏色標示）` : "已劃座位（以票價顏色標示）";
             const minCol = Math.min(...allSeats.map(s => Number(s.excel_col)));
             const maxCol = Math.max(...allSeats.map(s => Number(s.excel_col)));
             const minRow = Math.min(...allSeats.map(s => Number(s.excel_row)));
