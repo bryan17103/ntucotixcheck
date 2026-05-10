@@ -548,16 +548,16 @@ def admin_delete_order(order_id: str, floor: str = "", row_label: str = ""):
 
 def get_section_members_rows():
     ws = get_config_worksheet("section_members")
-    rows = ws.get_all_records(expected_headers=["姓名", "聲部", "手動加分"])
+    rows = ws.get_all_records(expected_headers=["姓名", "聲部", "手動加分_TP"])
 
     return [
         {
             "name": normalize_text(row.get("姓名")),
             "section": normalize_text(row.get("聲部")),
-            "manual_points": float(row.get("手動加分") or 0),
+            "manual_points": float(row.get("手動加分_TP") or 0),
         }
         for row in rows
-        if normalize_text(row.get("姓名")) or normalize_text(row.get("聲部")) or normalize_text(row.get("手動加分"))
+        if normalize_text(row.get("姓名")) or normalize_text(row.get("聲部")) or normalize_text(row.get("手動加分_TP"))
     ]
 
 
@@ -578,7 +578,7 @@ def get_stats_config_rows():
 
 def save_section_members_rows(rows):
     ws = get_config_worksheet("section_members")
-    values = [["姓名", "聲部", "手動加分"]]
+    values = [["姓名", "聲部", "手動加分_TP"]]
 
     for row in rows:
         name = normalize_text(row.get("name"))
@@ -621,7 +621,7 @@ def load_section_members():
 
     try:
         ws = get_config_worksheet("section_members")
-        rows = ws.get_all_records(expected_headers=["姓名", "聲部", "手動加分"])
+        rows = ws.get_all_records(expected_headers=["姓名", "聲部", "手動加分_TP"])
     except Exception:
         return member_to_section
 
@@ -630,7 +630,7 @@ def load_section_members():
         section = normalize_text(row.get("聲部"))
 
         try:
-            manual_points = float(row.get("手動加分") or 0)
+            manual_points = float(row.get("手動加分_TP") or 0)
         except Exception:
             manual_points = 0
 
