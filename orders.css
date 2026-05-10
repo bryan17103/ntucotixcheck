@@ -142,6 +142,8 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
 .legend-500 { background: #cf6f6d; }
 .legend-300 { background: #b9cf8c; }
 .legend-200 { background: #9fc3ea; }
+.legend-dot.legend-sold { background: #7a7a7a; }
+.legend-dot.legend-empty { background: #f4f4f4; border: 1.5px solid #d7d7d7; }
 .my-seat-map-scroll { flex: 1; min-height: 0; overflow: auto; border: 1.5px solid #eee; border-radius: 18px; background: #fafafa; padding: 14px; }
 .my-seat-map { display: grid; gap: 6px; justify-content: start; align-content: start; width: fit-content; min-height: max-content; padding: 8px 10px 20px; }
 .my-map-floor-label { grid-column: 1 / -1; text-align: center; font-size: 18px; font-weight: 900; color: #444; display: flex; align-items: center; justify-content: center; pointer-events: none; }
