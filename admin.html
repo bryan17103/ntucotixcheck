@@ -4,271 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>《嶋聲》後台管理</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body.admin-page {
-            margin: 0;
-            font-family: Arial, "Noto Sans TC", sans-serif;
-            background: linear-gradient(135deg, #0f3b3a, #4b1f11);
-            min-height: 100vh;
-            padding: 12px;
-        }
-
-        .admin-shell {
-            background: rgba(255, 255, 255, 0.96);
-            border-radius: 28px;
-            padding: 24px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-            min-height: calc(100vh - 24px);
-        }
-
-        .admin-topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 16px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .admin-title-wrap h1 {
-            margin: 0;
-            font-size: 28px;
-            color: #222;
-            font-weight: 800;
-        }
-
-        .admin-title-wrap p {
-            margin: 8px 0 0 0;
-            color: #7a7a7a;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .back-link-btn {
-            height: 44px;
-            padding: 0 20px;
-            border-radius: 16px;
-            border: 2px solid #dddddd;
-            background: #fff;
-            color: #4a4a4a;
-            font-size: 15px;
-            font-weight: 700;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .admin-search-card {
-            display: flex;
-            gap: 14px;
-            align-items: center;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .admin-search-input {
-            width: 300px;
-            max-width: 100%;
-            height: 52px;
-            border: 2px solid #d8d8d8;
-            border-radius: 18px;
-            padding: 0 18px;
-            font-size: 16px;
-            outline: none;
-            background: #fff;
-        }
-
-        .admin-search-btn {
-            height: 52px;
-            padding: 0 24px;
-            border: none;
-            border-radius: 18px;
-            background: #f26c41;
-            color: white;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        .admin-search-btn:hover {
-            background: #e95d31;
-        }
-
-        .admin-table-card {
-            border: 1.5px solid #e8e8e8;
-            border-radius: 26px;
-            overflow: hidden;
-            background: #fff;
-        }
-
-        .admin-table-scroll {
-            overflow-x: auto;
-        }
-
-        table.admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-            min-width: 1500px;
-        }
-
-        .admin-table thead th {
-            background: #fafafa;
-            color: #2f2f2f;
-            font-size: 16px;
-            font-weight: 800;
-            text-align: left;
-            padding: 18px 14px;
-            border-bottom: 1px solid #ececec;
-            white-space: nowrap;
-        }
-
-        .admin-table tbody td {
-            padding: 16px 14px;
-            border-bottom: 1px solid #efefef;
-            vertical-align: middle;
-            font-size: 15px;
-        }
-
-        .admin-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .admin-table th:nth-child(1),
-        .admin-table td:nth-child(1) { width: 180px; }
-
-        .admin-table th:nth-child(2),
-        .admin-table td:nth-child(2) { width: 130px; }
-
-        .admin-table th:nth-child(3),
-        .admin-table td:nth-child(3) { width: 100px; }
-
-        .admin-table th:nth-child(4),
-        .admin-table td:nth-child(4) { width: 110px; }
-
-        .admin-table th:nth-child(5),
-        .admin-table td:nth-child(5) { width: 150px; }
-
-        .admin-table th:nth-child(6),
-        .admin-table td:nth-child(6) { width: 100px; }
-
-        .admin-table th:nth-child(7),
-        .admin-table td:nth-child(7) { width: 250px; }
-
-        .admin-table th:nth-child(8),
-        .admin-table td:nth-child(8) { width: 150px; text-align: center; }
-
-        .admin-table th:nth-child(9),
-        .admin-table td:nth-child(9) { width: 150px; text-align: center; }
-
-        .admin-table th:nth-child(10),
-        .admin-table td:nth-child(10) { width: 170px; text-align: center; }
-
-        .info-text {
-            color: #276fb7;
-            font-weight: 800;
-        }
-
-        .seats-cell {
-            white-space: normal;
-            word-break: break-word;
-            line-height: 1.5;
-        }
-
-        .note-input {
-            width: 210px;
-            max-width: 100%;
-            height: 46px;
-            border: 2px solid #d5d5d5;
-            border-radius: 16px;
-            padding: 0 14px;
-            font-size: 15px;
-            color: #444;
-            outline: none;
-            background: #fff;
-        }
-
-        .cell-center {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
-
-        .pill-btn {
-            height: 58px;
-            min-width: 120px;
-            padding: 0 18px;
-            border: none;
-            border-radius: 16px;
-            font-size: 15px;
-            font-weight: 800;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-
-        .pill-btn.orange {
-            background: #f26c41;
-            color: #fff;
-        }
-
-        .pill-btn.orange:hover {
-            background: #e95d31;
-        }
-
-        .pill-btn.red-outline {
-            background: #fff7f6;
-            color: #d84b3b;
-            border: 2px solid #f0a59a;
-        }
-
-        .pill-btn.red-outline:hover {
-            background: #fff0ed;
-        }
-
-        .pill-btn.gray {
-            background: #eeeeee;
-            color: #8f8f8f;
-        }
-
-        .pill-btn.green {
-            background: #e9f7ef;
-            color: #249167;
-        }
-
-        .pill-btn.blue {
-            background: #e7efff;
-            color: #356fcb;
-        }
-
-        .pill-btn.dark {
-            background: #333;
-            color: #fff;
-        }
-
-        .pill-btn.cyan {
-            background: #e7fbff;
-            color: #1493a5;
-            border: 2px solid #8adce7;
-        }
-
-        .pill-btn:disabled {
-            cursor: not-allowed;
-            opacity: 1;
-        }
-
-        .empty-state {
-            text-align: center;
-            color: #888;
-            font-size: 16px;
-            padding: 32px 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="/admin.css">
 </head>
 <body class="admin-page">
     <div class="admin-shell">
@@ -484,49 +220,15 @@
             renderAdminOrders(data.orders || []);
         }
 
-        async function toggleLock(orderId) {
-            if (!authed) return;
-            const res = await fetch(`/api/admin/orders/${orderId}/lock`, {
-                method: "PATCH"
-            });
-            const data = await res.json();
-            if (!res.ok || !data.success) {
-                alert(data.message || "更新失敗");
-                return;
-            }
-            searchAdminOrders();
-        }
-
-        async function togglePayment(orderId) {
-            if (!authed) return;
-            const res = await fetch(`/api/admin/orders/${orderId}/payment`, {
-                method: "PATCH"
-            });
-            const data = await res.json();
-            if (!res.ok || !data.success) {
-                alert(data.message || "更新失敗");
-                return;
-            }
-            searchAdminOrders();
-        }
-
-        async function advancePickup(orderId) {
-            if (!authed) return;
-            const res = await fetch(`/api/admin/orders/${orderId}/pickup/advance`, {
-                method: "PATCH"
-            });
-            const data = await res.json();
-            if (!res.ok || !data.success) {
-                alert(data.message || "更新失敗");
-                return;
-            }
-            searchAdminOrders();
-        }
-
-        async function toggleTicketAdjusted(orderId) {
+        async function toggleLock(orderId, floor, rowLabel) {
             if (!authed) return;
         
-            const res = await fetch(`/api/admin/orders/${encodeURIComponent(orderId)}/ticket-adjusted`, {
+            const url =
+                `/api/admin/orders/${encodeURIComponent(orderId)}/lock` +
+                `?floor=${encodeURIComponent(floor)}` +
+                `&row_label=${encodeURIComponent(rowLabel)}`;
+        
+            const res = await fetch(url, {
                 method: "PATCH"
             });
         
@@ -539,20 +241,95 @@
         
             searchAdminOrders();
         }
-
-        async function deleteOrder(orderId) {
+        
+        async function togglePayment(orderId, floor, rowLabel) {
             if (!authed) return;
-            const ok = confirm("確定要刪除這筆訂單嗎？");
+        
+            const url =
+                `/api/admin/orders/${encodeURIComponent(orderId)}/payment` +
+                `?floor=${encodeURIComponent(floor)}` +
+                `&row_label=${encodeURIComponent(rowLabel)}`;
+        
+            const res = await fetch(url, {
+                method: "PATCH"
+            });
+        
+            const data = await res.json();
+        
+            if (!res.ok || !data.success) {
+                alert(data.message || "更新失敗");
+                return;
+            }
+        
+            searchAdminOrders();
+        }
+        
+        async function advancePickup(orderId, floor, rowLabel) {
+            if (!authed) return;
+        
+            const url =
+                `/api/admin/orders/${encodeURIComponent(orderId)}/pickup/advance` +
+                `?floor=${encodeURIComponent(floor)}` +
+                `&row_label=${encodeURIComponent(rowLabel)}`;
+        
+            const res = await fetch(url, {
+                method: "PATCH"
+            });
+        
+            const data = await res.json();
+        
+            if (!res.ok || !data.success) {
+                alert(data.message || "更新失敗");
+                return;
+            }
+        
+            searchAdminOrders();
+        }
+        
+        async function toggleTicketAdjusted(orderId, floor, rowLabel) {
+            if (!authed) return;
+        
+            const url =
+                `/api/admin/orders/${encodeURIComponent(orderId)}/ticket-adjusted` +
+                `?floor=${encodeURIComponent(floor)}` +
+                `&row_label=${encodeURIComponent(rowLabel)}`;
+        
+            const res = await fetch(url, {
+                method: "PATCH"
+            });
+        
+            const data = await res.json();
+        
+            if (!res.ok || !data.success) {
+                alert(data.message || "更新失敗");
+                return;
+            }
+        
+            searchAdminOrders();
+        }
+        
+        async function deleteOrder(orderId, floor, rowLabel) {
+            if (!authed) return;
+        
+            const ok = confirm("確定要刪除這排座位嗎？");
             if (!ok) return;
-
-            const res = await fetch(`/api/admin/orders/${orderId}`, {
+        
+            const url =
+                `/api/admin/orders/${encodeURIComponent(orderId)}` +
+                `?floor=${encodeURIComponent(floor)}` +
+                `&row_label=${encodeURIComponent(rowLabel)}`;
+        
+            const res = await fetch(url, {
                 method: "DELETE"
             });
+        
             const data = await res.json();
+        
             if (!res.ok || !data.success) {
                 alert(data.message || "刪除失敗");
                 return;
             }
+        
             searchAdminOrders();
         }
 
