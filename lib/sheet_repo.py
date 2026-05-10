@@ -248,6 +248,11 @@ def group_order_rows(rows: List[dict]) -> List[dict]:
                 "row_label": row_label,
                 "seats": [],
                 "price": 0,
+                "price_counts": {
+                    "500": 0,
+                    "300": 0,
+                    "200": 0,
+                },
                 "note": note,
                 "pickup_open": pickup_open,
                 "picked_up": picked_up,
@@ -260,6 +265,10 @@ def group_order_rows(rows: List[dict]) -> List[dict]:
             grouped[key]["seats"].append(seat_number)
 
         grouped[key]["price"] += price
+        zone = price_to_reward_zone(price)
+        
+        if zone in grouped[key]["price_counts"]:
+            grouped[key]["price_counts"][zone] += 1
 
         if note:
             grouped[key]["note"] = note
