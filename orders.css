@@ -124,6 +124,27 @@ body.orders-page {
     cursor: pointer;
 }
 
+.orders-help-modal-card {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,.18) transparent;
+}
+
+.orders-help-modal-card::-webkit-scrollbar {
+    width: 8px;
+}
+
+.orders-help-modal-card::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.orders-help-modal-card::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,.16);
+    border-radius: 999px;
+}
+
+.orders-help-modal-card::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,.26);
+}
 /* # Summary Cards */
 .orders-summary-grid { display: grid; grid-template-columns: 1fr 1fr 1.45fr 1.15fr; gap: 18px; margin-bottom: 22px; }
 .summary-card {
