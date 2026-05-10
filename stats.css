@@ -709,20 +709,23 @@ tr:last-child td {
     .section-name-cell,
     .section-inline-title {
         display: flex;
-        align-items: center;
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
     
         color: #276fb7;
         font-size: 15px;
         font-weight: 900;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
     }
     
     .section-total-cell,
     .section-inline-subtotal {
+        display: block;
         color: #276fb7;
-        font-size: 15px;
+        font-size: 18px;
         font-weight: 900;
+        line-height: 1;
     }
     
     .section-members-cell,
