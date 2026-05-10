@@ -670,20 +670,25 @@
                     : "";
         }
 
-        async function saveNote(orderId) {
+        async function saveNote(orderId, floor, rowLabel) {
             const input = document.getElementById(`note-${orderId}`);
             const note = input ? input.value.trim() : "";
-
-            const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}/note`, {
+        
+            const url =
+                `/api/orders/${encodeURIComponent(orderId)}/note` +
+                `?floor=${encodeURIComponent(floor)}` +
+                `&row_label=${encodeURIComponent(rowLabel)}`;
+        
+            const res = await fetch(url, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({ note })
             });
-
+        
             const raw = await res.text();
-
+        
             let data = {};
             try {
                 data = JSON.parse(raw);
@@ -691,29 +696,34 @@
                 alert(`回傳不是 JSON：${raw}`);
                 return;
             }
-
+        
             if (!res.ok || !data.success) {
                 alert(data.message || "更新失敗");
                 return;
             }
-
+        
             alert("備註已更新");
-
+        
             if (currentSearchName) {
                 searchOrders();
             }
         }
 
-        async function deleteOrder(orderId) {
-            const ok = confirm("確定要刪除這筆訂單嗎？刪除後座位會重新釋出。");
+        async function deleteOrder(orderId, floor, rowLabel) {
+            const ok = confirm("確定要刪除這一排的座位嗎？刪除後座位會重新釋出。");
             if (!ok) return;
-
-            const res = await fetch(`/api/orders/${encodeURIComponent(orderId)}`, {
+        
+            const url =
+                `/api/orders/${encodeURIComponent(orderId)}` +
+                `?floor=${encodeURIComponent(floor)}` +
+                `&row_label=${encodeURIComponent(rowLabel)}`;
+        
+            const res = await fetch(url, {
                 method: "DELETE"
             });
-
+        
             const raw = await res.text();
-
+        
             let data = {};
             try {
                 data = JSON.parse(raw);
@@ -721,14 +731,14 @@
                 alert(`回傳不是 JSON：${raw}`);
                 return;
             }
-
+        
             if (!res.ok || !data.success) {
                 alert(data.message || "刪除失敗");
                 return;
             }
-
+        
             alert(data.message || "刪除成功");
-
+        
             if (currentSearchName) {
                 searchOrders();
             }
