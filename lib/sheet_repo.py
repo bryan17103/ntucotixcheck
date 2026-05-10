@@ -545,21 +545,25 @@ def admin_delete_order(order_id: str, floor: str = "", row_label: str = ""):
     clear_caches()
     return True, "訂單已刪除"
 
-
 def get_section_members_rows():
     ws = get_config_worksheet("section_members")
-    rows = ws.get_all_records(expected_headers=["姓名", "聲部", "手動加分_TP"])
+    rows = ws.get_all_records(expected_headers=["姓名", "聲部", "手動加分_TP", "手動加分_KH"])
 
     return [
         {
             "name": normalize_text(row.get("姓名")),
             "section": normalize_text(row.get("聲部")),
             "manual_points": float(row.get("手動加分_TP") or 0),
+            "manual_points_kh": float(row.get("手動加分_KH") or 0),
         }
         for row in rows
-        if normalize_text(row.get("姓名")) or normalize_text(row.get("聲部")) or normalize_text(row.get("手動加分_TP"))
+        if (
+            normalize_text(row.get("姓名"))
+            or normalize_text(row.get("聲部"))
+            or normalize_text(row.get("手動加分_TP"))
+            or normalize_text(row.get("手動加分_KH"))
+        )
     ]
-
 
 def get_stats_config_rows():
     ws = get_config_worksheet("stats_config")
@@ -575,29 +579,31 @@ def get_stats_config_rows():
         if normalize_text(row.get("類型")) or normalize_text(row.get("名稱")) or normalize_text(row.get("條件"))
     ]
 
-
 def save_section_members_rows(rows):
     ws = get_config_worksheet("section_members")
-
-    values = [["姓名", "聲部", "手動加分_TP"]]
+    values = [["姓名", "聲部", "手動加分_TP", "手動加分_KH"]]
 
     for row in rows:
         name = normalize_text(row.get("name"))
         section = normalize_text(row.get("section"))
 
         try:
-            manual_points = float(row.get("manual_points") or 0)
+            manual_points_tp = float(row.get("manual_points") or 0)
         except Exception:
-            manual_points = 0
+            manual_points_tp = 0
 
-        if not name and not section and manual_points == 0:
+        try:
+            manual_points_kh = float(row.get("manual_points_kh") or 0)
+        except Exception:
+            manual_points_kh = 0
+
+        if not name and not section and manual_points_tp == 0 and manual_points_kh == 0:
             continue
 
-        values.append([name, section, manual_points])
+        values.append([name, section, manual_points_tp, manual_points_kh])
 
-    ws.batch_clear(["A:C"])
-    ws.update("A1:C" + str(len(values)), values)
-
+    ws.batch_clear(["A:D"])
+    ws.update("A1:D" + str(len(values)), values)
 
 def save_stats_config_rows(rows):
     ws = get_config_worksheet("stats_config")
@@ -616,13 +622,12 @@ def save_stats_config_rows(rows):
     ws.clear()
     ws.update("A1", values)
 
-
 def load_section_members():
     member_to_section = {}
 
     try:
         ws = get_config_worksheet("section_members")
-        rows = ws.get_all_records(expected_headers=["姓名", "聲部", "手動加分_TP"])
+        rows = ws.get_all_records(expected_headers=["姓名", "聲部", "手動加分_TP", "手動加分_KH"])
     except Exception:
         return member_to_section
 
@@ -642,7 +647,6 @@ def load_section_members():
             }
 
     return member_to_section
-
 
 def price_to_reward_zone(price: int) -> str:
     if price in {500, 400}:
