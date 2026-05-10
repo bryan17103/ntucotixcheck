@@ -734,5 +734,48 @@ body {
     height: 44px;
     font-size: 15px;
   }
+
+    .success-modal-card {
+        text-align: center;
+        max-width: 420px;
+    }
+    
+    .success-icon {
+        width: 72px;
+        height: 72px;
+        margin: 4px auto 18px;
+        border-radius: 50%;
+        background: #e8f7ef;
+    
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    
+        color: #1d9c67;
+        font-size: 38px;
+        font-weight: 900;
+    }
+    
+    .success-confirm-btn {
+        margin-top: 18px;
+    
+        height: 46px;
+        padding: 0 28px;
+    
+        border: none;
+        border-radius: 16px;
+    
+        background: #276fb7;
+        color: white;
+    
+        font-size: 15px;
+        font-weight: 800;
+    
+        cursor: pointer;
+    }
+    
+    .success-confirm-btn:hover {
+        background: #1f5fa0;
+    }
     
 }
