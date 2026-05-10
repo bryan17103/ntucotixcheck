@@ -1,3 +1,4 @@
+/* # Reset / Base */
 * {
     box-sizing: border-box;
 }
@@ -11,6 +12,8 @@ body {
     padding: 6px;
 }
 
+
+/* # Header */
 .page-header {
     height: 90px;
     display: flex;
@@ -35,6 +38,8 @@ body {
     color: rgba(255, 255, 255, 0.82);
 }
 
+
+/* # Main Layout */
 .app-shell {
     display: flex;
     gap: 12px;
@@ -42,18 +47,19 @@ body {
     height: calc(100vh - 86px);
 }
 
-/* 左側主區 */
 .seat-card {
     flex: 1;
     background: rgba(255, 255, 255, 0.96);
     border-radius: 28px;
-    padding: 14px 18px 18px 18px;
+    padding: 14px 18px 18px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
     height: 100%;
     overflow: hidden;
     position: relative;
 }
 
+
+/* # Stage / Seat Map */
 .stage-box {
     width: 100%;
     max-width: 980px;
@@ -70,10 +76,9 @@ body {
 }
 
 .map-stage {
-    margin: 0 auto 18px auto;
+    margin: 0 auto 18px;
 }
 
-/* 地圖區 */
 #map-viewport {
     width: 100%;
     height: 100%;
@@ -101,13 +106,14 @@ body {
     gap: 8px;
     justify-content: start;
     align-content: start;
-    padding: 10px 14px 24px 14px;
+    padding: 10px 14px 24px;
     width: fit-content;
     min-height: max-content;
     transform-origin: top left;
 }
 
-/* Tooltip */
+
+/* # Tooltip */
 .seat-tooltip {
     position: absolute;
     z-index: 20;
@@ -139,7 +145,8 @@ body {
     font-size: 12px;
 }
 
-/* 樓層與排號 */
+
+/* # Floor / Row Labels */
 .floor-label {
     grid-column: 1 / -1;
     text-align: center;
@@ -165,7 +172,8 @@ body {
     font-weight: 500;
 }
 
-/* 座位 */
+
+/* # Seats */
 .seat {
     width: 28px;
     height: 28px;
@@ -183,7 +191,6 @@ body {
     transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-/* 可選團內票 */
 .group-500 {
     background: #cf6f6d;
     color: white;
@@ -199,7 +206,6 @@ body {
     color: white;
 }
 
-/* 不可選區域 */
 .staff,
 .camera,
 .wheelchair,
@@ -214,21 +220,20 @@ body {
     cursor: not-allowed;
 }
 
-/* 已售 */
 .sold {
     background: #767676;
     color: white;
     cursor: not-allowed;
 }
 
-/* 已選 */
 .selected {
     outline: 3px solid #3949ab;
     transform: scale(1.12);
     box-shadow: 0 0 0 2px rgba(57, 73, 171, 0.15);
 }
 
-/* 浮動工具按鈕 */
+
+/* # Floating Map Tools */
 .map-floating-tools {
     position: absolute;
     top: 110px;
@@ -273,7 +278,8 @@ body {
     display: block;
 }
 
-/* 右側 sidebar */
+
+/* # Sidebar */
 .sidebar {
     width: 300px;
     background: rgba(255, 255, 255, 0.96);
@@ -297,17 +303,18 @@ body {
 }
 
 .sidebar h2 {
-    margin: 0 0 8px 0;
+    margin: 0 0 8px;
     font-size: 18px;
 }
 
 .sidebar-subtitle {
-    margin: 18px 0 10px 0;
+    margin: 18px 0 10px;
     font-size: 16px;
     color: #444;
 }
 
-/* 已選座位清單 */
+
+/* # Selected Seats */
 #selected-list {
     flex: 1;
     min-height: 0;
@@ -344,7 +351,8 @@ body {
     font-size: 13px;
 }
 
-/* 票區統計 */
+
+/* # Zone Summary */
 #zone-summary {
     min-height: 70px;
     font-size: 15px;
@@ -372,24 +380,8 @@ body {
     font-size: 15px;
 }
 
-.ticket-breakdown {
-    margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    font-size: 15px;
-    font-weight: 700;
-    color: #444;
-}
 
-.points-line {
-    margin-top: 12px;
-    font-size: 18px;
-    font-weight: 900;
-    color: #2f6fb7;
-}
-
-/* 金額與按鈕 */
+/* # Summary / Buttons */
 #summary {
     font-size: 18px;
     font-weight: 700;
@@ -437,6 +429,8 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
+
+/* # Forms / Small Buttons */
 .note-group {
     display: flex;
     align-items: center;
@@ -467,17 +461,24 @@ body {
     width: 100%;
 }
 
-.primary-mini-btn {
+
+/* # Shared Mini Buttons */
+.primary-mini-btn,
+.danger-btn,
+.pickup-btn {
     height: 40px;
     padding: 0 18px;
-    border: none;
     border-radius: 12px;
-    background: #f26c41;
-    color: white;
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
     flex-shrink: 0;
+}
+
+.primary-mini-btn {
+    border: none;
+    background: #f26c41;
+    color: white;
 }
 
 .primary-mini-btn:hover {
@@ -485,31 +486,21 @@ body {
 }
 
 .danger-btn {
-    height: 40px;
-    padding: 0 18px;
     border: 1.5px solid #f2a29a;
-    border-radius: 12px;
     background: #fff7f6;
     color: #d84b3b;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    flex-shrink: 0;
 }
 
 .danger-btn:hover {
     background: #fff0ed;
 }
+
 .pickup-btn {
-    height: 40px;
-    padding: 0 18px;
     border: none;
     border-radius: 999px;
     font-size: 14px;
-    font-weight: 700;
     cursor: default;
     white-space: nowrap;
-    flex-shrink: 0;
 }
 
 .pickup-btn.closed {
@@ -525,6 +516,25 @@ body {
 .pickup-btn.done {
     background: #e8f0ff;
     color: #276fb7;
+}
+
+
+/* # Stats / Rewards Shared Styles */
+.ticket-breakdown {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #444;
+}
+
+.points-line {
+    margin-top: 12px;
+    font-size: 18px;
+    font-weight: 900;
+    color: #2f6fb7;
 }
 
 .rank-badge {
@@ -591,370 +601,324 @@ body {
     color: #aaa;
 }
 
-@media (max-width: 900px) {
-  body {
-    overflow: auto;
-    padding: 8px;
-  }
 
-  .page-header {
-    height: auto;
-    padding: 12px 8px 10px;
-  }
+/* # Modals */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
 
-  .page-title {
-    font-size: 22px;
-  }
+.modal-overlay.hidden {
+    display: none;
+}
 
-  .page-subtitle {
-    font-size: 13px;
-    margin-top: 4px;
-  }
+.modal-card {
+    position: relative;
+    width: min(420px, 100%);
+    background: #fff;
+    border-radius: 26px;
+    padding: 30px 28px;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
+    color: #222;
+    animation: modalPop 0.16s ease-out;
+}
 
-  .app-shell {
-    flex-direction: column;
-    height: auto;
-    gap: 10px;
-  }
+.modal-card h2 {
+    margin: 0 0 12px;
+    font-size: 24px;
+    font-weight: 900;
+    color: #222;
+}
 
-  .seat-card {
-    width: 100%;
-    height: 62vh;
-    min-height: 420px;
-    padding: 12px;
-    border-radius: 22px;
-  }
+.modal-card p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: #555;
+}
 
-  .sidebar {
-    width: 100%;
-    position: static;
-    top: auto;
-    max-height: none;
-    border-radius: 22px;
-    padding: 16px;
-  }
-
-  .map-floating-tools {
+.modal-close-btn {
+    position: absolute;
     top: 14px;
-    right: 14px;
-    gap: 10px;
-  }
+    right: 16px;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: #f1f1f1;
+    color: #555;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+}
 
-  .tool-btn {
-    width: 42px;
-    height: 42px;
-    border-radius: 12px;
-  }
+.modal-close-btn:hover {
+    background: #e5e5e5;
+}
 
-  .tool-icon,
-  .tool-btn svg {
-    width: 20px;
-    height: 20px;
-  }
 
-  .stage-box {
-    height: 50px;
-    font-size: 18px;
-    border-radius: 14px;
-  }
+/* # Name Modal */
+.name-modal-card {
+    width: min(420px, 100%);
+}
 
-  #map-viewport {
-    min-height: 0;
-  }
-
-  #seat-map {
-    gap: 6px;
-    padding: 8px 10px 18px 10px;
-  }
-
-  .floor-label {
-    font-size: 18px;
-  }
-
-  .row-label {
-    width: 20px;
-    height: 24px;
-    font-size: 10px;
-  }
-
-  .seat {
-    width: 22px;
-    height: 22px;
-    font-size: 9px;
-    line-height: 22px;
-  }
-
-  .seat-tooltip {
-    display: none !important;
-  }
-
-  .sidebar h2 {
-    font-size: 17px;
-  }
-
-  .sidebar-subtitle {
-    margin-top: 14px;
+.name-modal-text {
+    margin-top: 8px;
+    margin-bottom: 18px;
     font-size: 15px;
-  }
+    line-height: 1.7;
+    color: #666;
+}
 
-  #selected-list {
-    max-height: 180px;
-    flex: none;
-    margin-bottom: 12px;
-  }
+.name-modal-input {
+    width: 100%;
+    height: 52px;
+    border: 1.5px solid #d8d8d8;
+    border-radius: 16px;
+    padding: 0 16px;
+    font-size: 16px;
+    font-weight: 700;
+    outline: none;
+    transition: 0.15s;
+}
 
-  .selected-seat-item {
-    font-size: 14px;
-    margin-bottom: 8px;
-  }
+.name-modal-input:focus {
+    border-color: #276fb7;
+    box-shadow: 0 0 0 4px rgba(39, 111, 183, 0.12);
+}
 
-  .selected-seat-item span {
-    font-size: 12px;
-  }
+.name-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 22px;
+}
 
-  .zone-summary-item {
-    font-size: 14px;
-  }
-
-  .zone-summary-item .zone-name {
-    font-size: 12px;
-  }
-
-  .zone-summary-item .zone-count {
-    font-size: 14px;
-  }
-
-  #summary {
-    font-size: 17px;
-    margin-bottom: 12px;
-  }
-
-  #confirm-btn,
-  .secondary-link-btn {
+.name-cancel-btn,
+.name-confirm-btn {
     height: 44px;
+    padding: 0 22px;
+    border: none;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.name-cancel-btn {
+    background: #efefef;
+    color: #666;
+}
+
+.name-confirm-btn {
+    background: #276fb7;
+    color: white;
+}
+
+.name-confirm-btn:hover {
+    background: #1f5fa0;
+}
+
+
+/* # Success Modal */
+.success-modal-card {
+    text-align: center;
+    max-width: 420px;
+}
+
+.success-icon {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: #e8f7ef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1d9c67;
+    font-size: 38px;
+    font-weight: 900;
+}
+
+.success-confirm-btn {
+    margin-top: 18px;
+    height: 46px;
+    padding: 0 28px;
+    border: none;
+    border-radius: 16px;
+    background: #276fb7;
+    color: white;
     font-size: 15px;
-  }
+    font-weight: 800;
+    cursor: pointer;
+}
 
-    .success-modal-card {
-        text-align: center;
-        max-width: 420px;
+.success-confirm-btn:hover {
+    background: #1f5fa0;
+}
+
+
+/* # Animations */
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(0.98);
     }
-    
-    .success-icon {
-        width: 72px;
-        height: 72px;
-        margin: 4px auto 18px;
-        border-radius: 50%;
-        background: #e8f7ef;
-    
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    
-        color: #1d9c67;
-        font-size: 38px;
-        font-weight: 900;
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
     }
-    
-    .success-confirm-btn {
-        margin-top: 18px;
-    
-        height: 46px;
-        padding: 0 28px;
-    
-        border: none;
-        border-radius: 16px;
-    
-        background: #276fb7;
-        color: white;
-    
-        font-size: 15px;
-        font-weight: 800;
-    
-        cursor: pointer;
-    }
-    
-    .success-confirm-btn:hover {
-        background: #1f5fa0;
+}
+
+
+/* # Mobile */
+@media (max-width: 900px) {
+    body {
+        overflow: auto;
+        padding: 8px;
     }
 
-    .name-modal-card {
-        width: min(420px, 100%);
+    .page-header {
+        height: auto;
+        padding: 12px 8px 10px;
     }
-    
-    .name-modal-text {
-        margin-top: 8px;
-        margin-bottom: 18px;
-    
-        font-size: 15px;
-        line-height: 1.7;
-        color: #666;
+
+    .page-title {
+        font-size: 22px;
     }
-    
-    .name-modal-input {
+
+    .page-subtitle {
+        font-size: 13px;
+        margin-top: 4px;
+    }
+
+    .app-shell {
+        flex-direction: column;
+        height: auto;
+        gap: 10px;
+    }
+
+    .seat-card {
         width: 100%;
-        height: 52px;
-    
-        border: 1.5px solid #d8d8d8;
-        border-radius: 16px;
-    
-        padding: 0 16px;
-    
-        font-size: 16px;
-        font-weight: 700;
-    
-        outline: none;
-        transition: 0.15s;
-    }
-    
-    .name-modal-input:focus {
-        border-color: #276fb7;
-        box-shadow: 0 0 0 4px rgba(39, 111, 183, 0.12);
-    }
-    
-    .name-modal-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-    
-        margin-top: 22px;
-    }
-    
-    .name-cancel-btn,
-    .name-confirm-btn {
-        height: 44px;
-        padding: 0 22px;
-    
-        border: none;
-        border-radius: 14px;
-    
-        font-size: 14px;
-        font-weight: 800;
-    
-        cursor: pointer;
-    }
-    
-    .name-cancel-btn {
-        background: #efefef;
-        color: #666;
-    }
-    
-    .name-confirm-btn {
-        background: #276fb7;
-        color: white;
-    }
-    
-    .name-confirm-btn:hover {
-        background: #1f5fa0;
+        height: 62vh;
+        min-height: 420px;
+        padding: 12px;
+        border-radius: 22px;
     }
 
-    .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.45);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        padding: 20px;
+    .sidebar {
+        width: 100%;
+        position: static;
+        top: auto;
+        max-height: none;
+        border-radius: 22px;
+        padding: 16px;
     }
-    
-    .modal-overlay.hidden {
-        display: none;
-    }
-    
-    .modal-card {
-        position: relative;
-        width: min(420px, 100%);
-        background: #fff;
-        border-radius: 26px;
-        padding: 30px 28px;
-        box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
-        color: #222;
-        animation: modalPop 0.16s ease-out;
-    }
-    
-    .modal-close-btn {
-        position: absolute;
+
+    .map-floating-tools {
         top: 14px;
-        right: 16px;
-        width: 34px;
-        height: 34px;
-        border: none;
-        border-radius: 50%;
-        background: #f1f1f1;
-        color: #555;
-        font-size: 24px;
-        cursor: pointer;
+        right: 14px;
+        gap: 10px;
     }
-    
-    .name-modal-input {
-        width: 100%;
-        height: 52px;
-        border: 1.5px solid #d8d8d8;
-        border-radius: 16px;
-        padding: 0 16px;
-        font-size: 16px;
-        font-weight: 700;
-        outline: none;
+
+    .tool-btn {
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
     }
-    
-    .name-modal-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 12px;
-        margin-top: 22px;
+
+    .tool-icon,
+    .tool-btn svg {
+        width: 20px;
+        height: 20px;
     }
-    
-    .name-cancel-btn,
-    .name-confirm-btn,
-    .success-confirm-btn {
-        height: 44px;
-        padding: 0 22px;
-        border: none;
+
+    .stage-box {
+        height: 50px;
+        font-size: 18px;
         border-radius: 14px;
+    }
+
+    #map-viewport {
+        min-height: 0;
+    }
+
+    #seat-map {
+        gap: 6px;
+        padding: 8px 10px 18px;
+    }
+
+    .floor-label {
+        font-size: 18px;
+    }
+
+    .row-label {
+        width: 20px;
+        height: 24px;
+        font-size: 10px;
+    }
+
+    .seat {
+        width: 22px;
+        height: 22px;
+        font-size: 9px;
+        line-height: 22px;
+    }
+
+    .seat-tooltip {
+        display: none !important;
+    }
+
+    .sidebar h2 {
+        font-size: 17px;
+    }
+
+    .sidebar-subtitle {
+        margin-top: 14px;
+        font-size: 15px;
+    }
+
+    #selected-list {
+        max-height: 180px;
+        flex: none;
+        margin-bottom: 12px;
+    }
+
+    .selected-seat-item {
         font-size: 14px;
-        font-weight: 800;
-        cursor: pointer;
+        margin-bottom: 8px;
     }
-    
-    .name-cancel-btn {
-        background: #efefef;
-        color: #666;
+
+    .selected-seat-item span {
+        font-size: 12px;
     }
-    
-    .name-confirm-btn,
-    .success-confirm-btn {
-        background: #276fb7;
-        color: white;
+
+    .zone-summary-item {
+        font-size: 14px;
     }
-    
-    .success-modal-card {
-        text-align: center;
+
+    .zone-summary-item .zone-name {
+        font-size: 12px;
     }
-    
-    .success-icon {
-        width: 72px;
-        height: 72px;
-        margin: 0 auto 18px;
-        border-radius: 50%;
-        background: #e8f7ef;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #1d9c67;
-        font-size: 38px;
-        font-weight: 900;
+
+    .zone-summary-item .zone-count {
+        font-size: 14px;
     }
-    
-    @keyframes modalPop {
-        from {
-            opacity: 0;
-            transform: translateY(8px) scale(0.98);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
+
+    #summary {
+        font-size: 17px;
+        margin-bottom: 12px;
+    }
+
+    #confirm-btn,
+    .secondary-link-btn {
+        height: 44px;
+        font-size: 15px;
     }
 }
