@@ -271,7 +271,7 @@ tr:last-child td {
 
 .section-block {
     padding-bottom: 14px;
-    border-bottom: 1px dashed #ddd;
+    border-bottom: 1px solid #eeeeee;
 }
 
 .section-block:last-child {
@@ -576,6 +576,11 @@ tr:last-child td {
         max-height: 400px;
         overflow-x: hidden;
         overflow-y: auto;
+        position: sticky;
+        top: 0;
+        z-index: 5;
+
+    background: #fafafa;
     }
 
     table {
