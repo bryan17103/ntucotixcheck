@@ -566,7 +566,7 @@ def get_section_members_rows():
     ]
 
 def get_stats_config_rows():
-    ws = get_config_worksheet("stats_config")
+    ws = get_config_worksheet("stats_config_tp")
     rows = ws.get_all_records(expected_headers=["類型", "名稱", "條件"])
 
     return [
@@ -606,7 +606,7 @@ def save_section_members_rows(rows):
     ws.update("A1:D" + str(len(values)), values)
 
 def save_stats_config_rows(rows):
-    ws = get_config_worksheet("stats_config")
+    ws = get_config_worksheet("stats_config_tp")
     values = [["類型", "名稱", "條件"]]
 
     for row in rows:
@@ -681,7 +681,7 @@ def load_stats_config():
     }
 
     try:
-        ws = get_config_worksheet("stats_config")
+        ws = get_config_worksheet("stats_config_tp")
         rows = ws.get_all_records(expected_headers=["類型", "名稱", "條件"])
     except Exception:
         return config
