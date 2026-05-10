@@ -1,0 +1,487 @@
+/* # Reset / Base */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, "Noto Sans TC", sans-serif;
+    background: linear-gradient(135deg, #0f3b3a, #4b1f11);
+    min-height: 100vh;
+    padding: 12px;
+}
+
+/* # Page Shell */
+.stats-shell {
+    background: rgba(255, 255, 255, 0.96);
+    border-radius: 28px;
+    padding: 28px 28px 32px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    min-height: calc(100vh - 24px);
+}
+
+.stats-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.stats-title-wrap h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 900;
+    color: #222;
+}
+
+.stats-title-wrap p {
+    margin: 8px 0 0;
+    color: #7a7a7a;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.back-link-btn {
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 14px;
+    border: 1.5px solid #dddddd;
+    background: #fff;
+    color: #444;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.back-link-btn:hover {
+    background: #f7f7f7;
+}
+
+/* # Hero Overview Cards */
+.hero-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+    align-items: stretch;
+}
+
+.hero-card,
+.panel-card,
+.section-card {
+    background: #fff;
+    border: 1.5px solid #e8e8e8;
+    border-radius: 22px;
+    padding: 20px;
+}
+
+.hero-card {
+    min-height: 112px;
+}
+
+.hero-label {
+    font-size: 14px;
+    color: #7a7a7a;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.hero-progress-main,
+.hero-money-main,
+.hero-zone-main {
+    font-size: 34px;
+    font-weight: 900;
+    line-height: 1.05;
+}
+
+.hero-progress-main {
+    color: #f26c41;
+}
+
+.hero-money-main {
+    color: #276fb7;
+}
+
+.hero-zone-main {
+    color: #276fb7;
+}
+
+.zone-500-card .hero-zone-main {
+    color: #cf6f6d;
+}
+
+.zone-300-card .hero-zone-main {
+    color: #8fab58;
+}
+
+.zone-200-card .hero-zone-main {
+    color: #5b9bd5;
+}
+
+.hero-progress-target {
+    font-size: 20px;
+    color: #979797;
+    font-weight: 800;
+    margin-left: 6px;
+}
+
+/* # Main Panels */
+.panel-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(320px, 0.9fr);
+    gap: 18px;
+    margin-bottom: 24px;
+    align-items: stretch;
+}
+
+.panel-card {
+    height: 460px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.reward-panel-card {
+    height: 460px;
+}
+
+.card-title {
+    font-size: 20px;
+    font-weight: 900;
+    color: #222;
+    margin-bottom: 14px;
+}
+
+/* # Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: 13px 10px;
+    border-bottom: 1px solid #eeeeee;
+    text-align: left;
+    font-size: 15px;
+    vertical-align: middle;
+}
+
+th {
+    background: #fafafa;
+    font-weight: 900;
+    color: #333;
+    white-space: nowrap;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+.ranking-table-scroll,
+.reward-table-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    border-radius: 14px;
+}
+
+.reward-table-scroll {
+    padding-right: 8px;
+}
+
+/* # Ranking */
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+    border-radius: 999px;
+    background: #fff2ec;
+    color: #f26c41;
+    font-weight: 900;
+    font-size: 14px;
+}
+
+.ranking-row-top {
+    background: #fff9f6;
+}
+
+.ranking-name {
+    color: #222;
+    font-weight: 700;
+}
+
+.ranking-section {
+    color: #7a7a7a;
+    font-weight: 700;
+}
+
+.ranking-ticket {
+    color: #276fb7;
+    font-weight: 900;
+    font-size: 17px;
+}
+
+/* # Chart */
+.chart-wrap {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    padding-top: 8px;
+}
+
+/* # Section Cards */
+.section-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 220px);
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.section-card {
+    width: 220px;
+    padding: 18px 16px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 900;
+    color: #222;
+    margin-bottom: 14px;
+}
+
+.member-line {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+.member-name {
+    color: #333;
+    min-width: 0;
+    word-break: break-word;
+}
+
+.member-count {
+    color: #276fb7;
+    font-weight: 900;
+    flex-shrink: 0;
+}
+
+.subtotal {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px dashed #ccc;
+    font-weight: 900;
+    color: #222;
+}
+
+/* # Rewards */
+.reward-condition-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.reward-condition-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 32px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: #fff4ee;
+    border: 1px solid #f3d3c3;
+    color: #d66a3b;
+    font-size: 13px;
+    font-weight: 800;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.reward-main {
+    color: #222;
+    font-weight: 900;
+}
+
+.reward-count {
+    color: #276fb7;
+    font-weight: 900;
+    font-size: 16px;
+}
+
+.reward-names {
+    color: #666;
+    line-height: 1.7;
+}
+
+.reward-empty,
+.empty-text {
+    color: #aaaaaa;
+    font-size: 14px;
+}
+
+.reward-table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.reward-table th {
+    height: 50px;
+    padding: 0 10px;
+    vertical-align: middle;
+    line-height: 1;
+    font-weight: 900;
+}
+
+.reward-table td {
+    vertical-align: middle;
+    padding: 10px;
+}
+
+.reward-table th:nth-child(1),
+.reward-table td:nth-child(1) {
+    width: 35%;
+    text-align: left;
+}
+
+.reward-table th:nth-child(2),
+.reward-table td:nth-child(2) {
+    width: 18%;
+    text-align: center;
+}
+
+.reward-table th:nth-child(3),
+.reward-table td:nth-child(3) {
+    width: 12%;
+    text-align: center;
+}
+
+.reward-table th:nth-child(4),
+.reward-table td:nth-child(4) {
+    width: 35%;
+    text-align: left;
+    word-break: break-word;
+    line-height: 1.5;
+}
+
+.reward-table th:nth-child(4) {
+    padding-left: 28px;
+}
+
+.reward-table td:nth-child(4) {
+    color: #666;
+}
+
+/* # Responsive */
+@media (max-width: 1280px) {
+    .hero-grid {
+        grid-template-columns: repeat(3, minmax(180px, 1fr));
+    }
+
+    .panel-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 960px) {
+    .hero-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-shell {
+        padding: 18px;
+    }
+
+    .section-grid {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+
+    .section-card {
+        width: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .reward-table-scroll {
+        max-height: 430px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 4px;
+    }
+
+    .reward-table {
+        table-layout: fixed;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .reward-table th {
+        height: 52px;
+        padding: 0 8px;
+        font-size: 14px;
+        line-height: 1.2;
+    }
+
+    .reward-table td {
+        padding: 16px 8px;
+        font-size: 14px;
+        line-height: 1.45;
+    }
+
+    .reward-table th:nth-child(1),
+    .reward-table td:nth-child(1) {
+        width: 34%;
+    }
+
+    .reward-table th:nth-child(2),
+    .reward-table td:nth-child(2) {
+        width: 22%;
+        text-align: center;
+    }
+
+    .reward-table th:nth-child(3),
+    .reward-table td:nth-child(3) {
+        width: 14%;
+        text-align: center;
+    }
+
+    .reward-table th:nth-child(4),
+    .reward-table td:nth-child(4) {
+        width: 30%;
+        text-align: left;
+        word-break: break-word;
+    }
+
+    .reward-main {
+        font-size: 15px;
+        line-height: 1.35;
+    }
+
+    .reward-condition-chip {
+        min-height: 28px;
+        padding: 0 10px;
+        font-size: 12px;
+    }
+
+    .reward-count {
+        font-size: 15px;
+    }
+
+    .reward-names {
+        font-size: 13px;
+        line-height: 1.5;
+    }
+}
