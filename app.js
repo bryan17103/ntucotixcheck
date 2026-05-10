@@ -416,7 +416,7 @@ function setupConfirmButton() {
             return;
         }
 
-        const name = prompt("請輸入姓名（點擊OK後請等一下下><）");
+        const name = await askBuyerName();
         if (!name) return;
 
         const res = await fetch("/api/confirm", {
@@ -454,11 +454,68 @@ setupZoomControls();
 setupConfirmButton();
 loadSeats();
 
+const nameModal = document.getElementById("name-modal");
+const buyerNameInput = document.getElementById("buyer-name-input");
+const nameCancelBtn = document.getElementById("name-cancel-btn");
+const nameConfirmBtn = document.getElementById("name-confirm-btn");
 const successModal = document.getElementById("success-modal");
 const successCloseBtn = document.getElementById("success-close-btn");
 const successConfirmBtn = document.getElementById("success-confirm-btn");
 const successTitle = document.getElementById("success-title");
 const successMessage = document.getElementById("success-message");
+
+function askBuyerName() {
+    return new Promise((resolve) => {
+
+        if (!nameModal) {
+            resolve(null);
+            return;
+        }
+
+        buyerNameInput.value = "";
+
+        nameModal.classList.remove("hidden");
+
+        setTimeout(() => {
+            buyerNameInput.focus();
+        }, 30);
+
+        function cleanup() {
+            nameModal.classList.add("hidden");
+
+            nameCancelBtn.removeEventListener("click", handleCancel);
+            nameConfirmBtn.removeEventListener("click", handleConfirm);
+            buyerNameInput.removeEventListener("keydown", handleKeydown);
+        }
+
+        function handleCancel() {
+            cleanup();
+            resolve(null);
+        }
+
+        function handleConfirm() {
+            const name = buyerNameInput.value.trim();
+
+            if (!name) {
+                buyerNameInput.focus();
+                return;
+            }
+
+            cleanup();
+            resolve(name);
+        }
+
+        function handleKeydown(e) {
+            if (e.key === "Enter") {
+                handleConfirm();
+            }
+        }
+
+        nameCancelBtn.addEventListener("click", handleCancel);
+        nameConfirmBtn.addEventListener("click", handleConfirm);
+        buyerNameInput.addEventListener("keydown", handleKeydown);
+    });
+}
 
 function showSuccessModal(title, message) {
     if (!successModal) return;
