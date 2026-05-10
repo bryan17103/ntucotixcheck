@@ -267,7 +267,7 @@
             mapEl.innerHTML = "";
             if (!allSeats.length) { mapEl.innerHTML = `<div class="my-seat-map-empty">目前無法載入座位圖</div>`; return; }
             const purchased = buildPurchasedSeatSet(orders);
-            subtitle.textContent = currentSearchName ? `${currentSearchName} 已劃座位（以票價顏色標示）` : "已劃座位（以票價顏色標示）";
+            subtitle.textContent = currentSearchName ? `${currentSearchName} 已劃座位（右上角打勾代表已取票）` : "已劃座位（右上角打勾代表已取票）";
             const minCol = Math.min(...allSeats.map(s => Number(s.excel_col)));
             const maxCol = Math.max(...allSeats.map(s => Number(s.excel_col)));
             const minRow = Math.min(...allSeats.map(s => Number(s.excel_row)));
