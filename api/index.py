@@ -179,11 +179,13 @@ def api_update_order_note(order_id):
 
     rows = get_all_records()
     debug_ids = [normalize_text(row.get("訂單ID")) for row in rows[:20]]
+    floor = request.args.get("floor", "").strip()
+    row_label = request.args.get("row_label", "").strip()
 
     print("DEBUG note order_id =", repr(order_id))
     print("DEBUG first 20 sheet order_ids =", debug_ids)
 
-    ok = update_order_note(order_id, note)
+    ok = update_order_note(order_id, note, floor=floor, row_label=row_label)
     if not ok:
         return jsonify({
             "success": False,
@@ -197,6 +199,8 @@ def api_update_order_note(order_id):
 @app.route("/api/orders/<order_id>", methods=["DELETE"])
 def api_delete_order(order_id):
     rows = get_all_records()
+    floor = request.args.get("floor", "").strip()
+    row_label = request.args.get("row_label", "").strip()
     locked = any(
         normalize_text(row.get("訂單ID")) == order_id
         and normalize_text(row.get("訂單狀態")).lower() == "locked"
@@ -206,7 +210,7 @@ def api_delete_order(order_id):
     if locked:
         return jsonify({"success": False, "message": "已鎖定，無法刪除"}), 403
 
-    ok = mark_order_deleted(order_id)
+    ok = mark_order_deleted(order_id, floor=floor, row_label=row_label)
     if not ok:
         return jsonify({"success": False, "message": "找不到訂單"}), 404
 
@@ -283,7 +287,9 @@ def api_admin_orders():
 @app.route("/api/admin/orders/<order_id>/ticket-adjusted", methods=["PATCH"])
 @require_admin
 def api_admin_ticket_adjusted(order_id):
-    ok, message = admin_toggle_ticket_adjusted_status(order_id)
+    floor = request.args.get("floor", "").strip()
+    row_label = request.args.get("row_label", "").strip()
+    ok, message = admin_toggle_ticket_adjusted_status(order_id, floor=floor, row_label=row_label)
     if not ok:
         return jsonify({"success": False, "message": message}), 404
     return jsonify({"success": True, "message": message})
@@ -291,7 +297,9 @@ def api_admin_ticket_adjusted(order_id):
 @app.route("/api/admin/orders/<order_id>/lock", methods=["PATCH"])
 @require_admin
 def api_admin_lock(order_id):
-    ok, message = admin_toggle_lock_status(order_id)
+    floor = request.args.get("floor", "").strip()
+    row_label = request.args.get("row_label", "").strip()
+    ok, message = admin_toggle_lock_status(order_id, floor=floor, row_label=row_label)
     if not ok:
         return jsonify({"success": False, "message": message}), 404
     return jsonify({"success": True, "message": message})
@@ -300,7 +308,9 @@ def api_admin_lock(order_id):
 @app.route("/api/admin/orders/<order_id>/payment", methods=["PATCH"])
 @require_admin
 def api_admin_payment(order_id):
-    ok, message = admin_toggle_payment_status(order_id)
+    floor = request.args.get("floor", "").strip()
+    row_label = request.args.get("row_label", "").strip()
+    ok, message = admin_toggle_payment_status(order_id, floor=floor, row_label=row_label)
     if not ok:
         return jsonify({"success": False, "message": message}), 404
     return jsonify({"success": True, "message": message})
@@ -309,7 +319,9 @@ def api_admin_payment(order_id):
 @app.route("/api/admin/orders/<order_id>/pickup/advance", methods=["PATCH"])
 @require_admin
 def api_admin_pickup_advance(order_id):
-    ok, message = admin_advance_pickup_status(order_id)
+    floor = request.args.get("floor", "").strip()
+    row_label = request.args.get("row_label", "").strip()
+    ok, message = admin_advance_pickup_status(order_id, floor=floor, row_label=row_label)
     if not ok:
         return jsonify({"success": False, "message": message}), 404
     return jsonify({"success": True, "message": message})
@@ -318,7 +330,9 @@ def api_admin_pickup_advance(order_id):
 @app.route("/api/admin/orders/<order_id>", methods=["DELETE"])
 @require_admin
 def api_admin_delete(order_id):
-    ok, message = admin_delete_order(order_id)
+    floor = request.args.get("floor", "").strip()
+    row_label = request.args.get("row_label", "").strip()
+    ok, message = admin_delete_order(order_id, floor=floor, row_label=row_label)
     if not ok:
         return jsonify({"success": False, "message": message}), 403
     return jsonify({"success": True, "message": message})
