@@ -470,88 +470,157 @@ tr:last-child td {
 }
 
 /* # Responsive */
-@media (max-width: 1280px) {
-    .hero-grid {
-        grid-template-columns: repeat(3, minmax(180px, 1fr));
-    }
-
-    .panel-grid {
-        grid-template-columns: 1fr;
-    }
-}
-
-@media (max-width: 960px) {
-    .hero-grid {
-        grid-template-columns: 1fr;
+@media (max-width: 768px) {
+    body {
+        padding: 8px;
+        overflow-x: hidden;
     }
 
     .stats-shell {
-        padding: 18px;
+        padding: 16px;
+        border-radius: 22px;
+        min-height: auto;
     }
 
-    .section-grid {
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    .stats-topbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        margin-bottom: 18px;
     }
 
-    .section-card {
-        width: auto;
+    .stats-title-wrap h1 {
+        font-size: 24px;
+        line-height: 1.25;
     }
-}
 
-@media (max-width: 768px) {
+    .stats-title-wrap p {
+        font-size: 13px;
+    }
+
+    .back-link-btn {
+        width: 100%;
+        height: 42px;
+    }
+
+    .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .hero-card {
+        min-height: 96px;
+        padding: 16px 18px;
+        border-radius: 20px;
+    }
+
+    .hero-label {
+        font-size: 13px;
+        margin-bottom: 8px;
+    }
+
+    .hero-progress-main,
+    .hero-money-main,
+    .hero-zone-main {
+        font-size: 28px;
+    }
+
+    .hero-progress-target {
+        font-size: 17px;
+    }
+
+    .stats-content-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .stats-left-column,
+    .stats-right-column {
+        gap: 16px;
+    }
+
+    .panel-card {
+        padding: 16px;
+        border-radius: 20px;
+        min-height: auto;
+        height: auto;
+    }
+
+    .ranking-panel-card,
+    .chart-panel-card,
+    .reward-panel-card,
+    .section-summary-panel-card {
+        min-height: auto;
+    }
+
+    .card-title {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+
+    .ranking-table-scroll,
     .reward-table-scroll {
-        max-height: 430px;
+        max-height: 360px;
+        overflow-x: auto;
         overflow-y: auto;
-        overflow-x: hidden;
-        padding-right: 4px;
+    }
+
+    table {
+        min-width: 520px;
+    }
+
+    th,
+    td {
+        padding: 11px 8px;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    .rank-badge {
+        min-width: 30px;
+        height: 30px;
+        font-size: 13px;
+    }
+
+    .ranking-ticket {
+        font-size: 15px;
+    }
+
+    .chart-wrap {
+        max-width: 280px;
+        padding-top: 0;
+    }
+
+    .section-summary-list {
+        gap: 14px;
+    }
+
+    .section-block {
+        padding-bottom: 12px;
+    }
+
+    .section-inline-row {
+        display: block;
+    }
+
+    .section-inline-title {
+        min-width: 0;
+        font-size: 16px;
+        margin-bottom: 8px;
+    }
+
+    .section-inline-members {
+        font-size: 14px;
+        line-height: 1.8;
+    }
+
+    .section-member-count {
+        font-size: 15px;
     }
 
     .reward-table {
-        table-layout: fixed;
-        width: 100%;
-        min-width: 0;
-    }
-
-    .reward-table th {
-        height: 52px;
-        padding: 0 8px;
-        font-size: 14px;
-        line-height: 1.2;
-    }
-
-    .reward-table td {
-        padding: 16px 8px;
-        font-size: 14px;
-        line-height: 1.45;
-    }
-
-    .reward-table th:nth-child(1),
-    .reward-table td:nth-child(1) {
-        width: 34%;
-    }
-
-    .reward-table th:nth-child(2),
-    .reward-table td:nth-child(2) {
-        width: 22%;
-        text-align: center;
-    }
-
-    .reward-table th:nth-child(3),
-    .reward-table td:nth-child(3) {
-        width: 14%;
-        text-align: center;
-    }
-
-    .reward-table th:nth-child(4),
-    .reward-table td:nth-child(4) {
-        width: 30%;
-        text-align: left;
-        word-break: break-word;
-    }
-
-    .reward-main {
-        font-size: 15px;
-        line-height: 1.35;
+        min-width: 560px;
     }
 
     .reward-condition-chip {
@@ -560,12 +629,9 @@ tr:last-child td {
         font-size: 12px;
     }
 
-    .reward-count {
-        font-size: 15px;
-    }
-
+    .reward-main,
+    .reward-count,
     .reward-names {
         font-size: 13px;
-        line-height: 1.5;
     }
 }
