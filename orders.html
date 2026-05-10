@@ -646,61 +646,72 @@
 
         function updateOrdersSummary(orders) {
             orders = Array.isArray(orders) ? orders : [];
-
+        
             let paidAmount = 0;
             let unpaidAmount = 0;
             let pickedCount = 0;
             let unpickedCount = 0;
-
+        
             let count500 = 0;
             let count300 = 0;
             let count200 = 0;
             let basePoints = 0;
-
+        
             for (const order of orders) {
                 const price = Number(order.price || 0);
                 const seats = Array.isArray(order.seats) ? order.seats : [];
                 const seatCount = seats.length;
-                const unitPrice = seatCount > 0 ? price / seatCount : price;
-
+        
                 if (order.payment_done) {
                     paidAmount += price;
                 } else {
                     unpaidAmount += price;
                 }
-
+        
                 if (order.picked_up) {
                     pickedCount += seatCount;
                 } else {
                     unpickedCount += seatCount;
                 }
-
+        
                 const priceCounts = order.price_counts || {};
-                
-                const c500 = Number(priceCounts["500"] || 0);
-                const c300 = Number(priceCounts["300"] || 0);
-                const c200 = Number(priceCounts["200"] || 0);
-                
+        
+                let c500 = Number(priceCounts["500"] || 0);
+                let c300 = Number(priceCounts["300"] || 0);
+                let c200 = Number(priceCounts["200"] || 0);
+        
+                // fallback：如果後端還沒給 price_counts，才用平均票價推估
+                if (c500 + c300 + c200 === 0 && seatCount > 0) {
+                    const unitPrice = price / seatCount;
+        
+                    if (unitPrice === 500 || unitPrice === 400) {
+                        c500 = seatCount;
+                    } else if (unitPrice === 300 || unitPrice === 240) {
+                        c300 = seatCount;
+                    } else if (unitPrice === 200 || unitPrice === 160) {
+                        c200 = seatCount;
+                    }
+                }
+        
                 count500 += c500;
                 count300 += c300;
                 count200 += c200;
-                
+        
                 basePoints += c500 * 3 + c300 * 1.5 + c200 * 1;
             }
-
+        
             document.getElementById("paid-amount").textContent = formatMoney(paidAmount);
             document.getElementById("unpaid-amount").textContent = formatMoney(unpaidAmount);
             document.getElementById("picked-count").textContent = pickedCount;
             document.getElementById("unpicked-count").textContent = unpickedCount;
-
+        
             document.getElementById("count-500").textContent = count500;
             document.getElementById("count-300").textContent = count300;
             document.getElementById("count-200").textContent = count200;
-
+        
             document.getElementById("total-points").textContent = formatNumber(basePoints);
             document.getElementById("manual-points-note").textContent = "";
         }
-
         function renderOrdersTable(orders) {
             orders = Array.isArray(orders) ? orders : [];
 
@@ -792,9 +803,10 @@
             renderOrdersTable(orders);
             updateOrdersSummary(orders);
 
-            const finalTotalPoints = Number(data.total_points || 0);
             const manualPoints = Number(data.manual_points || 0);
-
+            const currentBasePoints = Number(document.getElementById("total-points").textContent || 0);
+            const finalTotalPoints = currentBasePoints + manualPoints;
+            
             document.getElementById("total-points").textContent = formatNumber(finalTotalPoints);
 
             document.getElementById("manual-points-note").textContent =
