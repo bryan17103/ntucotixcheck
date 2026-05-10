@@ -6,6 +6,7 @@
     <title>《嶋聲》團內購票系統｜台北場</title>
     <link rel="stylesheet" href="/style.css">
 </head>
+
 <body>
     <header class="page-header">
         <div class="page-title">《嶋聲》團內購票系統｜台北場</div>
@@ -56,6 +57,24 @@
             <a href="/orders" class="secondary-link-btn">查詢 / 管理訂單</a>
             <a href="/stats" class="secondary-link-btn">推票總統計</a>
         </aside>
+    </div>
+
+    <div id="success-modal" class="modal-overlay hidden">
+        <div class="modal-card success-modal-card">
+            <button class="modal-close-btn" type="button" id="success-close-btn">×</button>
+
+            <div class="success-icon">✓</div>
+
+            <h2 id="success-title">購票成功！</h2>
+
+            <p id="success-message">
+                訂單已成立，請記得截圖保存～
+            </p>
+
+            <button class="success-confirm-btn" type="button" id="success-confirm-btn">
+                我知道了
+            </button>
+        </div>
     </div>
 
     <script src="/app.js"></script>
