@@ -501,6 +501,31 @@
         document.addEventListener("keydown", (e) => {
             if (e.key === "Escape") { closeStatsHelpModal(); closeMySeatMapModal(); }
         });
+
+        const ordersHelpModal = document.getElementById("orders-help-modal");
+        const ordersHelpBtn = document.getElementById("orders-help-btn");
+        const ordersHelpCloseBtn = document.getElementById("orders-help-close-btn");
+        const ordersHelpConfirmBtn = document.getElementById("orders-help-confirm-btn");
+        
+        function openOrdersHelpModal() {
+            ordersHelpModal?.classList.remove("hidden");
+        }
+        
+        function closeOrdersHelpModal() {
+            ordersHelpModal?.classList.add("hidden");
+        }
+        
+        ordersHelpBtn?.addEventListener("click", openOrdersHelpModal);
+        
+        ordersHelpCloseBtn?.addEventListener("click", closeOrdersHelpModal);
+        
+        ordersHelpConfirmBtn?.addEventListener("click", closeOrdersHelpModal);
+        
+        ordersHelpModal?.addEventListener("click", (e) => {
+            if (e.target === ordersHelpModal) {
+                closeOrdersHelpModal();
+            }
+        });
     </script>
 </body>
 </html>
