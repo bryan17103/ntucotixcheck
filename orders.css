@@ -172,3 +172,163 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
     .my-seat-map-header { flex-direction: column; gap: 10px; padding-right: 38px; }
     .my-seat-legend { justify-content: flex-start; }
 }
+@media (max-width: 768px) {
+
+    .orders-table-card {
+        border: none;
+        background: transparent;
+        overflow: visible;
+    }
+
+    .orders-table-scroll {
+        overflow: visible;
+    }
+
+    .orders-table,
+    .orders-table thead,
+    .orders-table tbody,
+    .orders-table th,
+    .orders-table td,
+    .orders-table tr {
+        display: block;
+        width: 100%;
+    }
+
+    .orders-table thead {
+        display: none;
+    }
+
+    .orders-table tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .orders-table tbody tr {
+        background: #fff;
+        border: 1.5px solid #e8e8e8;
+        border-radius: 22px;
+        padding: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,.04);
+    }
+
+    .orders-table tbody td {
+        border: none;
+        padding: 0;
+        margin-bottom: 12px;
+        text-align: left !important;
+        width: 100% !important;
+    }
+
+    .orders-table tbody td:last-child {
+        margin-bottom: 0;
+    }
+
+    .orders-table td::before {
+        display: block;
+        margin-bottom: 4px;
+
+        font-size: 12px;
+        font-weight: 800;
+        color: #888;
+    }
+
+    .orders-table td:nth-child(1)::before {
+        content: "訂單日期";
+    }
+
+    .orders-table td:nth-child(2)::before {
+        content: "排數";
+    }
+
+    .orders-table td:nth-child(3)::before {
+        content: "座位";
+    }
+
+    .orders-table td:nth-child(4)::before {
+        content: "票價";
+    }
+
+    .orders-table td:nth-child(5)::before {
+        content: "備註";
+    }
+
+    .orders-table td:nth-child(6)::before {
+        content: "刪除";
+    }
+
+    .orders-table td:nth-child(7)::before {
+        content: "取票狀態";
+    }
+
+    .note-wrap {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .note-input {
+        width: 100%;
+        height: 44px;
+        font-size: 14px;
+    }
+
+    .save-btn,
+    .delete-btn {
+        width: 100%;
+        height: 44px;
+        border-radius: 16px;
+    }
+
+    .pickup-pill {
+        width: 100%;
+        min-width: 0;
+        height: 48px;
+        border-radius: 18px;
+        font-size: 14px;
+    }
+
+    .order-strong {
+        font-size: 15px;
+    }
+
+    .orders-table td:nth-child(3) {
+        line-height: 1.6;
+        word-break: break-word;
+    }
+
+    .orders-search-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .orders-search-input,
+    .orders-search-btn {
+        width: 100%;
+    }
+
+    .summary-card {
+        min-height: auto;
+        padding: 16px 18px;
+    }
+
+    .summary-value,
+    .ticket-stats-value {
+        font-size: 16px;
+    }
+
+    .my-seat-map {
+        gap: 4px;
+    }
+
+    .my-map-seat {
+        width: 18px;
+        height: 18px;
+        font-size: 8px;
+    }
+
+    .my-map-row-label {
+        width: 18px;
+        font-size: 9px;
+    }
+}
