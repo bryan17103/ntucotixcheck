@@ -165,7 +165,7 @@ body {
 .reward-panel-card,
 .section-summary-panel-card {
     min-height: 420px;
-    height: 460px;
+    height: 500px;
 }
 
 .card-title {
@@ -202,6 +202,7 @@ tr:last-child td {
 }
 
 .ranking-table-scroll,
+.section-summary-list,
 .reward-table-scroll {
     flex: 1;
     overflow-y: auto;
@@ -569,9 +570,10 @@ tr:last-child td {
 
     .ranking-table-scroll,
     .reward-table-scroll {
+    .section-summary-list,
         flex: 1;
         min-height: 0;
-        max-height: 360px;
+        max-height: 400px;
         overflow-x: hidden;
         overflow-y: auto;
     }
