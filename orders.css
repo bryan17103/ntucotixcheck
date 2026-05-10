@@ -45,7 +45,7 @@ body.orders-page {
 .orders-search-btn:hover { background: #e95d31; }
 
 .orders-table tbody tr.empty-row { background: transparent; border: none; box-shadow: none; padding: 0; }
-.orders-table tbody tr.empty-row td { padding: 24px 0; margin: 0; }
+.orders-table tbody tr.empty-row td { padding: 16px 0; margin: 0; }
 .orders-table tbody tr.empty-row td::before { display: none !important; }
 
 /* # Summary Cards */
