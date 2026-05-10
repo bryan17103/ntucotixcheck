@@ -14,7 +14,13 @@
             <div class="orders-title-wrap">
                 <h1>《嶋聲》團內購票訂單查詢</h1>
                 <p class="orders-note main">票務每天晚上都會上來鎖定，鎖定後即無法刪除！</p>
-                <p class="orders-note sub">關於修改位置：僅能同筆訂單內單排刪除，若需更改單一位置請單排刪除後重新劃位！</p>
+                <button
+                    class="orders-help-trigger"
+                    type="button"
+                    id="orders-help-btn"
+                >
+                    購票、取票、寄票相關說明請點我
+                </button>
             </div>
             <a href="/" class="back-link-btn">回到選位頁</a>
         </div>
@@ -69,6 +75,116 @@
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+
+    <div id="orders-help-modal" class="modal-overlay hidden">
+        <div class="modal-card orders-help-modal-card">
+    
+            <button
+                class="modal-close-btn"
+                type="button"
+                id="orders-help-close-btn"
+            >
+                ×
+            </button>
+    
+            <h2 class="orders-help-title">
+                購票／取票／寄票說明
+            </h2>
+    
+            <div class="orders-help-content">
+    
+                <section class="orders-help-section">
+                    <h3>【關於購票】</h3>
+    
+                    <p>
+                        團內購票截止時間為
+                        <strong>2026/07/10 23:59</strong>，
+                        請把握時間；超過期限後僅能至 Opentix 以原價購票。
+                    </p>
+    
+                    <p>
+                        若需更改單一位置，請將該排座位刪除後重新劃位。
+                        目前系統僅支援「同一下訂時間中的單排座位」一起刪除。
+                    </p>
+                </section>
+    
+                <section class="orders-help-section">
+                    <h3>【關於取票】</h3>
+    
+                    <p>
+                        當該排訂單狀態顯示為
+                        <strong>「已開放取票」</strong>
+                        時即可領票。
+                    </p>
+    
+                    <p>
+                        請於加練期間直接找票務領票，
+                        並以「一手交錢、一手交票」為原則。
+                    </p>
+    
+                    <p>
+                        請盡量備好零錢！！若當下票務手邊零錢不足，
+                        可能無法立即完成領票 (･･;)
+                    </p>
+    
+                    <p>
+                        若累積金額超過
+                        <strong>$1,600</strong>
+                        （可跨不同排數累計），
+                        可選擇轉帳付款。
+                    </p>
+    
+                    <p>
+                        若需轉帳，請事先於試算表備註，
+                        並於領票時當面完成轉帳。
+                    </p>
+    
+                    <p>
+                        無論是否需要寄票、或對方是否需付款，
+                        皆需由訂票人先完成付款，
+                        票務才會將票券交付或協助寄票。
+                    </p>
+    
+                    <p>
+                        取票截止時間：
+                        <strong>台北場總彩 07/15（三）17:00</strong>
+                    </p>
+                </section>
+    
+                <section class="orders-help-section">
+                    <h3>【關於寄票】</h3>
+    
+                    <p>
+                        「寄票」是指將親友票券寄放於前台，
+                        聽眾抵達中山堂後，
+                        可於前台付款（或直接領票）後取得票券。
+                    </p>
+    
+                    <p>
+                        活動結束後，
+                        前台會再統一整理票款並歸還給訂票人。
+                    </p>
+    
+                    <p>
+                        為加速本次前台作業流程，
+                        本次公演與今年冬季公演相同，
+                        將架設「團內購票取票查詢系統」，
+                        詳細資訊將於後續公布。
+                    </p>
+                </section>
+    
+            </div>
+    
+            <button
+                class="orders-help-confirm-btn"
+                type="button"
+                id="orders-help-confirm-btn"
+            >
+                我知道了
+            </button>
+    
         </div>
     </div>
 
