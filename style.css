@@ -777,5 +777,74 @@ body {
     .success-confirm-btn:hover {
         background: #1f5fa0;
     }
+
+    .name-modal-card {
+        width: min(420px, 100%);
+    }
     
+    .name-modal-text {
+        margin-top: 8px;
+        margin-bottom: 18px;
+    
+        font-size: 15px;
+        line-height: 1.7;
+        color: #666;
+    }
+    
+    .name-modal-input {
+        width: 100%;
+        height: 52px;
+    
+        border: 1.5px solid #d8d8d8;
+        border-radius: 16px;
+    
+        padding: 0 16px;
+    
+        font-size: 16px;
+        font-weight: 700;
+    
+        outline: none;
+        transition: 0.15s;
+    }
+    
+    .name-modal-input:focus {
+        border-color: #276fb7;
+        box-shadow: 0 0 0 4px rgba(39, 111, 183, 0.12);
+    }
+    
+    .name-modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+    
+        margin-top: 22px;
+    }
+    
+    .name-cancel-btn,
+    .name-confirm-btn {
+        height: 44px;
+        padding: 0 22px;
+    
+        border: none;
+        border-radius: 14px;
+    
+        font-size: 14px;
+        font-weight: 800;
+    
+        cursor: pointer;
+    }
+    
+    .name-cancel-btn {
+        background: #efefef;
+        color: #666;
+    }
+    
+    .name-confirm-btn {
+        background: #276fb7;
+        color: white;
+    }
+    
+    .name-confirm-btn:hover {
+        background: #1f5fa0;
+    }
 }
