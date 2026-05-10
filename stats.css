@@ -277,11 +277,11 @@ tr:last-child td {
 .section-summary-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 8px;
 }
 
 .section-block {
-    padding-bottom: 14px;
+    padding-bottom: 8px;
     border-bottom: 1px solid #eeeeee;
 }
 
@@ -292,7 +292,7 @@ tr:last-child td {
 .section-inline-row {
     display: flex;
     align-items: flex-start;
-    gap: 14px;
+    gap: 8px;
     flex-wrap: wrap;
 }
 
@@ -304,6 +304,7 @@ tr:last-child td {
     color: #276fb7;
 
     min-width: 120px;
+    line-height: 1.45;
 }
 
 .section-inline-subtotal {
@@ -319,13 +320,13 @@ tr:last-child td {
     gap: 6px;
 
     font-size: 15px;
-    line-height: 1.7;
+    line-height: 1.45;
 }
 
 .section-member-chip {
     display: inline-flex;
-    align-items: baseline;
-    gap: 4px;
+    align-items: center;
+    gap: 3px;
 }
 
 .section-member-name {
