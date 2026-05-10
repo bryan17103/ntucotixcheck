@@ -59,6 +59,36 @@
         </aside>
     </div>
 
+    <div id="name-modal" class="modal-overlay hidden">
+        <div class="modal-card name-modal-card">
+    
+            <h2>確認購票</h2>
+    
+            <p class="name-modal-text">
+                請輸入姓名（點擊確認後請稍等一下下 ><）
+            </p>
+    
+            <input
+                id="buyer-name-input"
+                class="name-modal-input"
+                type="text"
+                placeholder="請輸入姓名"
+                maxlength="20"
+            />
+    
+            <div class="name-modal-actions">
+                <button type="button" class="name-cancel-btn" id="name-cancel-btn">
+                    取消
+                </button>
+    
+                <button type="button" class="name-confirm-btn" id="name-confirm-btn">
+                    確認購票
+                </button>
+            </div>
+    
+        </div>
+        
+    </div>
     <div id="success-modal" class="modal-overlay hidden">
         <div class="modal-card success-modal-card">
             <button class="modal-close-btn" type="button" id="success-close-btn">×</button>
