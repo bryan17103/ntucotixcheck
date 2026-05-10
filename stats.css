@@ -239,12 +239,59 @@ tr:last-child td {
 }
 
 /* # Section Cards */
-.section-grid {
+.bottom-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 220px);
-    justify-content: center;
-    gap: 16px;
-    margin-bottom: 24px;
+    grid-template-columns: minmax(0, 1.35fr) minmax(340px, 0.95fr);
+    gap: 18px;
+    align-items: stretch;
+}
+
+.section-summary-card {
+    min-height: 420px;
+}
+
+.section-summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.section-block {
+    padding-bottom: 16px;
+    border-bottom: 1px dashed #ddd;
+}
+
+.section-block:last-child {
+    border-bottom: none;
+}
+
+.section-block-title {
+    font-size: 18px;
+    font-weight: 900;
+    color: #222;
+    margin-bottom: 12px;
+}
+
+.section-member-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    line-height: 1.9;
+    color: #444;
+    font-size: 18px;
+}
+
+.section-member-row strong {
+    color: #f5a623;
+    font-size: 22px;
+    margin-left: 4px;
+}
+
+.section-subtotal {
+    margin-top: 10px;
+    font-weight: 900;
+    color: #222;
+    font-size: 18px;
 }
 
 .section-card {
