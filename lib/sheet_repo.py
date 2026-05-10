@@ -578,6 +578,7 @@ def get_stats_config_rows():
 
 def save_section_members_rows(rows):
     ws = get_config_worksheet("section_members")
+
     values = [["姓名", "聲部", "手動加分_TP"]]
 
     for row in rows:
@@ -594,8 +595,8 @@ def save_section_members_rows(rows):
 
         values.append([name, section, manual_points])
 
-    ws.clear()
-    ws.update("A1", values)
+    ws.batch_clear(["A:C"])
+    ws.update("A1:C" + str(len(values)), values)
 
 
 def save_stats_config_rows(rows):
