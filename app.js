@@ -433,11 +433,19 @@ function setupConfirmButton() {
         const data = await res.json();
 
         if (data.success) {
-            alert(data.message);
+            showSuccessModal(
+                "購票成功！",
+                data.message || "訂單已成立，請記得截圖保存～"
+            );
+        
             selectedSeats.clear();
             loadSeats();
+        
         } else {
-            alert(data.message || "發生錯誤");
+            showSuccessModal(
+                "發生錯誤",
+                data.message || "發生錯誤"
+            );
         }
     });
 }
@@ -445,3 +453,32 @@ function setupConfirmButton() {
 setupZoomControls();
 setupConfirmButton();
 loadSeats();
+
+const successModal = document.getElementById("success-modal");
+const successCloseBtn = document.getElementById("success-close-btn");
+const successConfirmBtn = document.getElementById("success-confirm-btn");
+const successTitle = document.getElementById("success-title");
+const successMessage = document.getElementById("success-message");
+
+function showSuccessModal(title, message) {
+    if (!successModal) return;
+
+    successTitle.textContent = title || "成功";
+    successMessage.textContent = message || "";
+
+    successModal.classList.remove("hidden");
+}
+
+function closeSuccessModal() {
+    if (!successModal) return;
+    successModal.classList.add("hidden");
+}
+
+successCloseBtn?.addEventListener("click", closeSuccessModal);
+successConfirmBtn?.addEventListener("click", closeSuccessModal);
+
+successModal?.addEventListener("click", (e) => {
+    if (e.target === successModal) {
+        closeSuccessModal();
+    }
+});
