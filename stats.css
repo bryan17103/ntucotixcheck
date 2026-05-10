@@ -711,6 +711,7 @@ tr:last-child td {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        text-align: left;
         gap: 6px;
     
         color: #276fb7;
@@ -726,6 +727,16 @@ tr:last-child td {
         font-size: 18px;
         font-weight: 900;
         line-height: 1;
+    }
+
+    .section-total-cell {
+        text-align: left;
+    }
+    
+    .section-inline-subtotal {
+        margin-left: 0;
+        text-align: left;
+        width: auto;
     }
     
     .section-members-cell,
