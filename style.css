@@ -5,37 +5,71 @@
 
 body {
     margin: 0;
-    font-family: Arial, "Noto Sans TC", sans-serif;
-    background: linear-gradient(135deg, #0f3b3a, #4b1f11);
+    font-family: "Noto Sans TC", sans-serif;
+    color: #3f4642;
+
+    background:
+        radial-gradient(circle at 82% 72%, rgba(130,145,130,0.18), transparent 28%),
+        linear-gradient(
+            to bottom,
+            #f4f3ef 0%,
+            #e6efea 38%,
+            #bfd6d1 72%,
+            #7ea3a0 100%
+        );
+
     min-height: 100vh;
     overflow: hidden;
-    padding: 6px;
+    padding: 10px;
+    position: relative;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 18% -10% 0;
+
+    background:
+        radial-gradient(ellipse at 18% 36%, rgba(80,126,130,0.30) 0 24%, transparent 25%),
+        radial-gradient(ellipse at 46% 42%, rgba(123,158,137,0.28) 0 28%, transparent 29%),
+        radial-gradient(ellipse at 78% 48%, rgba(153,179,170,0.30) 0 30%, transparent 31%),
+        radial-gradient(ellipse at 35% 78%, rgba(60,139,153,0.28) 0 25%, transparent 26%);
+
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 0;
 }
 
 
 /* # Header */
 .page-header {
-    height: 90px;
+    position: relative;
+    z-index: 2;
+
+    height: 110px;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: white;
+
+    color: #37403d;
     text-align: center;
-    letter-spacing: 0.5px;
 }
 
 .page-title {
-    font-size: 28px;
-    font-weight: 800;
-    line-height: 1.1;
+    font-family: "Noto Serif TC", "Songti TC", serif;
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    line-height: 1.2;
 }
 
 .page-subtitle {
-    margin-top: 7px;
-    font-size: 16px;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.82);
+    margin-top: 6px;
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    color: rgba(55, 64, 61, 0.72);
 }
 
 
@@ -49,10 +83,12 @@ body {
 
 .seat-card {
     flex: 1;
-    background: rgba(255, 255, 255, 0.96);
+    background: rgba(255,255,255,0.42);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.45);
     border-radius: 28px;
     padding: 14px 18px 18px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 18px 42px rgba(64, 91, 89, 0.16);
     height: 100%;
     overflow: hidden;
     position: relative;
@@ -87,7 +123,12 @@ body {
     user-select: none;
     border-radius: 16px;
     padding: 4px;
-    background: #fafafa;
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(255,255,255,0.70),
+            rgba(247,249,248,0.84)
+        );
     position: relative;
 }
 
@@ -227,9 +268,12 @@ body {
 }
 
 .selected {
-    outline: 3px solid #3949ab;
+    outline: 3px solid #5f7c79;
+
+    box-shadow:
+        0 0 0 3px rgba(95,124,121,0.12);
+
     transform: scale(1.12);
-    box-shadow: 0 0 0 2px rgba(57, 73, 171, 0.15);
 }
 
 
@@ -249,8 +293,9 @@ body {
     height: 48px;
     border: none;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.96);
-    color: #444;
+    background: rgba(255,255,255,0.72);
+    backdrop-filter: blur(8px);
+    color: #4d5753;
     font-size: 22px;
     font-weight: 500;
     cursor: pointer;
@@ -282,7 +327,9 @@ body {
 /* # Sidebar */
 .sidebar {
     width: 300px;
-    background: rgba(255, 255, 255, 0.96);
+    background: rgba(255,255,255,0.50);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.42);
     border-radius: 24px;
     padding: 20px 22px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
@@ -394,7 +441,7 @@ body {
     height: 46px;
     border: none;
     border-radius: 12px;
-    background: #f26c41;
+    background: #4e6b68;
     color: white;
     font-size: 16px;
     font-weight: 700;
@@ -402,7 +449,7 @@ body {
 }
 
 #confirm-btn:hover {
-    background: #e95d31;
+    background: #405a57;
 }
 
 .secondary-link-btn {
@@ -411,9 +458,9 @@ body {
     width: 100%;
     height: 44px;
     border-radius: 12px;
-    border: 1.5px solid #e3e3e3;
-    background: #ffffff;
-    color: #444;
+    border: 1px solid rgba(120,130,126,0.18);
+    background: rgba(255,255,255,0.72);
+    color: #4a5652;
     font-size: 15px;
     font-weight: 700;
     text-decoration: none;
@@ -424,7 +471,7 @@ body {
 }
 
 .secondary-link-btn:hover {
-    background: #f7f7f7;
+    background: rgba(255,255,255,0.92);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
@@ -621,7 +668,9 @@ body {
 .modal-card {
     position: relative;
     width: min(420px, 100%);
-    background: #fff;
+    background: rgba(255,255,255,0.84);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.48);
     border-radius: 26px;
     padding: 30px 28px;
     box-shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
@@ -776,6 +825,22 @@ body {
     }
 }
 
+.sidebar h2,
+.sidebar-subtitle,
+.stage-box {
+    font-family: "Noto Serif TC", "Songti TC", serif;
+}
+
+#confirm-btn,
+.secondary-link-btn {
+    font-family: "Noto Sans TC", sans-serif;
+}
+
+#selected-list,
+#zone-summary,
+#summary {
+    font-family: "Noto Sans TC", sans-serif;
+}
 
 /* # Mobile */
 @media (max-width: 900px) {
@@ -840,19 +905,15 @@ body {
     }
 
     .stage-box {
-        height: 50px;
-        font-size: 18px;
-        border-radius: 14px;
-    }
-
-    #map-viewport {
-        min-height: 0;
-    }
-
-    #seat-map {
-        gap: 6px;
-        padding: 8px 10px 18px;
-    }
+    
+        #map-viewport {
+            min-height: 0;
+        }
+    
+        #seat-map {
+            gap: 6px;
+            padding: 8px 10px 18px;
+        }
 
     .floor-label {
         font-size: 18px;
