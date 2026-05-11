@@ -1,0 +1,298 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+  color: #3f4642;
+  background:
+    radial-gradient(circle at 80% 75%, rgba(130, 145, 130, 0.22), transparent 28%),
+    linear-gradient(to bottom, #f3f3ef 0%, #e9f0ec 38%, #c7ddd8 70%, #7fa5a3 100%);
+  min-height: 100vh;
+}
+
+.home-page {
+  min-height: 100vh;
+  padding: 42px 7vw 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-page::before {
+  content: "";
+  position: absolute;
+  inset: 26% -10% 0;
+  background:
+    radial-gradient(ellipse at 18% 36%, rgba(80, 126, 130, 0.36) 0 24%, transparent 25%),
+    radial-gradient(ellipse at 46% 42%, rgba(123, 158, 137, 0.34) 0 28%, transparent 29%),
+    radial-gradient(ellipse at 78% 48%, rgba(153, 179, 170, 0.38) 0 30%, transparent 31%),
+    radial-gradient(ellipse at 35% 78%, rgba(60, 139, 153, 0.35) 0 25%, transparent 26%);
+  opacity: 0.8;
+  z-index: 0;
+}
+
+.home-page::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.18), rgba(255,255,255,0.18)),
+    repeating-linear-gradient(90deg, rgba(80,80,80,0.025) 0 1px, transparent 1px 4px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero,
+.system-title,
+.menu-panel,
+footer {
+  position: relative;
+  z-index: 2;
+}
+
+.hero {
+  min-height: 260px;
+}
+
+.concert-label {
+  margin: 0 0 6px;
+  font-size: 20px;
+  letter-spacing: 0.08em;
+}
+
+.poster-info h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+}
+
+.dates {
+  margin-top: 40px;
+  display: grid;
+  gap: 22px;
+}
+
+.date-block {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.date-main {
+  font-size: 74px;
+  line-height: 1;
+  color: #1d1d1b;
+  letter-spacing: -0.04em;
+}
+
+.time {
+  display: block;
+  font-size: 26px;
+  margin-bottom: 4px;
+}
+
+.date-block strong {
+  display: block;
+  font-size: 25px;
+  font-weight: 600;
+}
+
+.date-block small {
+  display: block;
+  font-size: 14px;
+  margin-top: 3px;
+}
+
+.birds {
+  position: absolute;
+  top: 10px;
+  right: 10vw;
+  font-size: 34px;
+  letter-spacing: 14px;
+  transform: rotate(-18deg);
+  color: rgba(55, 62, 60, 0.65);
+}
+
+.system-title {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 22px;
+}
+
+.boat {
+  font-size: 34px;
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
+
+.system-title h2 {
+  margin: 0;
+  font-size: 34px;
+  letter-spacing: 0.24em;
+  font-weight: 600;
+}
+
+.system-title p {
+  margin: 8px 0 0;
+  font-size: 14px;
+  letter-spacing: 0.22em;
+}
+
+.menu-panel {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 34px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.42);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 18px 42px rgba(64, 91, 89, 0.16);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.menu-card {
+  min-height: 210px;
+  padding: 30px 20px 24px;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.62);
+  text-decoration: none;
+  color: #3f4642;
+  text-align: center;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.55),
+              0 10px 24px rgba(74, 96, 94, 0.11);
+  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.menu-card:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 16px 32px rgba(63, 91, 89, 0.18);
+}
+
+.icon {
+  width: 78px;
+  height: 78px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: rgba(129, 160, 152, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+}
+
+.menu-card h3 {
+  margin: 0;
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.menu-card p {
+  margin: 6px 0 14px;
+  font-family: Georgia, serif;
+  font-size: 14px;
+  letter-spacing: 0.18em;
+}
+
+.menu-card span {
+  display: inline-flex;
+  width: 30px;
+  height: 30px;
+  border: 1px solid rgba(63, 70, 66, 0.45);
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+footer {
+  margin-top: 34px;
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  opacity: 0.75;
+}
+
+@media (max-width: 900px) {
+  .home-page {
+    padding: 30px 18px 24px;
+  }
+
+  .hero {
+    min-height: auto;
+  }
+
+  .concert-label {
+    font-size: 16px;
+  }
+
+  .poster-info h1 {
+    font-size: 18px;
+  }
+
+  .date-main {
+    font-size: 54px;
+  }
+
+  .time {
+    font-size: 21px;
+  }
+
+  .date-block strong {
+    font-size: 22px;
+  }
+
+  .birds {
+    display: none;
+  }
+
+  .system-title {
+    margin-top: 42px;
+  }
+
+  .system-title h2 {
+    font-size: 28px;
+    letter-spacing: 0.16em;
+  }
+
+  .menu-panel {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 22px;
+    gap: 16px;
+  }
+
+  .menu-card {
+    min-height: 180px;
+  }
+
+  .menu-card h3 {
+    font-size: 23px;
+  }
+}
+
+@media (max-width: 560px) {
+  .dates {
+    gap: 16px;
+  }
+
+  .date-block {
+    gap: 16px;
+  }
+
+  .date-main {
+    font-size: 48px;
+  }
+
+  .menu-panel {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .menu-card {
+    min-height: 160px;
+  }
+}
