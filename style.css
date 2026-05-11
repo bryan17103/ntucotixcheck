@@ -46,8 +46,24 @@ body::after {
 
 .page-header,
 .app-shell,
-.page-footer,
 .modal-overlay {
+    position: relative;
+    z-index: 2;
+}
+
+.page-footer {
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: Georgia, serif;
+    font-size: 12px;
+
+    letter-spacing: 0.12em;
+
+    color: rgba(55, 64, 61, 0.68);
     position: relative;
     z-index: 2;
 }
