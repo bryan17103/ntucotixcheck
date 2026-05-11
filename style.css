@@ -44,26 +44,8 @@ body::after {
     z-index: 1;
 }
 
-.page-header,
 .app-shell,
 .modal-overlay {
-    position: relative;
-    z-index: 2;
-}
-
-.page-footer {
-    height: 38px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-family: Georgia, serif;
-    font-size: 12px;
-
-    letter-spacing: 0.12em;
-
-    color: rgba(55, 64, 61, 0.68);
     position: relative;
     z-index: 2;
 }
@@ -71,13 +53,18 @@ body::after {
 /* Header */
 
 .page-header {
-    height: 94px;
+    position: relative;
+    z-index: 2;
+
+    height: 112px;
+    padding: 10px 4vw 0;
+
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-start;
+    justify-content: space-between;
+
     color: #37403d;
-    text-align: center;
+    text-align: left;
 }
 
 .page-title {
@@ -866,54 +853,43 @@ body::after {
 .poster-header-left {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
 }
 
 .concert-label {
     margin: 0 0 4px;
-
     font-family: "Noto Serif TC", "Songti TC", serif;
     font-size: 18px;
     font-weight: 600;
-
     letter-spacing: 0.08em;
-
     color: #37403d;
 }
 
 .poster-main-title {
     margin: 0;
-
-    font-family: "Noto Serif TC", "Songti TC", serif;
+    font-family: Georgia, "Times New Roman", "Noto Serif TC", serif;
     font-size: 30px;
     font-weight: 600;
-
     letter-spacing: 0.08em;
-
     color: #37403d;
 }
 
 .poster-subinfo {
     margin-top: 6px;
-
+    font-family: "Noto Sans TC", sans-serif;
     font-size: 13px;
     letter-spacing: 0.08em;
-
     color: rgba(55, 64, 61, 0.72);
 }
 
 .poster-birds {
     position: absolute;
-
-    top: 6px;
-    right: 4vw;
-
-    font-size: 32px;
-    letter-spacing: 14px;
-
+    top: 8px;
+    right: 6vw;
+    font-size: 30px;
+    letter-spacing: 12px;
     transform: rotate(-18deg);
-
     color: rgba(55, 62, 60, 0.65);
-
     user-select: none;
 }
 
