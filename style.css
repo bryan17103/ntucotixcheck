@@ -101,7 +101,7 @@ body::after {
     display: flex;
     gap: 12px;
     align-items: stretch;
-    height: calc(100vh - 94px - 38px - 20px);
+    height: calc(100vh - 120px - 38px - 20px);
 }
 
 .seat-card {
