@@ -835,6 +835,72 @@ body::after {
     background: #405a57;
 }
 
+.poster-header {
+    position: relative;
+
+    height: 120px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    padding: 8px 8px 0;
+}
+
+.poster-header-left {
+    display: flex;
+    flex-direction: column;
+}
+
+.concert-label {
+    margin: 0 0 4px;
+
+    font-family: "Noto Serif TC", "Songti TC", serif;
+    font-size: 18px;
+    font-weight: 600;
+
+    letter-spacing: 0.08em;
+
+    color: #37403d;
+}
+
+.poster-main-title {
+    margin: 0;
+
+    font-family: "Noto Serif TC", "Songti TC", serif;
+    font-size: 30px;
+    font-weight: 600;
+
+    letter-spacing: 0.08em;
+
+    color: #37403d;
+}
+
+.poster-subinfo {
+    margin-top: 6px;
+
+    font-size: 13px;
+    letter-spacing: 0.08em;
+
+    color: rgba(55, 64, 61, 0.72);
+}
+
+.poster-birds {
+    position: absolute;
+
+    top: 6px;
+    right: 4vw;
+
+    font-size: 32px;
+    letter-spacing: 14px;
+
+    transform: rotate(-18deg);
+
+    color: rgba(55, 62, 60, 0.65);
+
+    user-select: none;
+}
+
 @keyframes modalPop {
     from {
         opacity: 0;
