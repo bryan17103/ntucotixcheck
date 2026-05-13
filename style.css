@@ -55,10 +55,8 @@ body::after {
 .hero {
     position: relative;
     z-index: 2;
-
-    min-height: 190px;
-
-    padding: 34px 7vw 12px;
+    min-height: 160px;
+    padding: 34px 7vw 0;
 
     display: flex;
     align-items: flex-start;
@@ -74,7 +72,7 @@ body::after {
 }
 
 .concert-label {
-    margin: 0 0 10px;
+    margin: 0 0 6px;
 
     font-size: 20px;
     font-weight: 400;
@@ -87,7 +85,7 @@ body::after {
 .poster-info h1 {
     margin: 0;
 
-    font-size: 34px;
+    font-size: 24px;
     font-weight: 500;
 
     letter-spacing: 0.06em;
@@ -579,10 +577,14 @@ body::after {
 .page-footer {
     position: relative;
     z-index: 2;
+
     height: 38px;
+    min-height: 38px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     font-family: Georgia, serif;
     font-size: 12px;
     letter-spacing: 0.12em;
