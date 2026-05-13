@@ -296,8 +296,6 @@ function addKhRowMarkers(seatMap, minCol, minRow, topOffset) {
         ["T", 42, 50, "E3"],
         ["U", 35, 52, "E2"],
         ["V", 25, 57, "E1"],
-        ["V", 61, 77, "C1"],
-        ["T", 75, 78, "C2"],
 
         ["Y", 33, 55, "D4"],
         ["Z", 31, 55, "D3"],
@@ -310,34 +308,156 @@ function addKhRowMarkers(seatMap, minCol, minRow, topOffset) {
         ["CF", 33, 55, "D4"],
 
         ["CI", 25, 57, "E1"],
-        ["CJ", 35, 52, "E2"],
         ["CK", 33, 51, "E3"],
-        ["CH", 61, 77, "C1"],
-        ["CJ", 74, 78, "C2"],
     ];
 
     // 二樓：橫排規則，左右顯示
-    // 這裡先放常見內圈橫排位置；如果你之後發現哪一排錯，再微調 row/col。
     const secondFloorHorizontalMarkers = [
-        ["AD", "CA", 30, "A1"],
-        ["AD", "CA", 31, "A2"],
-        ["AD", "CA", 32, "A3"],
-        ["AD", "CA", 33, "A4"],
-        ["AD", "CA", 34, "A5"],
-
-        ["AD", "CA", 54, "A5"],
-        ["AD", "CA", 55, "A4"],
-        ["AD", "CA", 56, "A3"],
-        ["AD", "CA", 57, "A2"],
-        ["AD", "CA", 58, "A1"],
+        // A 區
+        ["AB", 61, "A1"],
+        ["AU", 61, "A1"],
+        ["BJ", 61, "A1"],
+        ["CB", 61, "A1"],
+    
+        ["AB", 62, "A2"],
+        ["AP", 62, "A2"],
+        ["AU", 62, "A2"],
+        ["BJ", 62, "A2"],
+        ["BO", 62, "A2"],
+        ["CB", 62, "A2"],
+    
+        ["AB", 63, "A3"],
+        ["AP", 63, "A3"],
+        ["AU", 63, "A3"],
+        ["BJ", 63, "A3"],
+        ["BO", 63, "A3"],
+        ["CB", 63, "A3"],
+    
+        ["AB", 64, "A4"],
+        ["AP", 64, "A4"],
+        ["AU", 64, "A4"],
+        ["BJ", 64, "A4"],
+        ["BO", 64, "A4"],
+        ["CB", 64, "A4"],
+    
+        ["AB", 65, "A5"],
+        ["AP", 65, "A5"],
+        ["AU", 65, "A5"],
+        ["BJ", 65, "A5"],
+        ["BO", 65, "A5"],
+        ["CB", 65, "A5"],
+    
+        ["AO", 66, "A6"],
+        ["BP", 66, "A6"],
+    
+        // B 區
+        ["AV", 66, "B1"],
+        ["BH", 66, "B1"],
+    
+        ["AR", 67, "B2"],
+        ["BM", 67, "B2"],
+    
+        ["AO", 69, "B3"],
+        ["AR", 69, "B3"],
+        ["BM", 69, "B3"],
+        ["BP", 69, "B3"],
+    
+        ["AO", 70, "B4"],
+        ["AR", 70, "B4"],
+        ["BM", 70, "B4"],
+        ["BP", 70, "B4"],
+    
+        ["AO", 71, "B5"],
+        ["AR", 71, "B5"],
+        ["BM", 71, "B5"],
+        ["BP", 71, "B5"],
+    
+        ["AO", 72, "B6"],
+        ["AR", 72, "B6"],
+        ["BM", 72, "B6"],
+        ["BP", 72, "B6"],
+    
+        ["AO", 73, "B7"],
+        ["AR", 73, "B7"],
+        ["BM", 73, "B7"],
+        ["BP", 73, "B7"],
+    
+        ["AR", 74, "B8"],
+        ["BM", 74, "B8"],
+    
+        ["AR", 75, "B9"],
+        ["BM", 75, "B9"],
+    
+        // C 區 L-shape
+        ["AS", 78, "C1"],
+        ["BK", 78, "C1"],
+    
+        ["AR", 79, "C2"],
+        ["BM", 79, "C2"],
+    
+        ["AQ", 80, "C3"],
+        ["Q", 80, "C3"],
+        ["BN", 80, "C3"],
+        ["CN", 80, "C3"],
+    
+        ["AP", 81, "C4"],
+        ["U", 81, "C4"],
+        ["BO", 81, "C4"],
+        ["CK", 81, "C4"],
+    
+        ["AO", 82, "C5"],
+        ["W", 82, "C5"],
+        ["BP", 82, "C5"],
+        ["CH", 82, "C5"],
     ];
 
     secondFloorVerticalMarkers.forEach(([col, startRow, endRow, text]) => {
-        addVerticalRowMarker(seatMap, minCol, minRow, topOffset, col, startRow, endRow, text);
+        addVerticalRowMarker(
+            seatMap,
+            minCol,
+            minRow,
+            topOffset,
+            col,
+            startRow,
+            endRow,
+            text
+        );
+    });
+    
+    // 二樓 C1 / C2 / E2 特殊顯示位置
+    [
+        ["V", 60, "C1"],
+        ["CH", 60, "C1"],
+    
+        ["CJ", 73, "C2"],
+        ["U", 74, "C2"],
+    
+        ["CJ", 30, "E2"],
+        ["U", 34, "E2"],
+    ].forEach(([col, row, text]) => {
+        addSingleMarker(
+            seatMap,
+            minCol,
+            minRow,
+            topOffset,
+            col,
+            row,
+            text,
+            "kh-special-marker"
+        );
     });
 
-    secondFloorHorizontalMarkers.forEach(([leftCol, rightCol, row, text]) => {
-        addHorizontalRowMarker(seatMap, minCol, minRow, topOffset, leftCol, rightCol, row, text);
+    secondFloorHorizontalMarkers.forEach(([col, row, text]) => {
+        addSingleMarker(
+            seatMap,
+            minCol,
+            minRow,
+            topOffset,
+            col,
+            row,
+            text,
+            "kh-horizontal-marker"
+        );
     });
 
     if (!SHOW_KH_THIRD_FLOOR) return;
