@@ -33,13 +33,12 @@ app = Flask(__name__)
 
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret")
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
-SEAT_FILE = os.path.join(PROJECT_ROOT, "data", "seat_map_tp.xlsx")
-
-SEAT_CACHE = {
-    "seats": None,
-    "row_labels": None,
-    "loaded_at": 0,
+SEAT_FILES = {
+    "tp": os.path.join(PROJECT_ROOT, "data", "seat_map_tp.xlsx"),
+    "kh": os.path.join(PROJECT_ROOT, "data", "seat_map_kh.xlsx"),
 }
+
+SEAT_CACHE = {}
 SEAT_CACHE_TTL = 60
 SECOND_FLOOR_START_ROW = 33
 confirm_lock = Lock()
@@ -47,22 +46,50 @@ confirm_lock = Lock()
 def get_floor_label_from_excel_row(excel_row: int) -> str:
     return "2樓" if excel_row >= SECOND_FLOOR_START_ROW else "1樓"
 
-def get_cached_seat_map():
+def get_cached_seat_map(concert_code="tp"):
     now = time.time()
 
-    if (
-        SEAT_CACHE["seats"] is not None
-        and SEAT_CACHE["row_labels"] is not None
-        and (now - SEAT_CACHE["loaded_at"]) < SEAT_CACHE_TTL
-    ):
-        return SEAT_CACHE["seats"], SEAT_CACHE["row_labels"]
+    if concert_code not in SEAT_FILES:
+        raise ValueError(f"未知場次：{concert_code}")
 
-    seats, row_labels, _ = parse_seat_map(SEAT_FILE)
-    SEAT_CACHE["seats"] = seats
-    SEAT_CACHE["row_labels"] = row_labels
-    SEAT_CACHE["loaded_at"] = now
+    if concert_code not in SEAT_CACHE:
+        SEAT_CACHE[concert_code] = {
+            "seats": None,
+            "row_labels": None,
+            "loaded_at": 0,
+        }
+
+    cache = SEAT_CACHE[concert_code]
+
+    if (
+        cache["seats"] is not None
+        and cache["row_labels"] is not None
+        and (now - cache["loaded_at"]) < SEAT_CACHE_TTL
+    ):
+        return cache["seats"], cache["row_labels"]
+
+    seats, row_labels, _ = parse_seat_map(
+        SEAT_FILES[concert_code],
+        concert_code=concert_code
+    )
+
+    cache["seats"] = seats
+    cache["row_labels"] = row_labels
+    cache["loaded_at"] = now
+
     return seats, row_labels
 
+@app.route("/api/kh/seats", methods=["GET"])
+def api_kh_seats():
+    seats, row_labels = get_cached_seat_map("kh")
+
+    return jsonify({
+        "success": True,
+        "seats": seats,
+        "row_labels": row_labels,
+        "order_open": get_order_open()
+    })
+    
 @app.route("/api/seats", methods=["GET"])
 def api_seats():
     seats, row_labels = get_cached_seat_map()
