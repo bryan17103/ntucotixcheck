@@ -8,7 +8,7 @@ let seatMapBaseWidth = 0;
 let seatMapBaseHeight = 0;
 
 const SECOND_FLOOR_START_ROW = 33; 
-const SHOW_KH_THIRD_FLOOR = false;
+const SHOW_KH_THIRD_FLOOR = true;
 
 async function loadSeats() {
     const res = await fetch("/api/kh/seats");
