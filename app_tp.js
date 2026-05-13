@@ -8,21 +8,31 @@ let seatMapBaseWidth = 0;
 let seatMapBaseHeight = 0;
 
 const SECOND_FLOOR_START_ROW = 33; 
-
 async function loadSeats() {
-    const res = await fetch("/api/tp/seats");
-    const data = await res.json();
+    const loadingOverlay = document.getElementById("loading-overlay");
 
-    seatData = data.seats || [];
-    rowLabels = data.row_labels || {};
-    ORDER_OPEN = data.order_open !== false;
+    try {
+        loadingOverlay?.classList.remove("hidden");
 
-    updateOrderOpenUI();
+        const res = await fetch("/api/tp/seats");
+        const data = await res.json();
 
-    renderSeats();
-    updateSummary();
-    applyZoom();
-    enableDragScroll();
+        seatData = (data.seats || []).filter(seat => {
+            if (SHOW_KH_THIRD_FLOOR) return true;
+            return seat.floor !== "3樓";
+        });
+
+        ORDER_OPEN = data.order_open !== false;
+
+        updateOrderOpenUI();
+        renderSeats();
+        updateSummary();
+        applyZoom();
+        enableDragScroll();
+
+    } finally {
+        loadingOverlay?.classList.add("hidden");
+    }
 }
 
 function getSeatId(seat) {
