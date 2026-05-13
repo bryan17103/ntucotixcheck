@@ -34,6 +34,7 @@ STATS_CONFIG_SHEETS = {
 _ws_cache = {}
 _sold_cache = {}
 _sold_cache_time = {}
+_SOLD_CACHE_TTL = 2
 
 HEADERS = [
     "訂單日期與時間",
@@ -245,6 +246,14 @@ def get_active_records(concert_code="tp") -> List[dict]:
 
 
 def build_active_sold_seat_keys(concert_code="tp") -> Set[Tuple[str, str, int]]:
+    global _sold_cache, _sold_cache_time
+
+    if _sold_cache is None:
+        _sold_cache = {}
+
+    if _sold_cache_time is None:
+        _sold_cache_time = {}
+
     now = time.time()
 
     if (
