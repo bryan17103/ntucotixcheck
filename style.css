@@ -407,14 +407,10 @@ body::after {
     padding-top: 14px;
     margin-top: auto;
 
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(245,248,247,0),
-            rgba(245,248,247,0.92) 18%
-        );
+    background: transparent;
 
-    backdrop-filter: blur(6px);
+    box-shadow:
+        0 -10px 24px rgba(255,255,255,0.18);
 }
 
 #selected-list {
@@ -487,7 +483,7 @@ body::after {
 #summary {
     flex-shrink: 0;
 
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 
     padding: 0;
 
