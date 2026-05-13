@@ -353,9 +353,9 @@ function renderSeats() {
     seatMap.style.gridTemplateRows =
         `repeat(${maxRow - minRow + 2}, ${gridRowSize}px)`;
 
-    addFloorFrame(seatMap, minCol, minRow, TOP_TITLE_OFFSET, "三樓", "C", "CY", 6, 88, "kh-third-floor");
-    addFloorFrame(seatMap, minCol, minRow, TOP_TITLE_OFFSET, "二樓", "R", "CM", 17, 82, "kh-second-floor");
-    addFloorFrame(seatMap, minCol, minRow, TOP_TITLE_OFFSET, "一樓", "AJ", "BU", 44, 55, "kh-first-floor");
+    addFloorFrame(seatMap, minCol, minRow, TOP_TITLE_OFFSET, "三樓", "B", "CZ", 6, 89, "kh-third-floor");
+    addFloorFrame(seatMap, minCol, minRow, TOP_TITLE_OFFSET, "二樓", "P", "CP", 13, 83, "kh-second-floor");
+    addFloorFrame(seatMap, minCol, minRow, TOP_TITLE_OFFSET, "一樓", "AF", "BZ", 30, 57, "kh-first-floor");
 
     addKhStage(seatMap, minCol, minRow, TOP_TITLE_OFFSET);
     addKhRowMarkers(seatMap, minCol, minRow, TOP_TITLE_OFFSET);
