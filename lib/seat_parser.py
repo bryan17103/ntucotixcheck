@@ -200,7 +200,6 @@ def parse_tp_seat_map(filepath, debug=False):
 
     return seats, row_labels, color_map
 
-
 # =========================
 # 高雄場 parser
 # =========================
@@ -226,10 +225,21 @@ KH_SECOND_FLOOR_END_COL = column_index_from_string("CM")
 KH_SECOND_FLOOR_START_ROW = 17
 KH_SECOND_FLOOR_END_ROW = 82
 
-KH_LEGEND_COLOR_COL = column_index_from_string("DB")
-KH_LEGEND_LABEL_COL = column_index_from_string("DC")
+# 高雄場 legend：顏色在 DA，文字在 DB
+KH_LEGEND_COLOR_COL = column_index_from_string("DA")
+KH_LEGEND_LABEL_COL = column_index_from_string("DB")
 KH_LEGEND_START_ROW = 30
 KH_LEGEND_END_ROW = 45
+
+# 高雄場排數欄位，不是座位
+KH_ROW_NUMBER_COLS = {
+    column_index_from_string("AI"),
+    column_index_from_string("AT"),
+    column_index_from_string("AV"),
+    column_index_from_string("BI"),
+    column_index_from_string("BK"),
+    column_index_from_string("BV"),
+}
 
 
 def is_in_range(row, col, start_row, end_row, start_col, end_col):
@@ -237,6 +247,7 @@ def is_in_range(row, col, start_row, end_row, start_col, end_col):
         start_row <= row <= end_row
         and start_col <= col <= end_col
     )
+
 
 def is_kh_stage(row, col):
     return is_in_range(
@@ -283,7 +294,7 @@ def build_kh_color_map(ws):
         color = get_fill_color(color_cell)
         label = label_cell.value
 
-        if not color or color == "00000000":
+        if not color or color == "00000000" or label is None:
             continue
 
         label = str(label).strip()
@@ -291,8 +302,10 @@ def build_kh_color_map(ws):
             continue
 
         zone, price, available = label_to_zone_price_available(label)
-
         color_map[color] = (zone, price, available)
+
+    # 高雄場：部分座位格使用 theme color，legend 無法直接對應
+    color_map["theme:8:tint:-0.499984740745262"] = ("notopen", 300, False)
 
     return color_map
 
@@ -373,6 +386,10 @@ def parse_kh_seat_map(filepath, debug=False):
             if is_kh_stage(excel_row, excel_col):
                 continue
 
+            # 排數欄位不是座位
+            if excel_col in KH_ROW_NUMBER_COLS:
+                continue
+
             cell = ws.cell(excel_row, excel_col)
             value = cell.value
 
@@ -381,7 +398,8 @@ def parse_kh_seat_map(filepath, debug=False):
 
             color = get_fill_color(cell)
 
-            if not color:
+            # 透明背景不是座位
+            if not color or color == "00000000":
                 continue
 
             merged_info = merged_lookup.get((excel_row, excel_col))
