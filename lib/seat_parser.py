@@ -240,7 +240,7 @@ KH_ROW_LABEL_RULES = [
     {"label": "F4", "mode": "row", "row": 21, "start_col": "AM", "end_col": "BQ"},
     {"label": "F3", "mode": "row", "row": 22, "start_col": "AL", "end_col": "BR"},
     {"label": "F2", "mode": "row", "row": 23, "start_col": "AK", "end_col": "BS"},
-    {"label": "F1", "mode": "row", "row": 33, "start_col": "AL", "end_col": "BR"},
+    {"label": "F1", "mode": "row", "row": 26, "start_col": "AL", "end_col": "BR"},
 
     # ===== 二樓：A 區橫排 =====
     {"label": "A1", "mode": "row", "row": 61, "start_col": "AC", "end_col": "CA"},
@@ -257,18 +257,18 @@ KH_ROW_LABEL_RULES = [
     {"label": "B2", "mode": "row", "row": 67, "start_col": "AR", "end_col": "BM"},
 
     # B3-B7 拆成左、中、右，避免中間以外被直排規則吃掉
-    {"label": "B3", "mode": "row", "row": 69, "start_col": "AO", "end_col": "BP"},
-    {"label": "B4", "mode": "row", "row": 70, "start_col": "AO", "end_col": "BP"},
-    {"label": "B5", "mode": "row", "row": 71, "start_col": "AO", "end_col": "BP"},
-    {"label": "B6", "mode": "row", "row": 72, "start_col": "AO", "end_col": "BP"},
-    {"label": "B7", "mode": "row", "row": 73, "start_col": "AO", "end_col": "BP"},
+    {"label": "B3", "mode": "row", "row": 69, "start_col": "AI", "end_col": "BV"},
+    {"label": "B4", "mode": "row", "row": 70, "start_col": "AI", "end_col": "BV"},
+    {"label": "B5", "mode": "row", "row": 71, "start_col": "AI", "end_col": "BV"},
+    {"label": "B6", "mode": "row", "row": 72, "start_col": "AI", "end_col": "BV"},
+    {"label": "B7", "mode": "row", "row": 73, "start_col": "AI", "end_col": "BV"},
 
     {"label": "B8", "mode": "row", "row": 74, "start_col": "AR", "end_col": "BM"},
     {"label": "B9", "mode": "row", "row": 75, "start_col": "AR", "end_col": "BM"},
 
     # ===== 二樓：C 區 L-shape 橫排 =====
-    {"label": "C1", "mode": "row", "row": 78, "start_col": "AS", "end_col": "BK"},
-    {"label": "C2", "mode": "row", "row": 79, "start_col": "AR", "end_col": "BM"},
+    {"label": "C1", "mode": "row", "row": 78, "start_col": "V", "end_col": "CH"},
+    {"label": "C2", "mode": "row", "row": 79, "start_col": "T", "end_col": "CJ"},
     {"label": "C3", "mode": "row", "row": 80, "start_col": "Q", "end_col": "CN"},
     {"label": "C4", "mode": "row", "row": 81, "start_col": "U", "end_col": "CK"},
     {"label": "C5", "mode": "row", "row": 82, "start_col": "W", "end_col": "CH"},
