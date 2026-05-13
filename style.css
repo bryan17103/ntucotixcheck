@@ -63,25 +63,18 @@ body::after {
     justify-content: flex-start;
 }
 
+.poster-info,
+.poster-info * {
+    font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+}
+
 .poster-info {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-
-    font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
 }
 
-.concert-label {
-    margin: 0 0 6px;
-
-    font-size: 20px;
-    font-weight: 400;
-
-    letter-spacing: 0.08em;
-
-    color: #4a514e;
-}
-
+.concert-label,
 .poster-info h1 {
     margin: 0;
 
@@ -89,11 +82,32 @@ body::after {
     font-weight: 500;
 
     letter-spacing: 0.08em;
-    line-height: 1.2;
-
-    text-align: left;
+    line-height: 1.35;
 
     color: #404643;
+}
+
+.concert-label {
+    margin-bottom: 10px;
+}
+
+.poster-info h1 {
+    margin-bottom: 12px;
+    text-align: left;
+}
+
+.ticket-deadline {
+    margin: 0;
+
+    font-family: "Noto Sans TC", sans-serif;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+
+    color: #8a4b4b;
 }
 
 .birds {
@@ -393,9 +407,14 @@ body::after {
     background: transparent;
 }
 
-.sidebar-actions {
+.sidebar-bottom {
     flex-shrink: 0;
     padding-top: 14px;
+    margin-top: auto;
+}
+
+.sidebar-actions {
+    flex-shrink: 0;
 }
 
 .sidebar h2 {
@@ -413,20 +432,9 @@ body::after {
     margin: 16px 0 10px;
     font-family: "Noto Serif TC", "Songti TC", serif;
     font-size: 17px;
+    font-weight: 700;
     color: #37403d;
     letter-spacing: 0.06em;
-}
-
-.sidebar-bottom {
-    flex-shrink: 0;
-
-    padding-top: 14px;
-    margin-top: auto;
-
-    background: transparent;
-
-    box-shadow:
-        0 -10px 24px rgba(255,255,255,0.18);
 }
 
 #selected-list {
@@ -439,19 +447,6 @@ body::after {
     color: #3f4642;
     margin-bottom: 18px;
     padding-right: 0;
-}
-
-#selected-list::-webkit-scrollbar {
-    width: 8px;
-}
-
-#selected-list::-webkit-scrollbar-thumb {
-    background: rgba(95,124,121,0.28);
-    border-radius: 999px;
-}
-
-#selected-list::-webkit-scrollbar-track {
-    background: transparent;
 }
 
 .selected-seat-item {
@@ -500,7 +495,6 @@ body::after {
     flex-shrink: 0;
 
     margin-bottom: 12px;
-
     padding: 0;
 
     background: transparent;
@@ -539,8 +533,6 @@ body::after {
         box-shadow 0.15s ease;
 }
 
-/* Confirm button */
-
 #confirm-btn {
     border: none;
     background: #4e6b68;
@@ -553,8 +545,6 @@ body::after {
     transform: translateY(-1px);
     box-shadow: 0 8px 18px rgba(64, 91, 89, 0.20);
 }
-
-/* Secondary button */
 
 .secondary-link-btn {
     margin-top: 12px;
@@ -944,20 +934,23 @@ body::after {
         padding: 8px;
     }
 
-    .page-header {
-        height: auto;
-        padding: 12px 8px 10px;
+    .hero {
+        min-height: auto;
+        padding: 30px 18px 24px;
     }
 
-    .page-title {
-        font-size: 22px;
-        letter-spacing: 0.08em;
+    .concert-label,
+    .poster-info h1 {
+        font-size: 18px;
+        line-height: 1.35;
     }
 
-    .page-subtitle {
+    .ticket-deadline {
         font-size: 13px;
-        margin-top: 4px;
-        letter-spacing: 0.04em;
+    }
+
+    .birds {
+        display: none;
     }
 
     .app-shell {
@@ -980,6 +973,11 @@ body::after {
         max-height: none;
         border-radius: 22px;
         padding: 16px;
+    }
+
+    .sidebar-scroll-area {
+        overflow: visible;
+        padding-right: 0;
     }
 
     .map-floating-tools {
@@ -1042,12 +1040,12 @@ body::after {
 
     .sidebar-subtitle {
         margin-top: 14px;
-        font-size: 15px;
+        font-size: 17px;
     }
 
     #selected-list {
-        max-height: 180px;
-        flex: none;
+        min-height: 180px;
+        max-height: none;
         margin-bottom: 12px;
     }
 
@@ -1079,7 +1077,7 @@ body::after {
 
     #confirm-btn,
     .secondary-link-btn {
-        height: 44px;
+        height: 52px;
         font-size: 15px;
     }
 
