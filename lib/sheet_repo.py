@@ -52,11 +52,6 @@ HEADERS = [
     "是否已調票",
 ]
 
-_ws_cache = None
-_sold_cache = None
-_sold_cache_time = 0
-_SOLD_CACHE_TTL = 2
-
 
 def get_google_credentials():
     creds_dict = json.loads(os.environ["GOOGLE_CREDENTIALS_JSON"])
