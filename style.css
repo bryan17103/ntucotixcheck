@@ -356,6 +356,32 @@ body::after {
     flex-direction: column;
     overflow: hidden;
 }
+
+.sidebar-scroll-area {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+.sidebar-scroll-area::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar-scroll-area::-webkit-scrollbar-thumb {
+    background: rgba(95,124,121,0.28);
+    border-radius: 999px;
+}
+
+.sidebar-scroll-area::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar-actions {
+    flex-shrink: 0;
+    padding-top: 14px;
+}
+
 .sidebar h2 {
     flex-shrink: 0;
     margin: 0 0 8px;
@@ -376,16 +402,15 @@ body::after {
 }
 
 #selected-list {
-    flex: 1 1 auto;
-    min-height: 160px;
+    min-height: 220px;
     max-height: none;
-    overflow-y: auto;
+    overflow: visible;
 
     font-size: 15px;
     line-height: 1.8;
     color: #3f4642;
-    margin-bottom: 14px;
-    padding-right: 6px;
+    margin-bottom: 18px;
+    padding-right: 0;
 }
 
 #selected-list::-webkit-scrollbar {
