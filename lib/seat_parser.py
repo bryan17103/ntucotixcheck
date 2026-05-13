@@ -8,7 +8,6 @@ def get_fill_color(cell):
 
     if not fill:
         return None
-KH_ROW_LABEL_RULES
     color = fill.fgColor
 
     if not color:
