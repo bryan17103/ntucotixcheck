@@ -931,6 +931,59 @@ body::after {
     background: #405a57;
 }
 
+.kh-floor-frame {
+    position: relative;
+    z-index: 0;
+    border: 2px solid rgba(78, 107, 104, 0.22);
+    border-radius: 22px;
+    background: rgba(255,255,255,0.12);
+    pointer-events: none;
+}
+
+.kh-first-floor {
+    border-color: rgba(185, 107, 104, 0.35);
+}
+
+.kh-second-floor {
+    border-color: rgba(95, 124, 121, 0.32);
+}
+
+.kh-third-floor {
+    border-color: rgba(80, 126, 130, 0.22);
+}
+
+.kh-floor-tag {
+    position: absolute;
+    top: 6px;
+    left: 10px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.78);
+    color: #405f5b;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.kh-stage {
+    z-index: 1;
+    height: auto;
+    min-height: 100%;
+}
+
+.kh-row-marker {
+    z-index: 3;
+    font-size: 10px;
+    font-weight: 800;
+    color: #59615e;
+    opacity: 0.82;
+}
+
+.seat {
+    position: relative;
+    z-index: 2;
+}
+
 @keyframes modalPop {
     from {
         opacity: 0;
