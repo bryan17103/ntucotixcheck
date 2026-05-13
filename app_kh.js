@@ -410,6 +410,28 @@ function addKhRowMarkers(seatMap, minCol, minRow, topOffset) {
         ["W", 82, "C5"],
         ["BP", 82, "C5"],
         ["CH", 82, "C5"],
+
+        // F 區
+        ["AS", 17, "F7"],
+        ["BK", 17, "F7"],
+        
+        ["AR", 19, "F6"],
+        ["BK", 19, "F6"],
+        
+        ["AR", 20, "F5"],
+        ["BK", 20, "F5"],
+        
+        ["AR", 21, "F4"],
+        ["BK", 21, "F4"],
+        
+        ["AR", 22, "F3"],
+        ["BK", 22, "F3"],
+        
+        ["AR", 23, "F2"],
+        ["BK", 23, "F2"],
+        
+        ["AK", 26, "F1"],
+        ["BS", 26, "F1"],
     ];
 
     secondFloorVerticalMarkers.forEach(([col, startRow, endRow, text]) => {
