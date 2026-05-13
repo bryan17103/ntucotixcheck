@@ -596,16 +596,36 @@ function enableDragScroll() {
     viewport.dataset.dragBound = "true";
     viewport.dataset.justDragged = "false";
 
-    let isDown = false;
+    let isDragging = false;
     let startX = 0;
     let startY = 0;
     let startScrollLeft = 0;
     let startScrollTop = 0;
 
+    let pinchStartDistance = null;
+    let pinchStartZoom = zoomLevel;
+    let pinchCenterX = 0;
+    let pinchCenterY = 0;
+    let pinchStartScrollLeft = 0;
+    let pinchStartScrollTop = 0;
+
+    function getTouchDistance(touches) {
+        const dx = touches[0].clientX - touches[1].clientX;
+        const dy = touches[0].clientY - touches[1].clientY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function getTouchCenter(touches) {
+        return {
+            x: (touches[0].clientX + touches[1].clientX) / 2,
+            y: (touches[0].clientY + touches[1].clientY) / 2,
+        };
+    }
+
     viewport.addEventListener("mousedown", e => {
         if (e.button !== 0) return;
 
-        isDown = true;
+        isDragging = true;
         viewport.classList.add("dragging");
 
         startX = e.clientX;
@@ -616,7 +636,7 @@ function enableDragScroll() {
     });
 
     window.addEventListener("mousemove", e => {
-        if (!isDown) return;
+        if (!isDragging) return;
 
         const dx = e.clientX - startX;
         const dy = e.clientY - startY;
@@ -630,9 +650,9 @@ function enableDragScroll() {
     });
 
     window.addEventListener("mouseup", () => {
-        if (!isDown) return;
+        if (!isDragging) return;
 
-        isDown = false;
+        isDragging = false;
         viewport.classList.remove("dragging");
 
         setTimeout(() => {
@@ -640,50 +660,77 @@ function enableDragScroll() {
         }, 80);
     });
 
-    // ===== 手機雙指縮放 =====
-    let pinchStartDistance = null;
-    let pinchStartZoom = zoomLevel;
-    
-    function getTouchDistance(touches) {
-        const dx = touches[0].clientX - touches[1].clientX;
-        const dy = touches[0].clientY - touches[1].clientY;
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-    
-    viewport.addEventListener(
-        "touchstart",
-        e => {
-            if (e.touches.length === 2) {
-                pinchStartDistance = getTouchDistance(e.touches);
-                pinchStartZoom = zoomLevel;
-            }
-        },
-        { passive: false }
-    );
-    
-    viewport.addEventListener(
-        "touchmove",
-        e => {
-            if (e.touches.length !== 2 || !pinchStartDistance) return;
-    
+    viewport.addEventListener("touchstart", e => {
+        if (e.touches.length === 1) {
+            isDragging = true;
+
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+            startScrollLeft = viewport.scrollLeft;
+            startScrollTop = viewport.scrollTop;
+            viewport.dataset.justDragged = "false";
+        }
+
+        if (e.touches.length === 2) {
+            isDragging = false;
+
+            pinchStartDistance = getTouchDistance(e.touches);
+            pinchStartZoom = zoomLevel;
+
+            const center = getTouchCenter(e.touches);
+            pinchCenterX = center.x;
+            pinchCenterY = center.y;
+
+            pinchStartScrollLeft = viewport.scrollLeft;
+            pinchStartScrollTop = viewport.scrollTop;
+        }
+    }, { passive: false });
+
+    viewport.addEventListener("touchmove", e => {
+        if (e.touches.length === 1 && isDragging) {
             e.preventDefault();
-    
+
+            const dx = e.touches[0].clientX - startX;
+            const dy = e.touches[0].clientY - startY;
+
+            if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+                viewport.dataset.justDragged = "true";
+            }
+
+            viewport.scrollLeft = startScrollLeft - dx;
+            viewport.scrollTop = startScrollTop - dy;
+        }
+
+        if (e.touches.length === 2 && pinchStartDistance) {
+            e.preventDefault();
+
             const currentDistance = getTouchDistance(e.touches);
-    
             const scale = currentDistance / pinchStartDistance;
-    
-            zoomLevel = Math.max(
-                0.4,
-                Math.min(2.5, pinchStartZoom * scale)
-            );
-    
+
+            const newZoom = Math.max(0.45, Math.min(2.5, pinchStartZoom * scale));
+            const zoomRatio = newZoom / zoomLevel;
+
+            const center = getTouchCenter(e.touches);
+            const rect = viewport.getBoundingClientRect();
+
+            const contentX = viewport.scrollLeft + (pinchCenterX - rect.left);
+            const contentY = viewport.scrollTop + (pinchCenterY - rect.top);
+
+            zoomLevel = newZoom;
             applyZoom();
-        },
-        { passive: false }
-    );
-    
+
+            viewport.scrollLeft = contentX * zoomRatio - (center.x - rect.left);
+            viewport.scrollTop = contentY * zoomRatio - (center.y - rect.top);
+        }
+    }, { passive: false });
+
     viewport.addEventListener("touchend", () => {
+        isDragging = false;
         pinchStartDistance = null;
+
+        setTimeout(() => {
+            viewport.dataset.justDragged = "false";
+        }, 80);
     });
 }
 
