@@ -10,7 +10,7 @@ let seatMapBaseHeight = 0;
 const SECOND_FLOOR_START_ROW = 33; 
 
 async function loadSeats() {
-    const res = await fetch("/api/seats");
+    const res = await fetch("/api/index");
     const data = await res.json();
 
     seatData = data.seats || [];
