@@ -286,7 +286,7 @@ function addKhRowMarkers(seatMap, minCol, minRow, topOffset) {
     for (let r = 44; r <= 55; r++) {
         const label = String(r - 43);
 
-        ["AI", "AT", "AV", "BI", "BK"].forEach(col => {
+        ["AI", "AT", "AV", "BI", "BK" "BV"].forEach(col => {
             addSingleMarker(seatMap, minCol, minRow, topOffset, col, r, label, "kh-first-floor-marker");
         });
     }
