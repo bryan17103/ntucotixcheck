@@ -5,19 +5,25 @@ from openpyxl.utils import column_index_from_string
 # 共用工具
 def get_fill_color(cell):
     fill = cell.fill
+
     if not fill:
         return None
 
     color = fill.fgColor
+
     if not color:
         return None
 
     if color.type == "rgb":
         return color.rgb
-    elif color.type == "indexed":
+
+    # theme 色先忽略 tint，直接記 theme index
+    if color.type == "theme":
+        tint = getattr(color, "tint", 0)
+        return f"theme:{color.theme}:tint:{tint}"
+
+    if color.type == "indexed":
         return f"indexed:{color.indexed}"
-    elif color.type == "theme":
-        return f"theme:{color.theme}"
 
     return None
 
