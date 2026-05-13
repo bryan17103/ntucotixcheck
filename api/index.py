@@ -92,14 +92,26 @@ def api_kh_seats():
 
 @app.route("/api/debug/kh-seat-count")
 def debug_kh_seat_count():
+
     seats, row_labels = get_cached_seat_map("kh")
 
     zone_counts = {}
     color_counts = {}
 
     for seat in seats:
-        zone_counts[seat["zone"]] = zone_counts.get(seat["zone"], 0) + 1
-        color_counts[seat["color"]] = color_counts.get(seat["color"], 0) + 1
+        zone_counts[seat["zone"]] = (
+            zone_counts.get(seat["zone"], 0) + 1
+        )
+
+        color_counts[seat["color"]] = (
+            color_counts.get(seat["color"], 0) + 1
+        )
+
+    unknown_sample = [
+        seat
+        for seat in seats
+        if seat["zone"] == "unknown"
+    ][:30]
 
     return jsonify({
         "success": True,
@@ -107,7 +119,7 @@ def debug_kh_seat_count():
         "row_label_count": len(row_labels),
         "zone_counts": zone_counts,
         "color_counts": color_counts,
-        "sample": seats[:10],
+        "unknown_sample": unknown_sample,
     })
     
 @app.route("/api/seats", methods=["GET"])
