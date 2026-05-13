@@ -43,6 +43,37 @@ SEAT_CACHE_TTL = 60
 SECOND_FLOOR_START_ROW = 33
 confirm_lock = Lock()
 
+def build_result_seats(concert_code):
+    seats, row_labels = get_cached_seat_map(concert_code)
+    active_sold_keys = build_active_sold_seat_keys(concert_code)
+
+    result_seats = []
+
+    for seat in seats:
+        seat_copy = seat.copy()
+
+        seat_id = f"{seat_copy['excel_row']}-{seat_copy['excel_col']}"
+
+        floor = seat_copy.get("floor")
+        if not floor:
+            floor = get_floor_label_from_excel_row(
+                seat_copy["excel_row"]
+            )
+
+        seat_key = (
+            floor,
+            str(seat_copy["row_label"]),
+            int(seat_copy["seat_number"])
+        )
+
+        seat_copy["seat_id"] = seat_id
+        seat_copy["floor"] = floor
+        seat_copy["sold"] = seat_key in active_sold_keys
+
+        result_seats.append(seat_copy)
+
+    return result_seats, row_labels
+    
 def get_floor_label_from_excel_row(excel_row: int) -> str:
     return "2樓" if excel_row >= SECOND_FLOOR_START_ROW else "1樓"
 
@@ -79,15 +110,30 @@ def get_cached_seat_map(concert_code="tp"):
 
     return seats, row_labels
 
-@app.route("/api/kh/seats", methods=["GET"])
-def api_kh_seats():
-    seats, row_labels = get_cached_seat_map("kh")
+@app.route("/api/tp/seats", methods=["GET"])
+def api_tp_seats():
+
+    result_seats, row_labels = build_result_seats("tp")
 
     return jsonify({
         "success": True,
-        "seats": seats,
+        "seats": result_seats,
         "row_labels": row_labels,
-        "order_open": get_order_open()
+        "order_open": get_order_open("tp")
+    })
+
+
+@app.route("/api/kh/seats", methods=["GET"])
+def api_kh_seats():
+
+    result_seats, row_labels = build_result_seats("kh")
+
+    return jsonify({
+        "success": True,
+        "seats": result_seats,
+        "row_labels": row_labels,
+      
+        "order_open": get_order_open("kh")
     })
 
 @app.route("/api/debug/kh-seat-count")
@@ -151,54 +197,81 @@ def api_seats():
         "order_open": get_order_open()
     })
 
-@app.route("/api/tp/confirm", methods=["POST"])
-def api_confirm():
+def handle_confirm(concert_code):
+
     with confirm_lock:
 
-        if not get_order_open():
+        if not get_order_open(concert_code):
             return jsonify({
                 "success": False,
                 "message": "目前團內購票已截止，無法新增訂單。"
             }), 403
 
         data = request.get_json(silent=True) or {}
+
         name = str(data.get("name", "")).strip()
         selected_seat_ids = data.get("seats", [])
 
         if not name:
-            return jsonify({"success": False, "message": "請輸入姓名"}), 400
+            return jsonify({
+                "success": False,
+                "message": "請輸入姓名"
+            }), 400
 
         if not selected_seat_ids:
-            return jsonify({"success": False, "message": "請選擇座位"}), 400
+            return jsonify({
+                "success": False,
+                "message": "請選擇座位"
+            }), 400
 
-        seats, _ = get_cached_seat_map()
+        seats, _ = get_cached_seat_map(concert_code)
+
         seat_map = {
             f"{seat['excel_row']}-{seat['excel_col']}": seat
             for seat in seats
         }
 
-        active_sold_keys = build_active_sold_seat_keys()
+        active_sold_keys = build_active_sold_seat_keys(concert_code)
+
         seat_rows_to_save = []
 
         for seat_id in selected_seat_ids:
+
             seat = seat_map.get(seat_id)
 
             if not seat:
-                return jsonify({"success": False, "message": f"找不到座位 {seat_id}"}), 400
+                return jsonify({
+                    "success": False,
+                    "message": f"找不到座位 {seat_id}"
+                }), 400
 
-            floor = get_floor_label_from_excel_row(seat["excel_row"])
-            seat_key = (floor, str(seat["row_label"]), int(seat["seat_number"]))
+            floor = seat.get("floor")
+
+            if not floor:
+                floor = get_floor_label_from_excel_row(
+                    seat["excel_row"]
+                )
+
+            seat_key = (
+                floor,
+                str(seat["row_label"]),
+                int(seat["seat_number"])
+            )
 
             if seat_key in active_sold_keys:
                 return jsonify({
                     "success": False,
-                    "message": f"{floor}{seat['row_label']}排{seat['seat_number']}號 已被選走"
+                    "message":
+                        f"{floor}{seat['row_label']}排"
+                        f"{seat['seat_number']}號 已被選走"
                 }), 400
 
             if not seat["available"]:
                 return jsonify({
                     "success": False,
-                    "message": f"{floor}{seat['row_label']}排{seat['seat_number']}號 不開放購買"
+                    "message":
+                        f"{floor}{seat['row_label']}排"
+                        f"{seat['seat_number']}號 不開放購買"
                 }), 400
 
             seat_rows_to_save.append({
@@ -208,13 +281,27 @@ def api_confirm():
                 "price": int(seat["price"]),
             })
 
-        order_id = append_order_rows(name=name, seat_rows=seat_rows_to_save)
+        order_id = append_order_rows(
+            name=name,
+            seat_rows=seat_rows_to_save,
+            concert_code=concert_code
+        )
 
         return jsonify({
             "success": True,
             "message": f"訂位成功！訂單編號：{order_id}",
             "order_id": order_id,
         })
+
+
+@app.route("/api/tp/confirm", methods=["POST"])
+def api_tp_confirm():
+    return handle_confirm("tp")
+
+
+@app.route("/api/kh/confirm", methods=["POST"])
+def api_kh_confirm():
+    return handle_confirm("kh")
 
 @app.route("/api/orders", methods=["GET"])
 def api_orders():
