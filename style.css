@@ -401,6 +401,22 @@ body::after {
     letter-spacing: 0.06em;
 }
 
+.sidebar-bottom {
+    flex-shrink: 0;
+
+    padding-top: 14px;
+    margin-top: auto;
+
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(245,248,247,0),
+            rgba(245,248,247,0.92) 18%
+        );
+
+    backdrop-filter: blur(6px);
+}
+
 #selected-list {
     min-height: 220px;
     max-height: none;
