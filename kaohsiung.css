@@ -961,15 +961,24 @@ body::after {
 
 .kh-floor-tag {
     position: absolute;
-    top: 6px;
-    left: 10px;
-    padding: 3px 10px;
+
+    top: 10px;
+    left: 12px;
+
+    padding: 6px 12px;
     border-radius: 999px;
-    background: rgba(255,255,255,0.78);
-    color: #405f5b;
-    font-size: 13px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
+
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(4px);
+
+    font-size: 14px;
+    font-weight: 900;
+    color: #3d4b46;
+
+    writing-mode: horizontal-tb;
+    white-space: nowrap;
+
+    z-index: 20;
 }
 
 .kh-stage {
