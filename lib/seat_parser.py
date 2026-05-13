@@ -283,7 +283,7 @@ def build_kh_color_map(ws):
         color = get_fill_color(color_cell)
         label = label_cell.value
 
-        if not color or label is None:
+        if not color or color == "00000000":
             continue
 
         label = str(label).strip()
