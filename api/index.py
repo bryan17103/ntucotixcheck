@@ -275,44 +275,33 @@ def require_admin(fn):
             return jsonify({"success": False, "message": "你不是票務！"}), 401
         return fn(*args, **kwargs)
     return wrapper
+    
 @app.route("/api/admin/toggle-order-open", methods=["POST"])
 @require_admin
 def api_admin_toggle_order_open():
-
     rows = get_stats_config_rows()
 
     target_index = None
 
     for i, row in enumerate(rows):
-
-        row_type = str(row.get("類型", "")).strip()
-        row_name = str(row.get("名稱", "")).strip()
+        row_type = str(row.get("type", "")).strip()
+        row_name = str(row.get("name", "")).strip()
 
         if row_type == "open" and row_name == "order_open":
             target_index = i
             break
 
     if target_index is None:
-
         rows.append({
-            "類型": "open",
-            "名稱": "order_open",
-            "條件": "false"
+            "type": "open",
+            "name": "order_open",
+            "condition": "false"
         })
-
         new_value = False
-
     else:
-
-        current = str(
-            rows[target_index].get("條件", "true")
-        ).strip().lower() == "true"
-
+        current = str(rows[target_index].get("condition", "true")).strip().lower() == "true"
         new_value = not current
-
-        rows[target_index]["條件"] = (
-            "true" if new_value else "false"
-        )
+        rows[target_index]["condition"] = "true" if new_value else "false"
 
     save_stats_config_rows(rows)
 
