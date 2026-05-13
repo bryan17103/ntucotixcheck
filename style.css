@@ -376,13 +376,14 @@ body::after {
 }
 
 #selected-list {
-    flex: 1;
-    min-height: 0;
+    flex: 1.8;
+    min-height: 180px;
+    max-height: none;
     overflow-y: auto;
     font-size: 15px;
     line-height: 1.8;
     color: #3f4642;
-    margin-bottom: 12px;
+    margin-bottom: 18px;
     padding-right: 6px;
 }
 
@@ -460,19 +461,34 @@ body::after {
 
 /* Buttons */
 
-#confirm-btn {
+#confirm-btn,
+.secondary-link-btn {
     flex-shrink: 0;
     width: 100%;
-    height: 46px;
-    border: none;
-    border-radius: 14px;
-    background: #4e6b68;
-    color: white;
+    height: 54px;
+    border-radius: 18px;
+
     font-family: "Noto Sans TC", sans-serif;
     font-size: 16px;
     font-weight: 800;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+/* Confirm button */
+
+#confirm-btn {
+    border: none;
+    background: #4e6b68;
+    color: white;
     cursor: pointer;
-    transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 #confirm-btn:hover {
@@ -481,23 +497,16 @@ body::after {
     box-shadow: 0 8px 18px rgba(64, 91, 89, 0.20);
 }
 
+/* Secondary button */
+
 .secondary-link-btn {
-    flex-shrink: 0;
-    margin-top: 9px;
-    width: 100%;
-    height: 42px;
-    border-radius: 14px;
+    margin-top: 12px;
+
     border: 1px solid rgba(120,130,126,0.18);
     background: rgba(255,255,255,0.72);
+
     color: #4a5652;
-    font-family: "Noto Sans TC", sans-serif;
-    font-size: 14px;
-    font-weight: 800;
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.12s ease, transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .secondary-link-btn:hover {
