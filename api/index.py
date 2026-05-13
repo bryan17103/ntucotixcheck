@@ -33,7 +33,7 @@ app = Flask(__name__)
 
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret")
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
-SEAT_FILE = os.path.join(PROJECT_ROOT, "data", "seat_map.xlsx")
+SEAT_FILE = os.path.join(PROJECT_ROOT, "data", "seat_map_tp.xlsx")
 
 SEAT_CACHE = {
     "seats": None,
