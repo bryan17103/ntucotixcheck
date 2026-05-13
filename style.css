@@ -351,11 +351,11 @@ body::after {
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.42);
     box-shadow: 0 18px 42px rgba(64, 91, 89, 0.14);
+
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
-
 .sidebar h2 {
     flex-shrink: 0;
     margin: 0 0 8px;
@@ -376,14 +376,15 @@ body::after {
 }
 
 #selected-list {
-    flex: 1.8;
-    min-height: 180px;
+    flex: 1 1 auto;
+    min-height: 160px;
     max-height: none;
     overflow-y: auto;
+
     font-size: 15px;
     line-height: 1.8;
     color: #3f4642;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
     padding-right: 6px;
 }
 
@@ -414,7 +415,7 @@ body::after {
 
 #zone-summary {
     flex-shrink: 0;
-    min-height: 64px;
+    min-height: auto;
     font-size: 15px;
     line-height: 1.8;
     color: #333;
@@ -444,7 +445,7 @@ body::after {
 
 #summary {
     flex-shrink: 0;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 
     padding: 0;
     background: transparent;
@@ -452,8 +453,8 @@ body::after {
     box-shadow: none;
 
     font-family: "Noto Serif TC", "Songti TC", serif;
-    font-size: 15px;
-    font-weight: 700;
+    font-size: 17px;
+    font-weight: 800;
     color: #405f5b;
     letter-spacing: 0.04em;
     text-align: left;
