@@ -15,12 +15,14 @@ async function loadSeats() {
 
     seatData = data.seats || [];
     rowLabels = data.row_labels || {};
+    ORDER_OPEN = data.order_open !== false;
+
+    updateOrderOpenUI();
 
     renderSeats();
     updateSummary();
     applyZoom();
     enableDragScroll();
-    loadSystemStatus();
 }
 
 function getSeatId(seat) {
@@ -547,21 +549,15 @@ successModal?.addEventListener("click", (e) => {
     }
 });
 
-async function loadSystemStatus() {
-    try {
-        const res = await fetch("/api/index");
-        const data = await res.json();
+function updateOrderOpenUI() {
+    const confirmBtn = document.getElementById("confirm-btn");
+    if (!confirmBtn) return;
 
-        ORDER_OPEN = data.order_open !== false;
-
-        const confirmBtn = document.getElementById("confirm-btn");
-
-        if (!ORDER_OPEN) {
-            confirmBtn.disabled = true;
-            confirmBtn.textContent = "團內購票已截止";
-        }
-    } catch (err) {
-        console.error("讀取系統狀態失敗", err);
-        ORDER_OPEN = true;
+    if (!ORDER_OPEN) {
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = "團內購票已截止";
+    } else {
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = "確認選位";
     }
 }
