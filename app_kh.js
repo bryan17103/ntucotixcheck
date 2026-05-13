@@ -308,6 +308,7 @@ function addKhRowMarkers(seatMap, minCol, minRow, topOffset) {
         ["CF", 33, 55, "D4"],
 
         ["CI", 25, 57, "E1"],
+        ["CJ", 30, 53, "E2"],
         ["CK", 33, 51, "E3"],
     ];
 
@@ -401,7 +402,7 @@ function addKhRowMarkers(seatMap, minCol, minRow, topOffset) {
         ["CN", 80, "C3"],
     
         ["AP", 81, "C4"],
-        ["U", 81, "C4"],
+        ["T", 81, "C4"],
         ["BO", 81, "C4"],
         ["CK", 81, "C4"],
     
@@ -430,10 +431,8 @@ function addKhRowMarkers(seatMap, minCol, minRow, topOffset) {
         ["CH", 60, "C1"],
     
         ["CJ", 73, "C2"],
-        ["U", 74, "C2"],
-    
-        ["CJ", 30, "E2"],
-        ["U", 34, "E2"],
+        ["T", 74, "C2"],
+
     ].forEach(([col, row, text]) => {
         addSingleMarker(
             seatMap,
