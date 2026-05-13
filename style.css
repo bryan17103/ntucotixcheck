@@ -56,6 +56,12 @@ body::after {
     position: relative;
     z-index: 2;
     min-height: 160px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    padding: 24px 0 8px;
 }
 
 .concert-label {
@@ -64,17 +70,24 @@ body::after {
     letter-spacing: 0.08em;
 }
 
+.poster-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .poster-info h1 {
     margin: 0;
     font-size: 24px;
     font-weight: 500;
     letter-spacing: 0.08em;
+    text-align: left;
 }
 
 .birds {
     position: absolute;
-    top: 10px;
-    right: 10vw;
+    top: 18px;
+    right: 6vw;
     font-size: 34px;
     letter-spacing: 14px;
     transform: rotate(-18deg);
@@ -347,10 +360,10 @@ body::after {
     flex-shrink: 0;
     margin: 0 0 8px;
     font-family: "Noto Serif TC", "Songti TC", serif;
-    font-size: 20px;
+    font-size: 17px;
     font-weight: 700;
     color: #37403d;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
 }
 
 .sidebar-subtitle {
@@ -431,16 +444,18 @@ body::after {
 #summary {
     flex-shrink: 0;
     margin-bottom: 14px;
-    padding: 12px 14px;
-    border-radius: 16px;
-    background: rgba(255,255,255,0.58);
-    border: 1px solid rgba(95,124,121,0.16);
+
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+
     font-family: "Noto Serif TC", "Songti TC", serif;
-    font-size: 20px;
-    font-weight: 800;
+    font-size: 15px;
+    font-weight: 700;
     color: #405f5b;
     letter-spacing: 0.04em;
-    text-align: center;
+    text-align: left;
 }
 
 /* Buttons */
