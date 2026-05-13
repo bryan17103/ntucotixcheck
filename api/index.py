@@ -63,12 +63,6 @@ def get_cached_seat_map():
     SEAT_CACHE["loaded_at"] = now
     return seats, row_labels
 
-def handler(request):
-    return jsonify({
-        "success": True,
-        "order_open": get_order_open()
-    })
-
 @app.route("/api/seats", methods=["GET"])
 def api_seats():
     seats, row_labels = get_cached_seat_map()
@@ -95,6 +89,7 @@ def api_seats():
     return jsonify({
         "seats": result_seats,
         "row_labels": row_labels
+        "order_open": get_order_open()
     })
 
 @app.route("/api/confirm", methods=["POST"])
@@ -280,6 +275,51 @@ def require_admin(fn):
             return jsonify({"success": False, "message": "你不是票務！"}), 401
         return fn(*args, **kwargs)
     return wrapper
+@app.route("/api/admin/toggle-order-open", methods=["POST"])
+@require_admin
+def api_admin_toggle_order_open():
+
+    rows = get_stats_config_rows()
+
+    target_index = None
+
+    for i, row in enumerate(rows):
+
+        row_type = str(row.get("類型", "")).strip()
+        row_name = str(row.get("名稱", "")).strip()
+
+        if row_type == "open" and row_name == "order_open":
+            target_index = i
+            break
+
+    if target_index is None:
+
+        rows.append({
+            "類型": "open",
+            "名稱": "order_open",
+            "條件": "false"
+        })
+
+        new_value = False
+
+    else:
+
+        current = str(
+            rows[target_index].get("條件", "true")
+        ).strip().lower() == "true"
+
+        new_value = not current
+
+        rows[target_index]["條件"] = (
+            "true" if new_value else "false"
+        )
+
+    save_stats_config_rows(rows)
+
+    return jsonify({
+        "success": True,
+        "order_open": new_value
+    })
 
 @app.route("/api/admin/orders", methods=["GET"])
 @require_admin
