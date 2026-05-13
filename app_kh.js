@@ -14,7 +14,7 @@ async function loadSeats() {
     try {
         loadingOverlay?.classList.remove("hidden");
 
-        const res = await fetch("/api/tp/seats");
+        const res = await fetch("/api/kh/seats");
         const data = await res.json();
 
         seatData = (data.seats || []).filter(seat => {
@@ -30,10 +30,14 @@ async function loadSeats() {
         applyZoom();
         enableDragScroll();
 
+    } catch (err) {
+        console.error(err);
+
     } finally {
         loadingOverlay?.classList.add("hidden");
     }
 }
+
 function getSeatId(seat) {
     return seat.seat_id || `${seat.excel_row}-${seat.excel_col}`;
 }
