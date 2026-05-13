@@ -224,23 +224,65 @@ KH_SECOND_FLOOR_END_COL = column_index_from_string("CM")
 KH_SECOND_FLOOR_START_ROW = 17
 KH_SECOND_FLOOR_END_ROW = 82
 
-# 高雄場 legend：目前確認是 DB / DC
+# 高雄 legend
 KH_LEGEND_COLOR_COL = column_index_from_string("DB")
 KH_LEGEND_LABEL_COL = column_index_from_string("DC")
 KH_LEGEND_START_ROW = 30
 KH_LEGEND_END_ROW = 45
 
 
-# 高雄場手動排數規則
-# mode = "col"：直排，依照欄位 + row range 判斷
-# mode = "row"：橫排，依照列 + col range 判斷
 KH_ROW_LABEL_RULES = [
+    # ===== 二樓：F 區上排橫排 =====
+    {"label": "F7", "mode": "row", "row": 17, "start_col": "AT", "end_col": "BJ"},
+    {"label": "F6", "mode": "row", "row": 18, "start_col": "AL", "end_col": "BR"},
+    {"label": "F6", "mode": "row", "row": 19, "start_col": "AL", "end_col": "BR"},
+    {"label": "F5", "mode": "row", "row": 20, "start_col": "AN", "end_col": "BP"},
+    {"label": "F4", "mode": "row", "row": 21, "start_col": "AM", "end_col": "BQ"},
+    {"label": "F3", "mode": "row", "row": 22, "start_col": "AL", "end_col": "BR"},
+    {"label": "F2", "mode": "row", "row": 23, "start_col": "AK", "end_col": "BS"},
+    {"label": "F1", "mode": "row", "row": 33, "start_col": "AL", "end_col": "BR"},
+
+    # ===== 二樓：A 區橫排 =====
+    {"label": "A1", "mode": "row", "row": 61, "start_col": "AC", "end_col": "CA"},
+    {"label": "A2", "mode": "row", "row": 62, "start_col": "AC", "end_col": "CA"},
+    {"label": "A3", "mode": "row", "row": 63, "start_col": "AC", "end_col": "CA"},
+    {"label": "A4", "mode": "row", "row": 64, "start_col": "AC", "end_col": "CA"},
+    {"label": "A5", "mode": "row", "row": 65, "start_col": "AC", "end_col": "CA"},
+
+    {"label": "A6", "mode": "row", "row": 66, "start_col": "AH", "end_col": "AM"},
+    {"label": "A6", "mode": "row", "row": 66, "start_col": "BR", "end_col": "BW"},
+
+    # ===== 二樓：B 區橫排 =====
+    {"label": "B1", "mode": "row", "row": 66, "start_col": "AW", "end_col": "BG"},
+    {"label": "B2", "mode": "row", "row": 67, "start_col": "AR", "end_col": "BM"},
+
+    # B3-B7 拆成左、中、右，避免中間以外被直排規則吃掉
+    {"label": "B3", "mode": "row", "row": 69, "start_col": "AO", "end_col": "BP"},
+    {"label": "B4", "mode": "row", "row": 70, "start_col": "AO", "end_col": "BP"},
+    {"label": "B5", "mode": "row", "row": 71, "start_col": "AO", "end_col": "BP"},
+    {"label": "B6", "mode": "row", "row": 72, "start_col": "AO", "end_col": "BP"},
+    {"label": "B7", "mode": "row", "row": 73, "start_col": "AO", "end_col": "BP"},
+
+    {"label": "B8", "mode": "row", "row": 74, "start_col": "AR", "end_col": "BM"},
+    {"label": "B9", "mode": "row", "row": 75, "start_col": "AR", "end_col": "BM"},
+
+    # ===== 二樓：C 區 L-shape 橫排 =====
+    {"label": "C1", "mode": "row", "row": 78, "start_col": "AS", "end_col": "BK"},
+    {"label": "C2", "mode": "row", "row": 79, "start_col": "AR", "end_col": "BM"},
+    {"label": "C3", "mode": "row", "row": 80, "start_col": "Q", "end_col": "CN"},
+    {"label": "C4", "mode": "row", "row": 81, "start_col": "U", "end_col": "CK"},
+    {"label": "C5", "mode": "row", "row": 82, "start_col": "W", "end_col": "CH"},
+
+    # C1 / C2 直排 L-shape 兩側
+    {"label": "C1", "mode": "col", "col": "V", "start_row": 61, "end_row": 77},
+    {"label": "C1", "mode": "col", "col": "CH", "start_row": 61, "end_row": 77},
+    {"label": "C2", "mode": "col", "col": "T", "start_row": 75, "end_row": 78},
+    {"label": "C2", "mode": "col", "col": "CJ", "start_row": 74, "end_row": 78},
+
     # ===== 二樓：左側直排 =====
     {"label": "E3", "mode": "col", "col": "T", "start_row": 42, "end_row": 50},
     {"label": "E2", "mode": "col", "col": "U", "start_row": 35, "end_row": 52},
     {"label": "E1", "mode": "col", "col": "V", "start_row": 25, "end_row": 57},
-    {"label": "C1", "mode": "col", "col": "V", "start_row": 61, "end_row": 77},
-    {"label": "C2", "mode": "col", "col": "T", "start_row": 75, "end_row": 78},
 
     {"label": "D4", "mode": "col", "col": "Y", "start_row": 33, "end_row": 55},
     {"label": "D3", "mode": "col", "col": "Z", "start_row": 31, "end_row": 55},
@@ -256,8 +298,6 @@ KH_ROW_LABEL_RULES = [
     {"label": "E1", "mode": "col", "col": "CI", "start_row": 25, "end_row": 57},
     {"label": "E2", "mode": "col", "col": "CJ", "start_row": 35, "end_row": 52},
     {"label": "E3", "mode": "col", "col": "CK", "start_row": 33, "end_row": 51},
-    {"label": "C1", "mode": "col", "col": "CH", "start_row": 61, "end_row": 77},
-    {"label": "C2", "mode": "col", "col": "CJ", "start_row": 74, "end_row": 78},
 
     # ===== 三樓：左側 =====
     {"label": "B4", "mode": "col", "col": "J", "start_row": 43, "end_row": 49},
@@ -278,36 +318,6 @@ KH_ROW_LABEL_RULES = [
     {"label": "B2", "mode": "col", "col": "CR", "start_row": 55, "end_row": 74},
     {"label": "B3", "mode": "col", "col": "CS", "start_row": 55, "end_row": 74},
     {"label": "B4", "mode": "col", "col": "CT", "start_row": 59, "end_row": 73},
-
-    # ===== 二樓：A 區橫排 =====
-    {"label": "A1", "mode": "row", "row": 61, "start_col": "AC", "end_col": "CA"},
-    {"label": "A2", "mode": "row", "row": 62, "start_col": "AC", "end_col": "CA"},
-    {"label": "A3", "mode": "row", "row": 63, "start_col": "AC", "end_col": "CA"},
-    {"label": "A4", "mode": "row", "row": 64, "start_col": "AC", "end_col": "CA"},
-    {"label": "A5", "mode": "row", "row": 65, "start_col": "AC", "end_col": "CA"},
-
-    # A6：左右兩段
-    {"label": "A6", "mode": "row", "row": 66, "start_col": "AH", "end_col": "AM"},
-    {"label": "A6", "mode": "row", "row": 66, "start_col": "BR", "end_col": "BW"},
-
-    # ===== 二樓：B 區橫排 =====
-    {"label": "B1", "mode": "row", "row": 66, "start_col": "AW", "end_col": "BG"},
-    {"label": "B2", "mode": "row", "row": 67, "start_col": "AR", "end_col": "BM"},
-
-    {"label": "B3", "mode": "row", "row": 69, "start_col": "AO", "end_col": "BP"},
-    {"label": "B4", "mode": "row", "row": 70, "start_col": "AO", "end_col": "BP"},
-    {"label": "B5", "mode": "row", "row": 71, "start_col": "AO", "end_col": "BP"},
-    {"label": "B6", "mode": "row", "row": 72, "start_col": "AO", "end_col": "BP"},
-    {"label": "B7", "mode": "row", "row": 73, "start_col": "AO", "end_col": "BP"},
-    {"label": "B8", "mode": "row", "row": 74, "start_col": "AR", "end_col": "BM"},
-    {"label": "B9", "mode": "row", "row": 75, "start_col": "AR", "end_col": "BM"},
-
-    # ===== 二樓：C 區 L-shape 橫排 =====
-    {"label": "C1", "mode": "row", "row": 78, "start_col": "AS", "end_col": "BK"},
-    {"label": "C2", "mode": "row", "row": 79, "start_col": "AR", "end_col": "BM"},
-    {"label": "C3", "mode": "row", "row": 80, "start_col": "Q", "end_col": "CN"},
-    {"label": "C4", "mode": "row", "row": 81, "start_col": "U", "end_col": "CK"},
-    {"label": "C5", "mode": "row", "row": 82, "start_col": "W", "end_col": "CH"},
 ]
 
 
