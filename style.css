@@ -486,9 +486,11 @@ body::after {
 
 #summary {
     flex-shrink: 0;
-    margin-bottom: 12px;
+
+    margin-bottom: 16px;
 
     padding: 0;
+
     background: transparent;
     border: none;
     box-shadow: none;
@@ -497,6 +499,7 @@ body::after {
     font-size: 17px;
     font-weight: 800;
     color: #405f5b;
+
     letter-spacing: 0.04em;
     text-align: left;
 }
