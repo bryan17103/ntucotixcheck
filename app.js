@@ -1,3 +1,4 @@
+let ORDER_OPEN = true;
 let seatData = [];
 let rowLabels = {};
 let selectedSeats = new Set();
@@ -19,6 +20,7 @@ async function loadSeats() {
     updateSummary();
     applyZoom();
     enableDragScroll();
+    loadSystemStatus();
 }
 
 function getSeatId(seat) {
@@ -411,6 +413,11 @@ function setupConfirmButton() {
     confirmBtn.dataset.bound = "true";
 
     confirmBtn.addEventListener("click", async () => {
+        if (!ORDER_OPEN) {
+            alert("團內購票已截止，無法新增訂單！");
+            return;
+        }
+        
         if (selectedSeats.size === 0) {
             alert("請先選擇座位");
             return;
@@ -539,3 +546,22 @@ successModal?.addEventListener("click", (e) => {
         closeSuccessModal();
     }
 });
+
+async function loadSystemStatus() {
+    try {
+        const res = await fetch("/api/system_status");
+        const data = await res.json();
+
+        ORDER_OPEN = data.order_open !== false;
+
+        const confirmBtn = document.getElementById("confirm-btn");
+
+        if (!ORDER_OPEN) {
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = "團內購票已截止";
+        }
+    } catch (err) {
+        console.error("讀取系統狀態失敗", err);
+        ORDER_OPEN = true;
+    }
+}
