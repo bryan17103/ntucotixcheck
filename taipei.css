@@ -244,6 +244,14 @@ body::after {
     font-size: 12px;
 }
 
+#confirm-btn:disabled {
+    background: #b7b7b7;
+    color: white;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
 /* Labels */
 
 .floor-label {
