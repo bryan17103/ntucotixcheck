@@ -64,7 +64,7 @@ function isSecondFloorSeat(seat) {
 }
 
 function getFloorLabel(seat) {
-    return isSecondFloorSeat(seat) ? "2樓" : "1樓";
+    return seat.floor || "";
 }
 
 function applyZoom() {
@@ -224,12 +224,118 @@ function updateSummary() {
     summary.innerHTML = `已選 ${picked.length} 位，總金額：${formatMoney(total)}`;
 }
 
+function colIndex(col) {
+    let n = 0;
+    for (let i = 0; i < col.length; i++) {
+        n = n * 26 + (col.charCodeAt(i) - 64);
+    }
+    return n;
+}
+
+function addKhStage(seatMap, minCol, minRow, topOffset) {
+    const stage = document.createElement("div");
+    stage.className = "stage-box map-stage kh-stage";
+    stage.textContent = "舞台";
+
+    stage.style.gridColumn = `${colIndex("AJ") - minCol + 2} / ${colIndex("BV") - minCol + 3}`;
+    stage.style.gridRow = `${35 - minRow + 1 + topOffset} / ${41 - minRow + 2 + topOffset}`;
+
+    seatMap.appendChild(stage);
+}
+
+function addFloorFrame(seatMap, minCol, minRow, topOffset, label, startCol, endCol, startRow, endRow, className) {
+    const frame = document.createElement("div");
+    frame.className = `kh-floor-frame ${className}`;
+
+    frame.style.gridColumn = `${colIndex(startCol) - minCol + 2} / ${colIndex(endCol) - minCol + 3}`;
+    frame.style.gridRow = `${startRow - minRow + 1 + topOffset} / ${endRow - minRow + 2 + topOffset}`;
+
+    const tag = document.createElement("div");
+    tag.className = "kh-floor-tag";
+    tag.textContent = label;
+
+    frame.appendChild(tag);
+    seatMap.appendChild(frame);
+}
+
+function addRowMarker(seatMap, minCol, minRow, topOffset, col, startRow, endRow, text) {
+    for (let r = startRow; r <= endRow; r++) {
+        const marker = document.createElement("div");
+        marker.className = "row-label kh-row-marker";
+        marker.textContent = text;
+
+        marker.style.gridColumn = colIndex(col) - minCol + 2;
+        marker.style.gridRow = r - minRow + 1 + topOffset;
+
+        seatMap.appendChild(marker);
+    }
+}
+
+function addKhRowMarkers(seatMap, minCol, minRow, topOffset) {
+    // 一樓：44 = 1排，55 = 12排
+    for (let r = 44; r <= 55; r++) {
+        const label = String(r - 43);
+
+        ["AI", "AT", "AV", "BI", "BK"].forEach(col => {
+            addRowMarker(seatMap, minCol, minRow, topOffset, col, r, r, label);
+        });
+    }
+
+    // 二樓
+    const secondFloorMarkers = [
+        ["T", 42, 50, "E3"],
+        ["U", 35, 52, "E2"],
+        ["V", 25, 57, "E1"],
+        ["V", 61, 77, "C1"],
+        ["T", 75, 78, "C2"],
+
+        ["Y", 33, 55, "D4"],
+        ["Z", 31, 55, "D3"],
+        ["AB", 34, 54, "D2"],
+        ["AC", 37, 53, "D1"],
+
+        ["CB", 37, 53, "D1"],
+        ["CC", 34, 54, "D2"],
+        ["CE", 31, 55, "D3"],
+        ["CF", 33, 55, "D4"],
+
+        ["CI", 25, 57, "E1"],
+        ["CJ", 35, 52, "E2"],
+        ["CK", 33, 51, "E3"],
+        ["CH", 61, 77, "C1"],
+        ["CJ", 74, 78, "C2"],
+    ];
+
+    // 三樓
+    const thirdFloorMarkers = [
+        ["J", 43, 49, "B4"],
+        ["K", 42, 49, "B3"],
+        ["L", 41, 49, "B2"],
+        ["K", 53, 72, "B3"],
+        ["L", 53, 72, "B2"],
+        ["J", 58, 72, "B4"],
+        ["M", 57, 67, "B1"],
+
+        ["CR", 31, 51, "B2"],
+        ["CS", 31, 51, "B3"],
+        ["CT", 31, 51, "B4"],
+
+        ["CQ", 59, 69, "B1"],
+        ["CR", 55, 74, "B2"],
+        ["CS", 55, 74, "B3"],
+        ["CT", 59, 73, "B4"],
+    ];
+
+    [...secondFloorMarkers, ...thirdFloorMarkers].forEach(([col, startRow, endRow, text]) => {
+        addRowMarker(seatMap, minCol, minRow, topOffset, col, startRow, endRow, text);
+    });
+}
+
 function renderSeats() {
     const seatMap = document.getElementById("seat-map");
     if (!seatMap) return;
 
     seatMap.innerHTML = "";
-
     if (seatData.length === 0) return;
 
     const minCol = Math.min(...seatData.map(s => s.excel_col));
@@ -237,70 +343,23 @@ function renderSeats() {
     const minRow = Math.min(...seatData.map(s => s.excel_row));
     const maxRow = Math.max(...seatData.map(s => s.excel_row));
 
-    const totalCols = (maxCol - minCol + 1) + 2;
-
-    const TOP_TITLE_OFFSET = 1;
-    const totalRows = (maxRow - minRow + 1) + TOP_TITLE_OFFSET;
-
+    const TOP_TITLE_OFFSET = 0;
     const gridColSize = 28;
     const gridRowSize = 24;
 
     seatMap.style.gridTemplateColumns =
-        `${gridColSize}px repeat(${maxCol - minCol + 1}, ${gridColSize}px) ${gridColSize}px`;
+        `repeat(${maxCol - minCol + 3}, ${gridColSize}px)`;
 
     seatMap.style.gridTemplateRows =
-        `repeat(${totalRows}, ${gridRowSize}px)`;
+        `repeat(${maxRow - minRow + 2}, ${gridRowSize}px)`;
 
-    const firstFloorSeats = seatData.filter(seat => !isSecondFloorSeat(seat));
-    const secondFloorSeats = seatData.filter(seat => isSecondFloorSeat(seat));
+    addFloorFrame(seatMap, minCol, minRow, TOP_TITLE_OFFSET, "三樓", "C", "CY", 6, 88, "kh-third-floor");
+    addFloorFrame(seatMap, minCol, minRow, TOP_TITLE_OFFSET, "二樓", "R", "CM", 17, 82, "kh-second-floor");
+    addFloorFrame(seatMap, minCol, minRow, TOP_TITLE_OFFSET, "一樓", "AJ", "BU", 44, 55, "kh-first-floor");
 
-    // ===== 1樓標題 =====
-    if (firstFloorSeats.length > 0) {
-        const floor1 = document.createElement("div");
-        floor1.className = "floor-label";
-        floor1.textContent = "1樓";
-        floor1.style.gridColumn = `1 / ${totalCols + 1}`;
-        floor1.style.gridRow = 1;
-        seatMap.appendChild(floor1);
-    }
+    addKhStage(seatMap, minCol, minRow, TOP_TITLE_OFFSET);
+    addKhRowMarkers(seatMap, minCol, minRow, TOP_TITLE_OFFSET);
 
-    // ===== 左右排數 =====
-    Object.entries(rowLabels).forEach(([excelRow, label]) => {
-        const displayRow = (Number(excelRow) - minRow + 1) + TOP_TITLE_OFFSET;
-
-        const left = document.createElement("div");
-        left.className = "row-label";
-        left.textContent = label;
-        left.style.gridColumn = 1;
-        left.style.gridRow = displayRow;
-        seatMap.appendChild(left);
-
-        const right = document.createElement("div");
-        right.className = "row-label";
-        right.textContent = label;
-        right.style.gridColumn = totalCols;
-        right.style.gridRow = displayRow;
-        seatMap.appendChild(right);
-    });
-
-    // ===== 2樓標題 =====
-    if (secondFloorSeats.length > 0) {
-        const secondFloorTopExcelRow = Math.min(...secondFloorSeats.map(seat => seat.excel_row));
-        let secondFloorTitleRow = (secondFloorTopExcelRow - minRow) + TOP_TITLE_OFFSET;
-
-        if (secondFloorTitleRow < 2) {
-            secondFloorTitleRow = 2;
-        }
-
-        const floor2 = document.createElement("div");
-        floor2.className = "floor-label";
-        floor2.textContent = "2樓";
-        floor2.style.gridColumn = `1 / ${totalCols + 1}`;
-        floor2.style.gridRow = secondFloorTitleRow;
-        seatMap.appendChild(floor2);
-    }
-
-    // ===== 畫座位 =====
     seatData.forEach(seat => {
         const btn = document.createElement("button");
         const seatId = getSeatId(seat);
@@ -310,30 +369,19 @@ function renderSeats() {
         btn.type = "button";
 
         btn.style.gridColumn = seat.excel_col - minCol + 2;
-        btn.style.gridRow = (seat.excel_row - minRow + 1) + TOP_TITLE_OFFSET;
+        btn.style.gridRow = seat.excel_row - minRow + 1 + TOP_TITLE_OFFSET;
 
-        // ===== 已售 =====
         if (seat.sold) {
             btn.classList.add("sold");
             btn.disabled = true;
-
-            btn.addEventListener("mouseenter", (e) => {
-                showSeatTooltip(e, seat, "此座位已售出");
-            });
+            btn.addEventListener("mouseenter", e => showSeatTooltip(e, seat, "此座位已售出"));
             btn.addEventListener("mousemove", moveSeatTooltip);
             btn.addEventListener("mouseleave", hideSeatTooltip);
-
-        // ===== 不可購 =====
         } else if (!seat.available) {
             btn.disabled = true;
-
-            btn.addEventListener("mouseenter", (e) => {
-                showSeatTooltip(e, seat, "此區域不開放團內購票");
-            });
+            btn.addEventListener("mouseenter", e => showSeatTooltip(e, seat, "此區域不開放團內購票"));
             btn.addEventListener("mousemove", moveSeatTooltip);
             btn.addEventListener("mouseleave", hideSeatTooltip);
-
-        // ===== 可選 =====
         } else {
             btn.addEventListener("click", () => {
                 const viewport = document.getElementById("map-viewport");
@@ -341,9 +389,7 @@ function renderSeats() {
                 toggleSeat(seatId, btn);
             });
 
-            btn.addEventListener("mouseenter", (e) => {
-                showSeatTooltip(e, seat);
-            });
+            btn.addEventListener("mouseenter", e => showSeatTooltip(e, seat));
             btn.addEventListener("mousemove", moveSeatTooltip);
             btn.addEventListener("mouseleave", hideSeatTooltip);
         }
@@ -355,7 +401,6 @@ function renderSeats() {
         seatMap.appendChild(btn);
     });
 
-    // ===== ⭐ 這兩行是關鍵（修 zoom 空白 bug）=====
     seatMapBaseWidth = seatMap.offsetWidth;
     seatMapBaseHeight = seatMap.offsetHeight;
 }
@@ -433,7 +478,7 @@ function setupConfirmButton() {
         const name = await askBuyerName();
         if (!name) return;
 
-        const res = await fetch("/api/tp/confirm", {
+        const res = await fetch("/api/kh/confirm", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
