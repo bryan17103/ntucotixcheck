@@ -10,7 +10,7 @@ let seatMapBaseHeight = 0;
 const SECOND_FLOOR_START_ROW = 33; 
 
 async function loadSeats() {
-    const res = await fetch("/api/seats");
+    const res = await fetch("/api/tp/seats");
     const data = await res.json();
 
     seatData = data.seats || [];
@@ -428,7 +428,7 @@ function setupConfirmButton() {
         const name = await askBuyerName();
         if (!name) return;
 
-        const res = await fetch("/api/confirm", {
+        const res = await fetch("/api/tp/confirm", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
