@@ -963,22 +963,23 @@ body::after {
     position: absolute;
 
     top: 10px;
-    left: 12px;
+    left: 10px;
+
+    transform: none;
 
     padding: 6px 12px;
     border-radius: 999px;
 
-    background: rgba(255,255,255,0.92);
-    backdrop-filter: blur(4px);
+    background: rgba(255,255,255,.92);
 
     font-size: 14px;
     font-weight: 900;
-    color: #3d4b46;
+    line-height: 1;
 
     writing-mode: horizontal-tb;
     white-space: nowrap;
 
-    z-index: 20;
+    z-index: 30;
 }
 
 .kh-stage {
