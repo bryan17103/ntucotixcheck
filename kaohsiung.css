@@ -300,8 +300,13 @@ body::after {
     transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-.group-500 {
+.group-800 {
     background: #b96b68;
+    color: white;
+}
+
+.group-500 {
+    background: #d1a980;
     color: white;
 }
 
@@ -320,9 +325,11 @@ body::after {
 .wheelchair,
 .companion,
 .vip,
+.regular-800,
 .regular-500,
 .regular-300,
 .regular-200,
+.notopen,
 .unknown {
     background: #e4e4e4;
     color: #9b9b9b;
