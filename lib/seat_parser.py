@@ -225,7 +225,7 @@ KH_SECOND_FLOOR_END_COL = column_index_from_string("CM")
 KH_SECOND_FLOOR_START_ROW = 17
 KH_SECOND_FLOOR_END_ROW = 82
 
-# 高雄場 legend
+# 高雄場 legend：目前確認是 DB / DC
 KH_LEGEND_COLOR_COL = column_index_from_string("DB")
 KH_LEGEND_LABEL_COL = column_index_from_string("DC")
 KH_LEGEND_START_ROW = 30
@@ -241,12 +241,74 @@ KH_ROW_NUMBER_COLS = {
     column_index_from_string("BV"),
 }
 
+# 一樓排數欄位
+KH_FIRST_FLOOR_ROW_MARKER_COLS = {
+    column_index_from_string("AI"),
+    column_index_from_string("AT"),
+    column_index_from_string("AV"),
+    column_index_from_string("BI"),
+    column_index_from_string("BK"),
+}
+
+# 高雄場手動排數規則
+# mode = "col"：直排，依照欄位 + row range 判斷
+# mode = "row"：橫排，依照列 + col range 判斷
+KH_ROW_LABEL_RULES = [
+    # ===== 二樓：左側直排 =====
+    {"label": "E3", "mode": "col", "col": "T", "start_row": 42, "end_row": 50},
+    {"label": "E2", "mode": "col", "col": "U", "start_row": 35, "end_row": 52},
+    {"label": "E1", "mode": "col", "col": "V", "start_row": 25, "end_row": 57},
+    {"label": "C1", "mode": "col", "col": "V", "start_row": 61, "end_row": 77},
+    {"label": "C2", "mode": "col", "col": "T", "start_row": 75, "end_row": 78},
+
+    {"label": "D4", "mode": "col", "col": "Y", "start_row": 33, "end_row": 55},
+    {"label": "D3", "mode": "col", "col": "Z", "start_row": 31, "end_row": 55},
+    {"label": "D2", "mode": "col", "col": "AB", "start_row": 34, "end_row": 54},
+    {"label": "D1", "mode": "col", "col": "AC", "start_row": 37, "end_row": 53},
+
+    # ===== 二樓：右側直排 =====
+    {"label": "D1", "mode": "col", "col": "CB", "start_row": 37, "end_row": 53},
+    {"label": "D2", "mode": "col", "col": "CC", "start_row": 34, "end_row": 54},
+    {"label": "D3", "mode": "col", "col": "CE", "start_row": 31, "end_row": 55},
+    {"label": "D4", "mode": "col", "col": "CF", "start_row": 33, "end_row": 55},
+
+    {"label": "E1", "mode": "col", "col": "CI", "start_row": 25, "end_row": 57},
+    {"label": "E2", "mode": "col", "col": "CJ", "start_row": 35, "end_row": 52},
+    {"label": "E3", "mode": "col", "col": "CK", "start_row": 33, "end_row": 51},
+    {"label": "C1", "mode": "col", "col": "CH", "start_row": 61, "end_row": 77},
+    {"label": "C2", "mode": "col", "col": "CJ", "start_row": 74, "end_row": 78},
+
+    # ===== 三樓：左側 =====
+    {"label": "B4", "mode": "col", "col": "J", "start_row": 43, "end_row": 49},
+    {"label": "B3", "mode": "col", "col": "K", "start_row": 42, "end_row": 49},
+    {"label": "B2", "mode": "col", "col": "L", "start_row": 41, "end_row": 49},
+
+    {"label": "B4", "mode": "col", "col": "J", "start_row": 58, "end_row": 72},
+    {"label": "B3", "mode": "col", "col": "K", "start_row": 53, "end_row": 72},
+    {"label": "B2", "mode": "col", "col": "L", "start_row": 53, "end_row": 72},
+    {"label": "B1", "mode": "col", "col": "M", "start_row": 57, "end_row": 67},
+
+    # ===== 三樓：右側 =====
+    {"label": "B2", "mode": "col", "col": "CR", "start_row": 31, "end_row": 51},
+    {"label": "B3", "mode": "col", "col": "CS", "start_row": 31, "end_row": 51},
+    {"label": "B4", "mode": "col", "col": "CT", "start_row": 31, "end_row": 51},
+
+    {"label": "B1", "mode": "col", "col": "CQ", "start_row": 59, "end_row": 69},
+    {"label": "B2", "mode": "col", "col": "CR", "start_row": 55, "end_row": 74},
+    {"label": "B3", "mode": "col", "col": "CS", "start_row": 55, "end_row": 74},
+    {"label": "B4", "mode": "col", "col": "CT", "start_row": 59, "end_row": 73},
+]
+
 
 def is_in_range(row, col, start_row, end_row, start_col, end_col):
     return (
         start_row <= row <= end_row
         and start_col <= col <= end_col
     )
+
+
+def col_to_index(col_name):
+    return column_index_from_string(col_name)
 
 
 def is_kh_stage(row, col):
@@ -284,6 +346,42 @@ def get_kh_floor(row, col):
     return "3樓"
 
 
+def get_kh_row_label(row, col):
+    # 一樓：44 = 1排，55 = 12排
+    if is_in_range(
+        row,
+        col,
+        KH_FIRST_FLOOR_START_ROW,
+        KH_FIRST_FLOOR_END_ROW,
+        KH_FIRST_FLOOR_START_COL,
+        KH_FIRST_FLOOR_END_COL,
+    ):
+        return str(row - KH_FIRST_FLOOR_START_ROW + 1)
+
+    # 二樓 / 三樓：依照人工規則判斷
+    for rule in KH_ROW_LABEL_RULES:
+        if rule["mode"] == "col":
+            rule_col = col_to_index(rule["col"])
+
+            if (
+                col == rule_col
+                and rule["start_row"] <= row <= rule["end_row"]
+            ):
+                return rule["label"]
+
+        elif rule["mode"] == "row":
+            start_col = col_to_index(rule["start_col"])
+            end_col = col_to_index(rule["end_col"])
+
+            if (
+                row == rule["row"]
+                and start_col <= col <= end_col
+            ):
+                return rule["label"]
+
+    return ""
+
+
 def build_kh_color_map(ws):
     color_map = {}
 
@@ -304,7 +402,6 @@ def build_kh_color_map(ws):
         zone, price, available = label_to_zone_price_available(label)
         color_map[color] = (zone, price, available)
 
-    # 高雄場：部分座位格使用 theme color，legend 無法直接對應
     color_map["theme:8:tint:-0.499984740745262"] = ("notopen", 300, False)
 
     return color_map
@@ -345,40 +442,15 @@ def build_kh_merged_lookup(ws):
     return merged_lookup
 
 
-def extract_kh_row_labels(ws):
-    row_labels = {}
-
-    label_pattern = re.compile(r"^[A-Z]+\d+$")
-
-    for row in range(KH_SCAN_START_ROW, KH_SCAN_END_ROW + 1):
-        candidates = []
-
-        for col in range(KH_SCAN_START_COL, KH_SCAN_END_COL + 1):
-            value = ws.cell(row, col).value
-
-            if value is None:
-                continue
-
-            text = str(value).strip()
-
-            if label_pattern.match(text):
-                candidates.append(text)
-
-        if candidates:
-            row_labels[row] = candidates[0]
-
-    return row_labels
-
-
 def parse_kh_seat_map(filepath, debug=False):
     wb = load_workbook(filepath)
     ws = wb.active
 
     color_map = build_kh_color_map(ws)
     merged_lookup = build_kh_merged_lookup(ws)
-    row_labels = extract_kh_row_labels(ws)
 
     seats = []
+    row_labels = {}
 
     for excel_row in range(KH_SCAN_START_ROW, KH_SCAN_END_ROW + 1):
         for excel_col in range(KH_SCAN_START_COL, KH_SCAN_END_COL + 1):
@@ -386,7 +458,6 @@ def parse_kh_seat_map(filepath, debug=False):
             if is_kh_stage(excel_row, excel_col):
                 continue
 
-            # 排數欄位不是座位
             if excel_col in KH_ROW_NUMBER_COLS:
                 continue
 
@@ -398,7 +469,6 @@ def parse_kh_seat_map(filepath, debug=False):
 
             color = get_fill_color(cell)
 
-            # 透明背景不是座位
             if not color or color == "00000000":
                 continue
 
@@ -440,6 +510,10 @@ def parse_kh_seat_map(filepath, debug=False):
                 available = False
 
             floor = get_kh_floor(excel_row, excel_col)
+            row_label = get_kh_row_label(excel_row, excel_col)
+
+            if row_label:
+                row_labels[excel_row] = row_label
 
             if debug and color not in color_map:
                 print(
@@ -452,7 +526,7 @@ def parse_kh_seat_map(filepath, debug=False):
                 "seat_number": int(value),
                 "excel_row": excel_row,
                 "excel_col": excel_col,
-                "row_label": row_labels.get(excel_row, ""),
+                "row_label": row_label,
                 "floor": floor,
                 "zone": zone,
                 "price": price,
