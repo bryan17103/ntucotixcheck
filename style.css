@@ -127,6 +127,11 @@ body::after {
     color: rgba(55, 62, 60, 0.58);
 }
 
+#deadline-countdown {
+    font-weight: 700;
+    color: #9a3f3f;
+}
+
 /* Layout */
 
 .app-shell {
