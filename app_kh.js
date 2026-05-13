@@ -641,6 +641,52 @@ function enableDragScroll() {
     });
 }
 
+// ===== 手機雙指縮放 =====
+let pinchStartDistance = null;
+let pinchStartZoom = zoomLevel;
+
+function getTouchDistance(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+viewport.addEventListener(
+    "touchstart",
+    e => {
+        if (e.touches.length === 2) {
+            pinchStartDistance = getTouchDistance(e.touches);
+            pinchStartZoom = zoomLevel;
+        }
+    },
+    { passive: false }
+);
+
+viewport.addEventListener(
+    "touchmove",
+    e => {
+        if (e.touches.length !== 2 || !pinchStartDistance) return;
+
+        e.preventDefault();
+
+        const currentDistance = getTouchDistance(e.touches);
+
+        const scale = currentDistance / pinchStartDistance;
+
+        zoomLevel = Math.max(
+            0.4,
+            Math.min(2.5, pinchStartZoom * scale)
+        );
+
+        applyZoom();
+    },
+    { passive: false }
+);
+
+viewport.addEventListener("touchend", () => {
+    pinchStartDistance = null;
+});
+
 function setupConfirmButton() {
     const confirmBtn = document.getElementById("confirm-btn");
     if (!confirmBtn || confirmBtn.dataset.bound === "true") return;
