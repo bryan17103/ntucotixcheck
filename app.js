@@ -549,7 +549,7 @@ successModal?.addEventListener("click", (e) => {
 
 async function loadSystemStatus() {
     try {
-        const res = await fetch("/api/system_status");
+        const res = await fetch("/api/index");
         const data = await res.json();
 
         ORDER_OPEN = data.order_open !== false;
