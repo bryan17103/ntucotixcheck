@@ -21,7 +21,19 @@ SCOPES = [
 ]
 
 SPREADSHEET_ID = "1jtPGTV1dCT6QhI9gehKrMu_YwSvNaCrSViKU9S9Rxp8"
-WORKSHEET_NAME = "2026Summer_Taipei"
+WORKSHEET_NAMES = {
+    "tp": "2026Summer_Taipei",
+    "kh": "2026Summer_Kaoshiung",
+}
+
+STATS_CONFIG_SHEETS = {
+    "tp": "stats_config_tp",
+    "kh": "stats_config_kh",
+}
+
+_ws_cache = {}
+_sold_cache = {}
+_sold_cache_time = {}
 
 HEADERS = [
     "訂單日期與時間",
@@ -56,14 +68,17 @@ def get_spreadsheet():
     return client.open_by_key(SPREADSHEET_ID)
 
 
-def get_worksheet():
-    global _ws_cache
-    if _ws_cache is not None:
-        return _ws_cache
+def get_worksheet(concert_code="tp"):
+    if concert_code not in WORKSHEET_NAMES:
+        raise ValueError(f"未知場次：{concert_code}")
+
+    if concert_code in _ws_cache:
+        return _ws_cache[concert_code]
 
     spreadsheet = get_spreadsheet()
-    _ws_cache = spreadsheet.worksheet(WORKSHEET_NAME)
-    return _ws_cache
+    ws = spreadsheet.worksheet(WORKSHEET_NAMES[concert_code])
+    _ws_cache[concert_code] = ws
+    return ws
 
 
 def get_config_worksheet(name: str):
@@ -71,10 +86,15 @@ def get_config_worksheet(name: str):
     return spreadsheet.worksheet(name)
 
 
-def clear_caches():
+def clear_caches(concert_code=None):
     global _sold_cache, _sold_cache_time
-    _sold_cache = None
-    _sold_cache_time = 0
+
+    if concert_code:
+        _sold_cache.pop(concert_code, None)
+        _sold_cache_time.pop(concert_code, None)
+    else:
+        _sold_cache = {}
+        _sold_cache_time = {}
 
 
 def ensure_headers() -> None:
@@ -112,16 +132,21 @@ def normalize_bool(value) -> bool:
     return text in {"true", "1", "yes", "y", "是"}
 
 
-def get_all_records() -> List[dict]:
-    ws = get_worksheet()
+def get_all_records(concert_code="tp") -> List[dict]:
+    ws = get_worksheet(concert_code)
     return ws.get_all_records()
 
-def get_order_open():
-    ws = get_config_worksheet("stats_config_tp")
+def get_order_open(concert_code="tp"):
+    config_sheet = STATS_CONFIG_SHEETS.get(concert_code, "stats_config_tp")
+    ws = get_config_worksheet(config_sheet)
+
     rows = ws.get_all_records(expected_headers=["類型", "名稱", "條件"])
 
     for row in rows:
-        if str(row.get("類型", "")).strip() == "open" and str(row.get("名稱", "")).strip() == "order_open":
+        if (
+            str(row.get("類型", "")).strip() == "open"
+            and str(row.get("名稱", "")).strip() == "order_open"
+        ):
             value = str(row.get("條件", "true")).strip().lower()
             return value == "true"
 
@@ -157,22 +182,29 @@ def values_row_matches_scope(row: list, order_id: str, floor: str = "", row_labe
     return True
 
 
-def generate_order_id(name: str) -> str:
+def generate_order_id(name: str, concert_code="tp") -> str:
     now = datetime.now(TAIPEI_TZ)
+
+    prefix = {
+        "tp": "TP",
+        "kh": "KH",
+    }.get(concert_code, "TP")
+
     return (
-        "TP"
+        prefix
         + now.strftime("%m%d-%H%M-")
         + f"{now.second:02d}"
         + str(random.randint(0, 9))
     )
 
 
-def append_order_rows(name: str, seat_rows: List[Dict]) -> str:
-    ws = get_worksheet()
-    order_id = generate_order_id(name)
+def append_order_rows(name: str, seat_rows: List[Dict], concert_code="tp") -> str:
+    ws = get_worksheet(concert_code)
+    order_id = generate_order_id(name, concert_code)
     dt = now_str()
 
     values = []
+
     for seat in seat_rows:
         values.append([
             dt,
@@ -192,28 +224,32 @@ def append_order_rows(name: str, seat_rows: List[Dict]) -> str:
 
     if values:
         ws.append_rows(values, value_input_option="USER_ENTERED")
-        clear_caches()
+        clear_caches(concert_code)
 
     return order_id
 
 
-def get_active_records() -> List[dict]:
-    rows = get_all_records()
+def get_active_records(concert_code="tp") -> List[dict]:
+    rows = get_all_records(concert_code)
+
     return [
         row for row in rows
         if normalize_text(row.get("訂單狀態")).lower() in {"active", "locked"}
     ]
 
 
-def build_active_sold_seat_keys() -> Set[Tuple[str, str, int]]:
-    global _sold_cache, _sold_cache_time
-
+def build_active_sold_seat_keys(concert_code="tp") -> Set[Tuple[str, str, int]]:
     now = time.time()
-    if _sold_cache is not None and (now - _sold_cache_time) < _SOLD_CACHE_TTL:
-        return _sold_cache
+
+    if (
+        concert_code in _sold_cache
+        and (now - _sold_cache_time.get(concert_code, 0)) < _SOLD_CACHE_TTL
+    ):
+        return _sold_cache[concert_code]
 
     sold = set()
-    for row in get_active_records():
+
+    for row in get_active_records(concert_code):
         floor = normalize_text(row.get("樓層"))
         row_label = normalize_text(row.get("排數"))
         seat_number = normalize_int(row.get("座位"))
@@ -221,8 +257,9 @@ def build_active_sold_seat_keys() -> Set[Tuple[str, str, int]]:
         if floor and row_label and seat_number is not None:
             sold.add((floor, row_label, seat_number))
 
-    _sold_cache = sold
-    _sold_cache_time = now
+    _sold_cache[concert_code] = sold
+    _sold_cache_time[concert_code] = now
+
     return sold
 
 
