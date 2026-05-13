@@ -23,7 +23,7 @@ SCOPES = [
 SPREADSHEET_ID = "1jtPGTV1dCT6QhI9gehKrMu_YwSvNaCrSViKU9S9Rxp8"
 WORKSHEET_NAMES = {
     "tp": "2026Summer_Taipei",
-    "kh": "2026Summer_Kaoshiung",
+    "kh": "2026Summer_Kaohsiung",
 }
 
 STATS_CONFIG_SHEETS = {
@@ -88,6 +88,12 @@ def get_config_worksheet(name: str):
 
 def clear_caches(concert_code=None):
     global _sold_cache, _sold_cache_time
+
+    if _sold_cache is None:
+        _sold_cache = {}
+
+    if _sold_cache_time is None:
+        _sold_cache_time = {}
 
     if concert_code:
         _sold_cache.pop(concert_code, None)
