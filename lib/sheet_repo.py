@@ -116,6 +116,16 @@ def get_all_records() -> List[dict]:
     ws = get_worksheet()
     return ws.get_all_records()
 
+def get_order_open():
+    ws = get_worksheet("stats_config_tp")
+    rows = ws.get_all_records()
+
+    for row in rows:
+        if str(row.get("類型", "")).strip() == "open" and str(row.get("名稱", "")).strip() == "order_open":
+            value = str(row.get("條件", "true")).strip().lower()
+            return value == "true"
+
+    return True
 
 def row_matches_scope(row: dict, order_id: str, floor: str = "", row_label: str = "") -> bool:
     if normalize_text(row.get("訂單ID")) != normalize_text(order_id):
