@@ -55,43 +55,61 @@ body::after {
 .hero {
     position: relative;
     z-index: 2;
-    min-height: 160px;
+
+    min-height: 190px;
+
+    padding: 34px 7vw 12px;
 
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-
-    padding: 24px 0 8px;
-}
-
-.concert-label {
-    margin: 0 0 6px;
-    font-size: 20px;
-    letter-spacing: 0.08em;
 }
 
 .poster-info {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+
+    font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+}
+
+.concert-label {
+    margin: 0 0 10px;
+
+    font-size: 20px;
+    font-weight: 400;
+
+    letter-spacing: 0.08em;
+
+    color: #4a514e;
 }
 
 .poster-info h1 {
     margin: 0;
-    font-size: 24px;
+
+    font-size: 34px;
     font-weight: 500;
-    letter-spacing: 0.08em;
+
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+
     text-align: left;
+
+    color: #404643;
 }
 
 .birds {
     position: absolute;
-    top: 18px;
-    right: 6vw;
+
+    top: 26px;
+    right: 7vw;
+
     font-size: 34px;
     letter-spacing: 14px;
+
     transform: rotate(-18deg);
-    color: rgba(55, 62, 60, 0.65);
+
+    color: rgba(55, 62, 60, 0.58);
 }
 
 /* Layout */
