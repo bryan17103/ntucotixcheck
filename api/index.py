@@ -88,7 +88,7 @@ def api_seats():
 
     return jsonify({
         "seats": result_seats,
-        "row_labels": row_labels
+        "row_labels": row_labels,
         "order_open": get_order_open()
     })
 
