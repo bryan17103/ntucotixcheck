@@ -89,6 +89,17 @@ def api_kh_seats():
         "row_labels": row_labels,
         "order_open": get_order_open()
     })
+
+@app.route("/api/debug/kh-seat-count")
+def debug_kh_seat_count():
+    seats, row_labels = get_cached_seat_map("kh")
+
+    return jsonify({
+        "success": True,
+        "seat_count": len(seats),
+        "row_label_count": len(row_labels),
+        "sample": seats[:10],
+    })
     
 @app.route("/api/seats", methods=["GET"])
 def api_seats():
