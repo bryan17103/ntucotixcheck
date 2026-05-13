@@ -94,10 +94,19 @@ def api_kh_seats():
 def debug_kh_seat_count():
     seats, row_labels = get_cached_seat_map("kh")
 
+    zone_counts = {}
+    color_counts = {}
+
+    for seat in seats:
+        zone_counts[seat["zone"]] = zone_counts.get(seat["zone"], 0) + 1
+        color_counts[seat["color"]] = color_counts.get(seat["color"], 0) + 1
+
     return jsonify({
         "success": True,
         "seat_count": len(seats),
         "row_label_count": len(row_labels),
+        "zone_counts": zone_counts,
+        "color_counts": color_counts,
         "sample": seats[:10],
     })
     
