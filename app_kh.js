@@ -308,7 +308,7 @@ function addKhRowMarkers(seatMap, minCol, minRow, topOffset) {
         ["CF", 33, 55, "D4"],
 
         ["CI", 25, 57, "E1"],
-        ["CJ", 30, 53, "E2"],
+        ["CJ", 31, 52, "E2"],
         ["CK", 33, 51, "E3"],
     ];
 
