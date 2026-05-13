@@ -18,7 +18,7 @@ body.admin-page {
     background: rgba(255,255,255,.96);
     border-radius: 28px;
     padding: 24px;
-    min-height: calc(100vh - 24px);
+    min-height: auto;
     box-shadow: 0 8px 24px rgba(0,0,0,.18);
 }
 
