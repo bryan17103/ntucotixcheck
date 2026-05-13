@@ -8,7 +8,7 @@ def get_fill_color(cell):
 
     if not fill:
         return None
-
+KH_ROW_LABEL_RULES
     color = fill.fgColor
 
     if not color:
@@ -297,6 +297,36 @@ KH_ROW_LABEL_RULES = [
     {"label": "B2", "mode": "col", "col": "CR", "start_row": 55, "end_row": 74},
     {"label": "B3", "mode": "col", "col": "CS", "start_row": 55, "end_row": 74},
     {"label": "B4", "mode": "col", "col": "CT", "start_row": 59, "end_row": 73},
+
+    # ===== 二樓：A 區橫排 =====
+    {"label": "A1", "mode": "row", "row": 61, "start_col": "AC", "end_col": "CA"},
+    {"label": "A2", "mode": "row", "row": 62, "start_col": "AC", "end_col": "CA"},
+    {"label": "A3", "mode": "row", "row": 63, "start_col": "AC", "end_col": "CA"},
+    {"label": "A4", "mode": "row", "row": 64, "start_col": "AC", "end_col": "CA"},
+    {"label": "A5", "mode": "row", "row": 65, "start_col": "AC", "end_col": "CA"},
+
+    # A6：左右兩段
+    {"label": "A6", "mode": "row", "row": 66, "start_col": "AH", "end_col": "AM"},
+    {"label": "A6", "mode": "row", "row": 66, "start_col": "BR", "end_col": "BW"},
+
+    # ===== 二樓：B 區橫排 =====
+    {"label": "B1", "mode": "row", "row": 66, "start_col": "AW", "end_col": "BG"},
+    {"label": "B2", "mode": "row", "row": 67, "start_col": "AR", "end_col": "BM"},
+
+    {"label": "B3", "mode": "row", "row": 69, "start_col": "AO", "end_col": "BP"},
+    {"label": "B4", "mode": "row", "row": 70, "start_col": "AO", "end_col": "BP"},
+    {"label": "B5", "mode": "row", "row": 71, "start_col": "AO", "end_col": "BP"},
+    {"label": "B6", "mode": "row", "row": 72, "start_col": "AO", "end_col": "BP"},
+    {"label": "B7", "mode": "row", "row": 73, "start_col": "AO", "end_col": "BP"},
+    {"label": "B8", "mode": "row", "row": 74, "start_col": "AR", "end_col": "BM"},
+    {"label": "B9", "mode": "row", "row": 75, "start_col": "AR", "end_col": "BM"},
+
+    # ===== 二樓：C 區 L-shape 橫排 =====
+    {"label": "C1", "mode": "row", "row": 78, "start_col": "AS", "end_col": "BK"},
+    {"label": "C2", "mode": "row", "row": 79, "start_col": "AR", "end_col": "BM"},
+    {"label": "C3", "mode": "row", "row": 80, "start_col": "Q", "end_col": "CN"},
+    {"label": "C4", "mode": "row", "row": 81, "start_col": "U", "end_col": "CK"},
+    {"label": "C5", "mode": "row", "row": 82, "start_col": "W", "end_col": "CH"},
 ]
 
 
