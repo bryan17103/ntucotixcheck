@@ -363,6 +363,49 @@
                 searchAdminOrders();
             }
         };
+
+        const toggleBtn = document.getElementById("order-open-toggle-btn");
+        
+        async function loadOrderOpenStatus() {
+        
+            const res = await fetch("/api/system_status");
+            const data = await res.json();
+        
+            renderOrderOpenButton(data.order_open);
+        }
+        
+        function renderOrderOpenButton(isOpen) {
+        
+            toggleBtn.textContent = isOpen
+                ? "目前購票開放中｜點擊關閉"
+                : "目前購票已關閉｜點擊開放";
+        
+            toggleBtn.className = isOpen
+                ? "order-open-btn is-open"
+                : "order-open-btn is-closed";
+        }
+        
+        toggleBtn.addEventListener("click", async () => {
+        
+            const ok = confirm("確定要切換購票開放狀態嗎？");
+        
+            if (!ok) return;
+        
+            const res = await fetch("/api/admin/toggle_order_open", {
+                method: "POST"
+            });
+        
+            const data = await res.json();
+        
+            if (!data.success) {
+                alert(data.message || "切換失敗");
+                return;
+            }
+        
+            renderOrderOpenButton(data.order_open);
+        });
+        
+        loadOrderOpenStatus();
         
     </script>
     
