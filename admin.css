@@ -226,6 +226,45 @@ body.admin-page {
     color: #888;
 }
 
+.order-open-btn {
+    height: 44px;
+    padding: 0 18px;
+
+    border: none;
+    border-radius: 14px;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    transition:
+        background 0.15s ease,
+        transform 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.order-open-btn:hover {
+    transform: translateY(-1px);
+}
+
+.order-open-btn.is-open {
+    background: #e8f7ef;
+    color: #239267;
+}
+
+.order-open-btn.is-open:hover {
+    background: #dff3e8;
+}
+
+.order-open-btn.is-closed {
+    background: #fff0ed;
+    color: #b85b53;
+}
+
+.order-open-btn.is-closed:hover {
+    background: #ffe5df;
+}
 /* # Mobile */
 @media (max-width: 768px) {
 
