@@ -26,6 +26,7 @@ from lib.sheet_repo import (
     get_stats_config_rows,
     save_section_members_rows,
     save_stats_config_rows,
+    get_order_open
 )
 
 app = Flask(__name__)
@@ -62,6 +63,11 @@ def get_cached_seat_map():
     SEAT_CACHE["loaded_at"] = now
     return seats, row_labels
 
+def handler(request):
+    return jsonify({
+        "success": True,
+        "order_open": get_order_open()
+    })
 
 @app.route("/api/seats", methods=["GET"])
 def api_seats():
@@ -94,6 +100,13 @@ def api_seats():
 @app.route("/api/confirm", methods=["POST"])
 def api_confirm():
     with confirm_lock:
+
+        if not get_order_open():
+            return jsonify({
+                "success": False,
+                "message": "目前團內購票已截止，無法新增訂單。"
+            }), 403
+
         data = request.get_json(silent=True) or {}
         name = str(data.get("name", "")).strip()
         selected_seat_ids = data.get("seats", [])
@@ -148,7 +161,6 @@ def api_confirm():
             "message": f"訂位成功！訂單編號：{order_id}",
             "order_id": order_id,
         })
-
 
 @app.route("/api/orders", methods=["GET"])
 def api_orders():
