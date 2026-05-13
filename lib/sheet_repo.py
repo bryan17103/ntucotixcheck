@@ -117,8 +117,8 @@ def get_all_records() -> List[dict]:
     return ws.get_all_records()
 
 def get_order_open():
-    ws = get_worksheet("stats_config_tp")
-    rows = ws.get_all_records()
+    ws = get_config_worksheet("stats_config_tp")
+    rows = ws.get_all_records(expected_headers=["類型", "名稱", "條件"])
 
     for row in rows:
         if str(row.get("類型", "")).strip() == "open" and str(row.get("名稱", "")).strip() == "order_open":
