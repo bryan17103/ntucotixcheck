@@ -122,7 +122,7 @@ def debug_kh_seat_count():
         "unknown_sample": unknown_sample,
     })
     
-@app.route("/api/seats", methods=["GET"])
+@app.route("/api/tp/seats", methods=["GET"])
 def api_seats():
     seats, row_labels = get_cached_seat_map()
     active_sold_keys = build_active_sold_seat_keys()
@@ -151,7 +151,7 @@ def api_seats():
         "order_open": get_order_open()
     })
 
-@app.route("/api/confirm", methods=["POST"])
+@app.route("/api/tp/confirm", methods=["POST"])
 def api_confirm():
     with confirm_lock:
 
