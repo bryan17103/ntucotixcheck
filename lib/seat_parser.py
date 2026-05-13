@@ -225,9 +225,9 @@ KH_SECOND_FLOOR_END_COL = column_index_from_string("CM")
 KH_SECOND_FLOOR_START_ROW = 17
 KH_SECOND_FLOOR_END_ROW = 82
 
-# 高雄場 legend：顏色在 DA，文字在 DB
-KH_LEGEND_COLOR_COL = column_index_from_string("DA")
-KH_LEGEND_LABEL_COL = column_index_from_string("DB")
+# 高雄場 legend
+KH_LEGEND_COLOR_COL = column_index_from_string("DB")
+KH_LEGEND_LABEL_COL = column_index_from_string("DC")
 KH_LEGEND_START_ROW = 30
 KH_LEGEND_END_ROW = 45
 
