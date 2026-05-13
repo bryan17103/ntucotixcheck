@@ -368,7 +368,7 @@
         
         async function loadOrderOpenStatus() {
         
-            const res = await fetch("/api/system_status");
+            const res = await fetch("/api/seats");
             const data = await res.json();
         
             renderOrderOpenButton(data.order_open);
