@@ -1,11 +1,8 @@
+import re
 from openpyxl import load_workbook
 from openpyxl.utils import column_index_from_string
 
-
-# =========================
 # 共用工具
-# =========================
-
 def get_fill_color(cell):
     fill = cell.fill
     if not fill:
@@ -200,8 +197,243 @@ def parse_tp_seat_map(filepath, debug=False):
 
 # =========================
 # 高雄場 parser
-# 下一步再正式填
 # =========================
 
+KH_SCAN_START_COL = column_index_from_string("C")
+KH_SCAN_END_COL = column_index_from_string("CY")
+
+KH_SCAN_START_ROW = 6
+KH_SCAN_END_ROW = 88
+
+KH_STAGE_START_COL = column_index_from_string("AJ")
+KH_STAGE_END_COL = column_index_from_string("BV")
+KH_STAGE_START_ROW = 35
+KH_STAGE_END_ROW = 41
+
+KH_FIRST_FLOOR_START_COL = column_index_from_string("AJ")
+KH_FIRST_FLOOR_END_COL = column_index_from_string("BU")
+KH_FIRST_FLOOR_START_ROW = 44
+KH_FIRST_FLOOR_END_ROW = 55
+
+KH_SECOND_FLOOR_START_COL = column_index_from_string("R")
+KH_SECOND_FLOOR_END_COL = column_index_from_string("CM")
+KH_SECOND_FLOOR_START_ROW = 17
+KH_SECOND_FLOOR_END_ROW = 82
+
+KH_LEGEND_COLOR_COL = column_index_from_string("DB")
+KH_LEGEND_LABEL_COL = column_index_from_string("DC")
+KH_LEGEND_START_ROW = 30
+KH_LEGEND_END_ROW = 45
+
+
+def is_in_range(row, col, start_row, end_row, start_col, end_col):
+    return (
+        start_row <= row <= end_row
+        and start_col <= col <= end_col
+    )
+
+def is_kh_stage(row, col):
+    return is_in_range(
+        row,
+        col,
+        KH_STAGE_START_ROW,
+        KH_STAGE_END_ROW,
+        KH_STAGE_START_COL,
+        KH_STAGE_END_COL,
+    )
+
+
+def get_kh_floor(row, col):
+    if is_in_range(
+        row,
+        col,
+        KH_FIRST_FLOOR_START_ROW,
+        KH_FIRST_FLOOR_END_ROW,
+        KH_FIRST_FLOOR_START_COL,
+        KH_FIRST_FLOOR_END_COL,
+    ):
+        return "1樓"
+
+    if is_in_range(
+        row,
+        col,
+        KH_SECOND_FLOOR_START_ROW,
+        KH_SECOND_FLOOR_END_ROW,
+        KH_SECOND_FLOOR_START_COL,
+        KH_SECOND_FLOOR_END_COL,
+    ):
+        return "2樓"
+
+    return "3樓"
+
+
+def build_kh_color_map(ws):
+    color_map = {}
+
+    for row in range(KH_LEGEND_START_ROW, KH_LEGEND_END_ROW + 1):
+        color_cell = ws.cell(row, KH_LEGEND_COLOR_COL)
+        label_cell = ws.cell(row, KH_LEGEND_LABEL_COL)
+
+        color = get_fill_color(color_cell)
+        label = label_cell.value
+
+        if not color or label is None:
+            continue
+
+        label = str(label).strip()
+        if not label:
+            continue
+
+        zone, price, available = label_to_zone_price_available(label)
+
+        color_map[color] = (zone, price, available)
+
+    return color_map
+
+
+def build_kh_merged_lookup(ws):
+    merged_lookup = {}
+
+    for merged_range in ws.merged_cells.ranges:
+        min_row = merged_range.min_row
+        max_row = merged_range.max_row
+        min_col = merged_range.min_col
+        max_col = merged_range.max_col
+
+        if (
+            max_row < KH_SCAN_START_ROW
+            or min_row > KH_SCAN_END_ROW
+            or max_col < KH_SCAN_START_COL
+            or min_col > KH_SCAN_END_COL
+        ):
+            continue
+
+        row_span = max_row - min_row + 1
+        col_span = max_col - min_col + 1
+
+        for row in range(min_row, max_row + 1):
+            for col in range(min_col, max_col + 1):
+                merged_lookup[(row, col)] = {
+                    "min_row": min_row,
+                    "max_row": max_row,
+                    "min_col": min_col,
+                    "max_col": max_col,
+                    "row_span": row_span,
+                    "col_span": col_span,
+                    "is_top_left": row == min_row and col == min_col,
+                }
+
+    return merged_lookup
+
+
+def extract_kh_row_labels(ws):
+    row_labels = {}
+
+    label_pattern = re.compile(r"^[A-Z]+\d+$")
+
+    for row in range(KH_SCAN_START_ROW, KH_SCAN_END_ROW + 1):
+        candidates = []
+
+        for col in range(KH_SCAN_START_COL, KH_SCAN_END_COL + 1):
+            value = ws.cell(row, col).value
+
+            if value is None:
+                continue
+
+            text = str(value).strip()
+
+            if label_pattern.match(text):
+                candidates.append(text)
+
+        if candidates:
+            row_labels[row] = candidates[0]
+
+    return row_labels
+
+
 def parse_kh_seat_map(filepath, debug=False):
-    raise NotImplementedError("高雄場座位圖解析尚未完成")
+    wb = load_workbook(filepath)
+    ws = wb.active
+
+    color_map = build_kh_color_map(ws)
+    merged_lookup = build_kh_merged_lookup(ws)
+    row_labels = extract_kh_row_labels(ws)
+
+    seats = []
+
+    for excel_row in range(KH_SCAN_START_ROW, KH_SCAN_END_ROW + 1):
+        for excel_col in range(KH_SCAN_START_COL, KH_SCAN_END_COL + 1):
+
+            if is_kh_stage(excel_row, excel_col):
+                continue
+
+            cell = ws.cell(excel_row, excel_col)
+            value = cell.value
+
+            if not isinstance(value, (int, float)):
+                continue
+
+            color = get_fill_color(cell)
+
+            if not color:
+                continue
+
+            merged_info = merged_lookup.get((excel_row, excel_col))
+
+            if merged_info:
+                if not merged_info["is_top_left"]:
+                    continue
+
+                is_four_cell_merge = (
+                    merged_info["row_span"] == 2
+                    and merged_info["col_span"] == 2
+                )
+
+                zone, price, available = color_map.get(
+                    color,
+                    ("unknown", 0, False)
+                )
+
+                if is_four_cell_merge:
+                    if zone == "wheelchair":
+                        available = False
+                    else:
+                        if debug:
+                            print(
+                                f"🚪 高雄場 gate 已略過: "
+                                f"row={excel_row}, col={excel_col}, "
+                                f"value={value}, color={color}"
+                            )
+                        continue
+
+            else:
+                zone, price, available = color_map.get(
+                    color,
+                    ("unknown", 0, False)
+                )
+
+            if zone in ("wheelchair", "companion"):
+                available = False
+
+            floor = get_kh_floor(excel_row, excel_col)
+
+            if debug and color not in color_map:
+                print(
+                    f"⚠️ 高雄場未定義顏色: "
+                    f"row={excel_row}, col={excel_col}, "
+                    f"seat={value}, color={color}"
+                )
+
+            seats.append({
+                "seat_number": int(value),
+                "excel_row": excel_row,
+                "excel_col": excel_col,
+                "row_label": row_labels.get(excel_row, ""),
+                "floor": floor,
+                "zone": zone,
+                "price": price,
+                "color": color,
+                "available": available,
+            })
+
+    return seats, row_labels, color_map
