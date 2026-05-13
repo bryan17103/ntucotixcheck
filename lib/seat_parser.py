@@ -230,24 +230,6 @@ KH_LEGEND_LABEL_COL = column_index_from_string("DC")
 KH_LEGEND_START_ROW = 30
 KH_LEGEND_END_ROW = 45
 
-# 高雄場排數欄位，不是座位
-KH_ROW_NUMBER_COLS = {
-    column_index_from_string("AI"),
-    column_index_from_string("AT"),
-    column_index_from_string("AV"),
-    column_index_from_string("BI"),
-    column_index_from_string("BK"),
-    column_index_from_string("BV"),
-}
-
-# 一樓排數欄位
-KH_FIRST_FLOOR_ROW_MARKER_COLS = {
-    column_index_from_string("AI"),
-    column_index_from_string("AT"),
-    column_index_from_string("AV"),
-    column_index_from_string("BI"),
-    column_index_from_string("BK"),
-}
 
 # 高雄場手動排數規則
 # mode = "col"：直排，依照欄位 + row range 判斷
@@ -485,9 +467,6 @@ def parse_kh_seat_map(filepath, debug=False):
         for excel_col in range(KH_SCAN_START_COL, KH_SCAN_END_COL + 1):
 
             if is_kh_stage(excel_row, excel_col):
-                continue
-
-            if excel_col in KH_ROW_NUMBER_COLS:
                 continue
 
             cell = ws.cell(excel_row, excel_col)
