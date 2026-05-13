@@ -8,12 +8,16 @@ let seatMapBaseWidth = 0;
 let seatMapBaseHeight = 0;
 
 const SECOND_FLOOR_START_ROW = 33; 
+const SHOW_KH_THIRD_FLOOR = false;
 
 async function loadSeats() {
     const res = await fetch("/api/kh/seats");
     const data = await res.json();
 
-    seatData = data.seats || [];
+    seatData = (data.seats || []).filter(seat => {
+        if (SHOW_KH_THIRD_FLOOR) return true;
+        return seat.floor !== "3樓";
+    });
     rowLabels = data.row_labels || {};
     ORDER_OPEN = data.order_open !== false;
 
@@ -270,14 +274,23 @@ function addRowMarker(seatMap, minCol, minRow, topOffset, col, startRow, endRow,
         seatMap.appendChild(marker);
     }
 }
-
 function addKhRowMarkers(seatMap, minCol, minRow, topOffset) {
+
     // 一樓：44 = 1排，55 = 12排
     for (let r = 44; r <= 55; r++) {
         const label = String(r - 43);
 
         ["AI", "AT", "AV", "BI", "BK"].forEach(col => {
-            addRowMarker(seatMap, minCol, minRow, topOffset, col, r, r, label);
+            addRowMarker(
+                seatMap,
+                minCol,
+                minRow,
+                topOffset,
+                col,
+                r,
+                r,
+                label
+            );
         });
     }
 
@@ -326,11 +339,36 @@ function addKhRowMarkers(seatMap, minCol, minRow, topOffset) {
         ["CT", 59, 73, "B4"],
     ];
 
-    [...secondFloorMarkers, ...thirdFloorMarkers].forEach(([col, startRow, endRow, text]) => {
-        addRowMarker(seatMap, minCol, minRow, topOffset, col, startRow, endRow, text);
+    // 二樓永遠顯示
+    secondFloorMarkers.forEach(([col, startRow, endRow, text]) => {
+        addRowMarker(
+            seatMap,
+            minCol,
+            minRow,
+            topOffset,
+            col,
+            startRow,
+            endRow,
+            text
+        );
     });
-}
 
+    // 三樓可開關
+    if (SHOW_KH_THIRD_FLOOR) {
+        thirdFloorMarkers.forEach(([col, startRow, endRow, text]) => {
+            addRowMarker(
+                seatMap,
+                minCol,
+                minRow,
+                topOffset,
+                col,
+                startRow,
+                endRow,
+                text
+            );
+        });
+    }
+}
 function renderSeats() {
     const seatMap = document.getElementById("seat-map");
     if (!seatMap) return;
@@ -353,7 +391,9 @@ function renderSeats() {
     seatMap.style.gridTemplateRows =
         `repeat(${maxRow - minRow + 2}, ${gridRowSize}px)`;
 
-    addFloorFrame(seatMap, minCol, minRow, TOP_TITLE_OFFSET, "三樓", "B", "CZ", 6, 89, "kh-third-floor");
+    if (SHOW_KH_THIRD_FLOOR) {
+        addFloorFrame(seatMap, minCol, minRow, TOP_TITLE_OFFSET, "三樓", "B", "CZ", 6, 89, "kh-third-floor");
+    }
     addFloorFrame(seatMap, minCol, minRow, TOP_TITLE_OFFSET, "二樓", "P", "CP", 13, 83, "kh-second-floor");
     addFloorFrame(seatMap, minCol, minRow, TOP_TITLE_OFFSET, "一樓", "AF", "BZ", 30, 57, "kh-first-floor");
 
