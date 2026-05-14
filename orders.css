@@ -310,8 +310,8 @@ body.orders-page {
 .summary-card {
     position: relative;
 
-    min-height: 178px;
-    padding: 24px 26px 22px;
+    min-height: 148px;
+    padding: 20px 22px 18px;
 
     background: rgba(255,255,255,0.86);
     border: 1px solid rgba(255,255,255,0.62);
@@ -348,7 +348,7 @@ body.orders-page {
     align-items: center;
     gap: 16px;
 
-    margin-bottom: 28px;
+    margin-bottom: 18px;
 }
 
 .summary-icon {
@@ -384,6 +384,11 @@ body.orders-page {
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+    margin-top: 2px;
+}
+
+#total-points {
+    font-size: 21px;
 }
 
 .summary-metric-label {
@@ -428,14 +433,14 @@ body.orders-page {
 .summary-metric-value {
     color: var(--orders-main);
     font-family: "Noto Sans TC", sans-serif;
-    font-size: 24px;
+    font-size: 21px;
     font-weight: 900;
     white-space: nowrap;
 }
 
 .summary-divider {
     height: 1px;
-    margin: 22px 0;
+    margin: 14px 0;
 
     background: linear-gradient(
         90deg,
@@ -494,20 +499,23 @@ body.orders-page {
     border-right: 1px solid rgba(95,124,121,0.18);
 }
 
-.ticket-price-item:last-child {
-    border-right: none;
-}
+.ticket-price-inline {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 4px;
 
-.ticket-price-item span {
+    margin-top: 2px;
+
     color: #505b58;
-    font-size: 14px;
-    font-weight: 900;
-    white-space: nowrap;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.5;
 }
 
-.ticket-price-item strong {
+.ticket-price-inline strong {
     color: var(--orders-main);
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 900;
 }
 
@@ -539,11 +547,11 @@ body.orders-page {
 }
 
 .seat-map-card-main {
-    margin-top: 20px;
+    margin-top: 10px;
 
     color: var(--orders-main);
     font-family: "Noto Serif TC", "Songti TC", serif;
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 900;
     letter-spacing: 0.04em;
     line-height: 1.2;
