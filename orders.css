@@ -1,11 +1,11 @@
 /* 主視覺更改時改這邊就好*/
 :root {
-    --orders-main: #4f6f73;
-    --orders-accent: #7f9f98;
-    --orders-accent-hover: #6d8d87;
-    --orders-bg-start: #0f3b3a;
-    --orders-bg-end: #4b1f11;
-    --orders-shell-bg: rgba(255,255,255,0.94);
+    --orders-main: #4f6f73; /* 主色：標題、重點文字、統計數字 */
+    --orders-accent: #7f9f98; /* 強調色：按鈕、focus、互動元件 */
+    --orders-accent-hover: #6d8d87; /* 強調色 hover：按鈕滑過時 */
+    --orders-bg-start: #5f7f82; /* 背景漸層起始色（左上） */
+    --orders-bg-end: #8ea7a3; /* 背景漸層結束色（右下） */
+    --orders-shell-bg: rgba(255,255,255,0.88); /* 主內容大框背景（半透明白） */
 }
 
 * { box-sizing: border-box; }
