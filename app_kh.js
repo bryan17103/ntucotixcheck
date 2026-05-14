@@ -790,7 +790,7 @@ function setupConfirmButton() {
             );
 
             selectedSeats.clear();
-            loadSeats();
+            loadSeats(false);
         } else {
             showSuccessModal(
                 "發生錯誤",
