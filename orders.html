@@ -42,6 +42,18 @@
             <button id="order-search-btn" class="orders-search-btn" type="button">查詢</button>
         </div>
 
+        <div class="orders-mode-tabs">
+            <button class="orders-mode-tab active" type="button" data-mode="all">
+                全部
+            </button>
+            <button class="orders-mode-tab" type="button" data-mode="tp">
+                台北場
+            </button>
+            <button class="orders-mode-tab" type="button" data-mode="kh">
+                高雄場
+            </button>
+        </div>
+
         <div class="orders-summary-grid" id="orders-summary-grid">
             <div class="summary-card">
                 <div class="summary-label">金額統計</div>
@@ -230,6 +242,7 @@
     <script>
         let currentSearchName = "";
         let currentOrders = [];
+        let currentConcertMode = "all";
         let cachedSeatMapData = null;
         const SECOND_FLOOR_START_ROW = 33;
 
@@ -319,7 +332,9 @@
             const name = input.value.trim();
             if (!name) { alert("請輸入姓名"); return; }
             currentSearchName = name;
-            const res = await fetch(`/api/orders?name=${encodeURIComponent(name)}`);
+            const res = await fetch(
+                `/api/orders?name=${encodeURIComponent(name)}&mode=${encodeURIComponent(currentConcertMode)}`
+            );
             const raw = await res.text();
             let data;
             try { data = JSON.parse(raw); } catch { console.log(raw); alert(`查詢回傳不是 JSON：${res.status}`); return; }
@@ -486,6 +501,40 @@
             modal.classList.add("hidden");
         }
 
+        function updateSeatMapButtonByMode() {
+            const btn = document.getElementById("my-seat-map-btn");
+            if (!btn) return;
+        
+            if (currentConcertMode === "all") {
+                btn.disabled = true;
+                btn.classList.add("disabled");
+                btn.querySelector(".seat-map-card-main").textContent = "不支援查看座位圖";
+                btn.querySelector(".seat-map-card-sub").textContent = "請切換至台北場或高雄場查看座位";
+            } else {
+                btn.disabled = false;
+                btn.classList.remove("disabled");
+                btn.querySelector(".seat-map-card-main").textContent = "打開座位圖";
+                btn.querySelector(".seat-map-card-sub").textContent = "依票價顏色標示已購買的座位";
+            }
+        }
+        
+        document.querySelectorAll(".orders-mode-tab").forEach(btn => {
+            btn.addEventListener("click", () => {
+                currentConcertMode = btn.dataset.mode || "all";
+        
+                document.querySelectorAll(".orders-mode-tab").forEach(item => {
+                    item.classList.toggle("active", item === btn);
+                });
+        
+                cachedSeatMapData = null;
+        
+                updateSeatMapButtonByMode();
+        
+                if (currentSearchName) {
+                    searchOrders();
+                }
+            });
+        });
         document.getElementById("order-search-btn").addEventListener("click", searchOrders);
         document.getElementById("order-name-input").addEventListener("keydown", (e) => { if (e.key === "Enter") searchOrders(); });
         const statsHelpBtn = document.getElementById("stats-help-btn");
@@ -530,6 +579,8 @@
                 closeOrdersHelpModal();
             }
         });
+
+        updateSeatMapButtonByMode();
     </script>
 </body>
 </html>
