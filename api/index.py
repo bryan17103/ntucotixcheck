@@ -39,7 +39,7 @@ SEAT_FILES = {
 }
 
 SEAT_CACHE = {}
-SEAT_CACHE_TTL = 60
+SEAT_CACHE_TTL = 300
 SECOND_FLOOR_START_ROW = 33
 confirm_lock = Lock()
 
