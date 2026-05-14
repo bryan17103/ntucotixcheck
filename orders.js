@@ -30,6 +30,19 @@ function getModeLabel(mode = currentConcertMode) {
     return "全部";
 }
 
+function showOrdersLoading(text = "載入中...") {
+    const overlay = document.getElementById("orders-loading-overlay");
+    const textEl = document.getElementById("orders-loading-text");
+
+    if (textEl) textEl.textContent = text;
+    overlay?.classList.remove("hidden");
+}
+
+function hideOrdersLoading() {
+    const overlay = document.getElementById("orders-loading-overlay");
+    overlay?.classList.add("hidden");
+}
+
 function pickupClass(order) {
     if (order.picked_up) return "done";
     if (order.pickup_open) return "open";
@@ -263,40 +276,47 @@ async function searchOrders() {
 
     currentSearchName = name;
 
-    const res = await fetch(
-        `/api/orders?name=${encodeURIComponent(name)}&mode=${encodeURIComponent(currentConcertMode)}`
-    );
-
-    const raw = await res.text();
-
-    let data;
     try {
-        data = JSON.parse(raw);
-    } catch {
-        console.log(raw);
-        alert(`查詢回傳不是 JSON：${res.status}`);
-        return;
+        showOrdersLoading("正在查詢訂單...");
+
+        const res = await fetch(
+            `/api/orders?name=${encodeURIComponent(name)}&mode=${encodeURIComponent(currentConcertMode)}`
+        );
+
+        const raw = await res.text();
+
+        let data;
+        try {
+            data = JSON.parse(raw);
+        } catch {
+            console.log(raw);
+            alert(`查詢回傳不是 JSON：${res.status}`);
+            return;
+        }
+
+        if (!res.ok || !data.success) {
+            alert(data.message || "查詢失敗");
+            return;
+        }
+
+        const orders = Array.isArray(data.orders) ? data.orders : [];
+
+        currentOrders = orders;
+
+        renderOrdersTable(orders);
+        updateOrdersSummary(orders);
+
+        const manualPoints = Number(data.manual_points || 0);
+        const currentBasePoints = Number(document.getElementById("total-points").textContent || 0);
+        const finalTotalPoints = currentBasePoints + manualPoints;
+
+        document.getElementById("total-points").textContent = formatNumber(finalTotalPoints);
+        document.getElementById("manual-points-note").textContent =
+            manualPoints > 0 ? `（含手動加分 ${formatNumber(manualPoints)}）` : "";
+
+    } finally {
+        hideOrdersLoading();
     }
-
-    if (!res.ok || !data.success) {
-        alert(data.message || "查詢失敗");
-        return;
-    }
-
-    const orders = Array.isArray(data.orders) ? data.orders : [];
-
-    currentOrders = orders;
-
-    renderOrdersTable(orders);
-    updateOrdersSummary(orders);
-
-    const manualPoints = Number(data.manual_points || 0);
-    const currentBasePoints = Number(document.getElementById("total-points").textContent || 0);
-    const finalTotalPoints = currentBasePoints + manualPoints;
-
-    document.getElementById("total-points").textContent = formatNumber(finalTotalPoints);
-    document.getElementById("manual-points-note").textContent =
-        manualPoints > 0 ? `（含手動加分 ${formatNumber(manualPoints)}）` : "";
 }
 
 async function saveNote(orderId, floor, rowLabel, mode = currentConcertMode) {
@@ -784,6 +804,8 @@ async function openMySeatMapModal() {
     if (!modal) return;
 
     try {
+        showOrdersLoading("正在載入座位圖...");
+
         const data = await fetchSeatMapData();
 
         if (currentConcertMode === "kh") {
@@ -793,10 +815,15 @@ async function openMySeatMapModal() {
         }
 
         modal.classList.remove("hidden");
+
     } catch (error) {
         console.error(error);
+
+    } finally {
+        hideOrdersLoading();
     }
 }
+
 function closeMySeatMapModal() {
     const modal = document.getElementById("my-seat-map-modal");
     if (!modal) return;
