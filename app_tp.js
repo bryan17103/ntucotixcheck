@@ -263,7 +263,7 @@ function renderSeats() {
     const firstFloorSeats = seatData.filter(seat => !isSecondFloorSeat(seat));
     const secondFloorSeats = seatData.filter(seat => isSecondFloorSeat(seat));
 
-    // ===== 1樓標題 =====
+    // 1樓標題
     if (firstFloorSeats.length > 0) {
         const floor1 = document.createElement("div");
         floor1.className = "floor-label";
@@ -273,7 +273,7 @@ function renderSeats() {
         seatMap.appendChild(floor1);
     }
 
-    // ===== 左右排數 =====
+    // 左右排數
     Object.entries(rowLabels).forEach(([excelRow, label]) => {
         const displayRow = (Number(excelRow) - minRow + 1) + TOP_TITLE_OFFSET;
 
@@ -292,7 +292,7 @@ function renderSeats() {
         seatMap.appendChild(right);
     });
 
-    // ===== 2樓標題 =====
+    // 2樓標題
     if (secondFloorSeats.length > 0) {
         const secondFloorTopExcelRow = Math.min(...secondFloorSeats.map(seat => seat.excel_row));
         let secondFloorTitleRow = (secondFloorTopExcelRow - minRow) + TOP_TITLE_OFFSET;
@@ -309,7 +309,7 @@ function renderSeats() {
         seatMap.appendChild(floor2);
     }
 
-    // ===== 畫座位 =====
+    // 座位 
     seatData.forEach(seat => {
         const btn = document.createElement("button");
         const seatId = getSeatId(seat);
@@ -321,7 +321,7 @@ function renderSeats() {
         btn.style.gridColumn = seat.excel_col - minCol + 2;
         btn.style.gridRow = (seat.excel_row - minRow + 1) + TOP_TITLE_OFFSET;
 
-        // ===== 已售 =====
+        // 已售 
         if (seat.sold) {
             btn.classList.add("sold");
             btn.disabled = true;
@@ -332,7 +332,7 @@ function renderSeats() {
             btn.addEventListener("mousemove", moveSeatTooltip);
             btn.addEventListener("mouseleave", hideSeatTooltip);
 
-        // ===== 不可購 =====
+        //  不可購 
         } else if (!seat.available) {
             btn.disabled = true;
 
@@ -342,7 +342,7 @@ function renderSeats() {
             btn.addEventListener("mousemove", moveSeatTooltip);
             btn.addEventListener("mouseleave", hideSeatTooltip);
 
-        // ===== 可選 =====
+        // 可選
         } else {
             btn.addEventListener("click", () => {
                 const viewport = document.getElementById("map-viewport");
@@ -364,7 +364,6 @@ function renderSeats() {
         seatMap.appendChild(btn);
     });
 
-    // ===== ⭐ 這兩行是關鍵（修 zoom 空白 bug）=====
     seatMapBaseWidth = seatMap.offsetWidth;
     seatMapBaseHeight = seatMap.offsetHeight;
 }
@@ -472,10 +471,6 @@ function setupConfirmButton() {
         }
     });
 }
-
-setupZoomControls();
-setupConfirmButton();
-loadSeats();
 
 const nameModal = document.getElementById("name-modal");
 const buyerNameInput = document.getElementById("buyer-name-input");
