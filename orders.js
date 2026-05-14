@@ -495,7 +495,7 @@ function renderTpMySeatMap(allSeats, rowLabels, orders) {
         btn.style.gridRow = (Number(seat.excel_row) - minRow + 1) + topTitleOffset;
 
         if (purchased.has(seatKey)) {
-            btn.classList.add("my-seat-owned", `my-seat-${priceZone}`);
+            btn.classList.add("my-seat-owned", ownedSeatClass(priceZone));
 
             const matchedOrder = orders.find(order => {
                 const seats = Array.isArray(order.seats) ? order.seats : [];
@@ -559,7 +559,9 @@ function renderKhMySeatMap(allSeats, rowLabels, orders) {
 
     mapEl.style.gridTemplateRows =
         `repeat(${maxRow - minRow + 2}, ${gridRowSize}px)`;
-
+    
+    addKhStageToMyMap(mapEl, minCol, minRow);
+    
     allSeats.forEach(seat => {
         const btn = document.createElement("button");
 
@@ -605,6 +607,29 @@ function renderKhMySeatMap(allSeats, rowLabels, orders) {
         mapEl.appendChild(btn);
     });
 }
+
+function colIndex(col) {
+    let n = 0;
+    for (let i = 0; i < col.length; i++) {
+        n = n * 26 + (col.charCodeAt(i) - 64);
+    }
+    return n;
+}
+
+function addKhStageToMyMap(mapEl, minCol, minRow) {
+    const stage = document.createElement("div");
+    stage.className = "my-map-stage";
+    stage.textContent = "舞台";
+
+    stage.style.gridColumn =
+        `${colIndex("AF") - minCol + 2} / ${colIndex("BZ") - minCol + 3}`;
+
+    stage.style.gridRow =
+        `${35 - minRow + 1} / ${41 - minRow + 2}`;
+
+    mapEl.appendChild(stage);
+}
+
 async function openMySeatMapModal() {
     if (currentConcertMode === "all") {
         alert("全部模式不支援查看座位圖，請切換至台北場或高雄場。");
@@ -653,6 +678,7 @@ function setupModeTabs() {
 
             updateSeatMapButtonByMode();
             updateStatsDisplayByMode();
+            updateSeatMapLegendByMode();
 
             if (currentSearchName) {
                 searchOrders();
@@ -741,8 +767,18 @@ function updateSeatMapLegendByMode() {
         dot500.classList.add("legend-500-tp");
     }
 }
+
+function ownedSeatClass(priceZone) {
+    if (priceZone === "500") {
+        return currentConcertMode === "kh" ? "my-seat-500-kh" : "my-seat-500-tp";
+    }
+
+    return `my-seat-${priceZone}`;
+}
+
 setupModeTabs();
 setupBasicEvents();
 
 updateSeatMapButtonByMode();
 updateStatsDisplayByMode();
+updateSeatMapLegendByMode();
