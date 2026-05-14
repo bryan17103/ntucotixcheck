@@ -8,11 +8,13 @@ let zoomLevel = window.innerWidth <= 900 ? 1.15 : 0.9;
 let seatMapBaseWidth = 0;
 let seatMapBaseHeight = 0;
 
-async function loadSeats() {
+async function loadSeats(showLoading = true) {
     const loadingOverlay = document.getElementById("loading-overlay");
 
     try {
-        loadingOverlay?.classList.remove("hidden");
+        if (showLoading) {
+            loadingOverlay?.classList.remove("hidden");
+        }
 
         const res = await fetch(
             `/api/kh/seats?show_third=${SHOW_KH_THIRD_FLOOR}`
@@ -33,7 +35,9 @@ async function loadSeats() {
         console.error(err);
 
     } finally {
-        loadingOverlay?.classList.add("hidden");
+        if (showLoading) {
+            loadingOverlay?.classList.add("hidden");
+        }
     }
 }
 
