@@ -304,14 +304,25 @@ def handle_confirm(concert_code):
 def api_tp_confirm():
     return handle_confirm("tp")
 
-
 @app.route("/api/kh/confirm", methods=["POST"])
 def api_kh_confirm():
     return handle_confirm("kh")
 
+def normalize_mode(mode):
+    mode = str(mode or "all").strip().lower()
+
+    if mode in ("tp", "taipei"):
+        return "tp"
+
+    if mode in ("kh", "kaohsiung", "kaoshiung"):
+        return "kh"
+
+    return "all"
+
 @app.route("/api/orders", methods=["GET"])
 def api_orders():
     name = request.args.get("name", "").strip()
+    mode = normalize_mode(request.args.get("mode", "all"))
 
     if not name:
         return jsonify({
@@ -320,7 +331,34 @@ def api_orders():
             "orders": []
         }), 400
 
-    result = get_orders_by_name(name)
+    if mode == "tp":
+        result = get_orders_by_name(name, concert_code="tp")
+
+    elif mode == "kh":
+        result = get_orders_by_name(name, concert_code="kh")
+
+    else:
+        tp_result = get_orders_by_name(name, concert_code="tp")
+        kh_result = get_orders_by_name(name, concert_code="kh")
+
+        tp_orders = tp_result.get("orders", [])
+        kh_orders = kh_result.get("orders", [])
+
+        for order in tp_orders:
+            order["concert_code"] = "tp"
+
+        for order in kh_orders:
+            order["concert_code"] = "kh"
+
+        result = {
+            "orders": tp_orders + kh_orders,
+            "manual_points":
+                float(tp_result.get("manual_points", 0) or 0)
+                + float(kh_result.get("manual_points", 0) or 0),
+            "total_points":
+                float(tp_result.get("total_points", 0) or 0)
+                + float(kh_result.get("total_points", 0) or 0),
+        }
 
     return jsonify({
         "success": True,
@@ -332,34 +370,45 @@ def api_orders():
 @app.route("/api/orders/<order_id>/note", methods=["PATCH"])
 def api_update_order_note(order_id):
     data = request.get_json(silent=True) or {}
+
     note = str(data.get("note", "")).strip()
-
-    from lib.sheet_repo import get_all_records, normalize_text
-
-    rows = get_all_records()
-    debug_ids = [normalize_text(row.get("訂單ID")) for row in rows[:20]]
     floor = request.args.get("floor", "").strip()
     row_label = request.args.get("row_label", "").strip()
+    mode = normalize_mode(request.args.get("mode", "tp"))
 
-    print("DEBUG note order_id =", repr(order_id))
-    print("DEBUG first 20 sheet order_ids =", debug_ids)
+    if mode == "all":
+        mode = "tp"
 
-    ok = update_order_note(order_id, note, floor=floor, row_label=row_label)
+    ok = update_order_note(
+        order_id,
+        note,
+        floor=floor,
+        row_label=row_label,
+        concert_code=mode
+    )
+
     if not ok:
         return jsonify({
             "success": False,
-            "message": "找不到訂單",
-            "debug_order_id": order_id,
-            "debug_first_ids": debug_ids
+            "message": "找不到訂單"
         }), 404
 
-    return jsonify({"success": True, "message": "備註已更新"})
+    return jsonify({
+        "success": True,
+        "message": "備註已更新"
+    })
 
 @app.route("/api/orders/<order_id>", methods=["DELETE"])
 def api_delete_order(order_id):
-    rows = get_all_records()
     floor = request.args.get("floor", "").strip()
     row_label = request.args.get("row_label", "").strip()
+    mode = normalize_mode(request.args.get("mode", "tp"))
+
+    if mode == "all":
+        mode = "tp"
+
+    rows = get_all_records(mode)
+
     locked = any(
         normalize_text(row.get("訂單ID")) == order_id
         and normalize_text(row.get("訂單狀態")).lower() == "locked"
@@ -367,29 +416,55 @@ def api_delete_order(order_id):
     )
 
     if locked:
-        return jsonify({"success": False, "message": "已鎖定，無法刪除"}), 403
+        return jsonify({
+            "success": False,
+            "message": "已鎖定，無法刪除"
+        }), 403
 
-    ok = mark_order_deleted(order_id, floor=floor, row_label=row_label)
+    ok = mark_order_deleted(
+        order_id,
+        floor=floor,
+        row_label=row_label,
+        concert_code=mode
+    )
+
     if not ok:
-        return jsonify({"success": False, "message": "找不到訂單"}), 404
+        return jsonify({
+            "success": False,
+            "message": "找不到訂單"
+        }), 404
 
-    return jsonify({"success": True, "message": "訂單已刪除，座位已重新釋出"})
+    return jsonify({
+        "success": True,
+        "message": "訂單已刪除，座位已重新釋出"
+    })
 
 
 @app.route("/api/orders/<order_id>/pickup", methods=["PATCH"])
 def api_update_order_pickup(order_id):
     data = request.get_json(silent=True) or {}
+    mode = normalize_mode(request.args.get("mode", "tp"))
+
+    if mode == "all":
+        mode = "tp"
 
     ok = update_order_pickup_status(
         order_id,
         pickup_open=data.get("pickup_open"),
-        picked_up=data.get("picked_up")
+        picked_up=data.get("picked_up"),
+        concert_code=mode
     )
 
     if not ok:
-        return jsonify({"success": False, "message": "找不到訂單"}), 404
+        return jsonify({
+            "success": False,
+            "message": "找不到訂單"
+        }), 404
 
-    return jsonify({"success": True, "message": "取票狀態已更新"})
+    return jsonify({
+        "success": True,
+        "message": "取票狀態已更新"
+    })
 
 @app.route("/api/admin/login", methods=["POST"])
 def api_admin_login():
