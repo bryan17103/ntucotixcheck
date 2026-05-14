@@ -82,12 +82,20 @@ body::after {
 
     letter-spacing: 0.08em;
     line-height: 1.35;
+    margin-bottom: 10px;
 
     color: #404643;
 }
 
-.concert-label {
-    margin-bottom: 10px;
+.kh-third-floor-note {
+    margin-left: 8px;
+
+    font-size: 0.55em;
+    font-weight: 700;
+
+    color: rgba(70, 82, 78, 0.72);
+
+    vertical-align: middle;
 }
 
 .poster-info h1 {
@@ -137,7 +145,7 @@ body::after {
     display: inline-block;
 
     font-family: "Noto Sans TC", sans-serif;
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 800;
 
     color: #4e6b68;
