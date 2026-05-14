@@ -299,48 +299,287 @@ body.orders-page {
     font-size: 14px;
 }
 /* # Summary Cards */
-.orders-summary-grid { display: grid; grid-template-columns: 1fr 1fr 1.45fr 1.15fr; gap: 18px; margin-bottom: 22px; }
+
+.orders-summary-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 1.05fr 1.45fr 1.05fr;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
 .summary-card {
-    background: #fff; border: 1.5px solid #e8e8e8; border-radius: 24px; padding: 16px 22px;
-    box-shadow: 0 4px 12px rgba(0,0,0,.04); min-height: 100px;
+    position: relative;
+
+    min-height: 178px;
+    padding: 24px 26px 22px;
+
+    background: rgba(255,255,255,0.86);
+    border: 1px solid rgba(255,255,255,0.62);
+    border-radius: 26px;
+
+    box-shadow:
+        0 16px 36px rgba(45, 65, 62, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.86);
+
+    overflow: hidden;
 }
-.summary-label { font-size: 14px; color: #777; font-weight: 800; margin-bottom: 6px; line-height: 1; }
-.summary-value { font-size: 18px; font-weight: 900; line-height: 1.25; display: block; }
-.summary-line {
-    color: var(--orders-main);
-    white-space: nowrap;
+
+.summary-card::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 4px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--orders-accent),
+        transparent
+    );
+
+    opacity: 0.9;
+}
+
+.summary-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    margin-bottom: 28px;
+}
+
+.summary-icon {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(127,159,152,0.16);
+    box-shadow: 0 8px 18px rgba(79,111,115,0.16);
+
+    font-size: 22px;
+}
+
+.summary-label {
     margin: 0;
-    padding: 0;
-}
-.ticket-stats-value {
-    font-size: 18px;
-    font-weight: 900;
 
+    font-family: "Noto Serif TC", "Songti TC", serif;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+
+    color: #2f3c39;
+}
+
+.summary-metric-row,
+.summary-points-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.summary-metric-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: #4e5b58;
+    font-size: 15px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.summary-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--orders-accent);
+}
+
+.summary-dot.muted {
+    background: #b7bdbc;
+}
+
+.summary-star {
+    width: 18px;
+    height: 18px;
+
+    border-radius: 50%;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(127,159,152,0.18);
     color: var(--orders-main);
 
-    line-height: 1.25;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+.summary-metric-value {
+    color: var(--orders-main);
+    font-family: "Noto Sans TC", sans-serif;
+    font-size: 24px;
+    font-weight: 900;
+    white-space: nowrap;
+}
+
+.summary-divider {
+    height: 1px;
+    margin: 22px 0;
+
+    background: linear-gradient(
+        90deg,
+        rgba(95,124,121,0.12),
+        rgba(95,124,121,0.28),
+        rgba(95,124,121,0.12)
+    );
+}
+
+/* 推票統計 */
+
+.summary-card-points {
+    min-width: 0;
+}
+
+.stats-help-trigger {
+    border: none;
+    background: transparent;
+    padding: 0;
+
+    cursor: pointer;
+    text-align: left;
+}
+
+.stats-help-trigger:hover {
+    color: var(--orders-main);
+    text-decoration: underline;
+}
+
+.summary-help-text {
+    font-family: "Noto Sans TC", sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    color: rgba(55,64,61,0.62);
+    letter-spacing: 0;
+}
+
+.ticket-price-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+
+    margin-top: 4px;
+}
+
+.ticket-price-item {
+    min-width: 0;
 
     display: flex;
     flex-direction: column;
-    gap: 2px;
-}
-.ticket-stats-row, .ticket-stats-points { white-space: nowrap; margin: 0; padding: 0; }
-.ticket-stats-points { font-size: 18px; line-height: 1.25; }
-#manual-points-note { font-size: 13px; font-weight: 700; color: #777; }
+    align-items: center;
+    gap: 6px;
 
-/* # Seat Map Summary Card */
-.seat-map-card {
-    border: 1.5px solid #e8e8e8; cursor: pointer; text-align: left; font-family: inherit;
-    transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+    padding: 0 10px;
+
+    border-right: 1px solid rgba(95,124,121,0.18);
 }
-.seat-map-card:hover { transform: translateY(-1px); border-color: #c7d8ee; box-shadow: 0 8px 18px rgba(39,111,183,.12); }
-.seat-map-card-main {
-    color: var(--orders-main);
-    font-size: 18px;
+
+.ticket-price-item:last-child {
+    border-right: none;
+}
+
+.ticket-price-item span {
+    color: #505b58;
+    font-size: 14px;
     font-weight: 900;
-    line-height: 1.25;
+    white-space: nowrap;
 }
-.seat-map-card-sub { margin-top: 4px; color: #777; font-size: 13px; font-weight: 700; }
+
+.ticket-price-item strong {
+    color: var(--orders-main);
+    font-size: 20px;
+    font-weight: 900;
+}
+
+#manual-points-note {
+    font-size: 12px;
+    font-weight: 700;
+    color: #777;
+}
+
+/* 座位圖卡片 */
+
+.seat-map-card {
+    border: 1px solid rgba(255,255,255,0.62);
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+
+    transition:
+        transform .14s ease,
+        box-shadow .14s ease,
+        border-color .14s ease;
+}
+
+.seat-map-card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 20px 42px rgba(45, 65, 62, 0.14),
+        inset 0 1px 0 rgba(255,255,255,0.86);
+}
+
+.seat-map-card-main {
+    margin-top: 20px;
+
+    color: var(--orders-main);
+    font-family: "Noto Serif TC", "Songti TC", serif;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+}
+
+.seat-map-card-sub {
+    margin-top: 10px;
+
+    color: #6b7471;
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 1.5;
+}
+
+.seat-map-arrow {
+    position: absolute;
+    right: 22px;
+    bottom: 28px;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(127,159,152,0.16);
+    color: var(--orders-main);
+
+    font-size: 34px;
+    font-weight: 500;
+    line-height: 1;
+}
+
 .seat-map-card.disabled {
     opacity: 0.55;
     cursor: not-allowed;
@@ -348,17 +587,9 @@ body.orders-page {
 
 .seat-map-card.disabled:hover {
     transform: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,.04);
-}
-
-.seat-map-card.disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
-.seat-map-card.disabled:hover {
-    transform: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,.04);
+    box-shadow:
+        0 16px 36px rgba(45, 65, 62, 0.10),
+        inset 0 1px 0 rgba(255,255,255,0.86);
 }
 /* # Orders Table */
 .orders-table-card { border: 1.5px solid #e8e8e8; border-radius: 26px; overflow: hidden; background: #fff; }
