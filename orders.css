@@ -469,7 +469,9 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
 .my-seat-not-owned { background: #e5e5e5; color: #aaa; }
 .my-seat-other-sold { background: #9a9a9a; color: #fff; }
 .my-seat-owned { color: #fff; font-weight: 900; outline: 3px solid #263579; box-shadow: 0 0 0 2px rgba(38,53,121,.16); position: relative;}
-.my-seat-500 { background: #cf6f6d; }
+.my-seat-800 { background: #b96b68; }
+.my-seat-500-tp { background: #cf6f6d; }
+.my-seat-500-kh { background: #d1a980; }
 .my-seat-300 { background: #b9cf8c; }
 .my-seat-200 { background: #9fc3ea; }
 .my-seat-map-empty { color: #777; font-weight: 800; padding: 28px; }
@@ -494,6 +496,23 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
     justify-content: center;
 
     border: 1.5px solid #fff;
+}
+
+.my-map-stage {
+    border-radius: 14px;
+    background: linear-gradient(to bottom, #ffffff, #eef2f0);
+    border: 1.5px solid #d8dfdc;
+    color: #4c5551;
+    font-family: "Noto Serif TC", "Songti TC", serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 1;
 }
 
 .page-footer {
