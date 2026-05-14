@@ -1,3 +1,4 @@
+let mySeatMapScale = 1;
 let currentSearchName = "";
 let currentOrders = [];
 let currentConcertMode = "all"; // all | tp | kh
@@ -606,8 +607,139 @@ function renderKhMySeatMap(allSeats, rowLabels, orders) {
 
         mapEl.appendChild(btn);
     });
+    addKhMyFloorFrames(mapEl, minCol, minRow);
+    addKhMyRowMarkers(mapEl, minCol, minRow);
+    
+    enableMySeatMapZoom();
+}
+function addKhFloorFrame(
+    mapEl,
+    minCol,
+    minRow,
+    startCol,
+    endCol,
+    startRow,
+    endRow,
+    label
+) {
+    const frame = document.createElement("div");
+
+    frame.className = "kh-floor-frame";
+
+    frame.style.gridColumn =
+        `${colIndex(startCol) - minCol + 2} / ${colIndex(endCol) - minCol + 3}`;
+
+    frame.style.gridRow =
+        `${startRow - minRow + 1} / ${endRow - minRow + 2}`;
+
+    const title = document.createElement("div");
+    title.className = "kh-floor-title";
+    title.textContent = label;
+
+    frame.appendChild(title);
+
+    mapEl.appendChild(frame);
 }
 
+function addKhMyFloorFrames(mapEl, minCol, minRow) {
+
+    addKhFloorFrame(
+        mapEl,
+        minCol,
+        minRow,
+        "AI",
+        "BV",
+        44,
+        55,
+        "1樓"
+    );
+
+    addKhFloorFrame(
+        mapEl,
+        minCol,
+        minRow,
+        "Q",
+        "CN",
+        25,
+        82,
+        "2樓"
+    );
+}
+
+function addKhMarker(
+    mapEl,
+    minCol,
+    minRow,
+    col,
+    row,
+    text
+) {
+    const marker = document.createElement("div");
+
+    marker.className = "kh-row-marker";
+    marker.textContent = text;
+
+    marker.style.gridColumn =
+        colIndex(col) - minCol + 2;
+
+    marker.style.gridRow =
+        row - minRow + 1;
+
+    mapEl.appendChild(marker);
+}
+function addKhMyRowMarkers(mapEl, minCol, minRow) {
+
+    /* 一樓 */
+
+    for (let r = 44; r <= 55; r++) {
+        const label = String(r - 43);
+
+        ["AI", "AT", "AV", "BI", "BK", "BV"].forEach(col => {
+            addKhMarker(
+                mapEl,
+                minCol,
+                minRow,
+                col,
+                r,
+                label
+            );
+        });
+    }
+
+    /* F 區 */
+
+    [
+        ["AS", 17, "F7"],
+        ["BK", 17, "F7"],
+
+        ["AR", 19, "F6"],
+        ["BK", 19, "F6"],
+
+        ["AR", 20, "F5"],
+        ["BK", 20, "F5"],
+
+        ["AR", 21, "F4"],
+        ["BK", 21, "F4"],
+
+        ["AR", 22, "F3"],
+        ["BK", 22, "F3"],
+
+        ["AR", 23, "F2"],
+        ["BK", 23, "F2"],
+
+        ["AK", 26, "F1"],
+        ["BS", 26, "F1"],
+    ].forEach(([col, row, text]) => {
+        addKhMarker(
+            mapEl,
+            minCol,
+            minRow,
+            col,
+            row,
+            text
+        );
+    });
+}
 function colIndex(col) {
     let n = 0;
     for (let i = 0; i < col.length; i++) {
@@ -776,6 +908,105 @@ function ownedSeatClass(priceZone) {
     }
 
     return `my-seat-${priceZone}`;
+}
+function enableMySeatMapZoom() {
+    const viewport = document.getElementById("my-seat-map-viewport");
+    const map = document.getElementById("my-seat-map");
+
+    if (!viewport || !map) return;
+
+    mySeatMapScale = 1;
+
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let startScrollLeft = 0;
+    let startScrollTop = 0;
+
+    viewport.onwheel = e => {
+        if (!e.ctrlKey) return;
+
+        e.preventDefault();
+
+        const delta = e.deltaY < 0 ? 0.1 : -0.1;
+
+        mySeatMapScale = Math.min(
+            3,
+            Math.max(0.45, mySeatMapScale + delta)
+        );
+
+        map.style.transform =
+            `scale(${mySeatMapScale})`;
+    };
+
+    viewport.onmousedown = e => {
+        isDragging = true;
+
+        viewport.classList.add("dragging");
+
+        startX = e.clientX;
+        startY = e.clientY;
+
+        startScrollLeft = viewport.scrollLeft;
+        startScrollTop = viewport.scrollTop;
+    };
+
+    window.onmouseup = () => {
+        isDragging = false;
+        viewport.classList.remove("dragging");
+    };
+
+    viewport.onmousemove = e => {
+        if (!isDragging) return;
+
+        viewport.scrollLeft =
+            startScrollLeft - (e.clientX - startX);
+
+        viewport.scrollTop =
+            startScrollTop - (e.clientY - startY);
+    };
+
+    /* mobile pinch */
+
+    let initialDistance = null;
+    let initialScale = mySeatMapScale;
+
+    viewport.ontouchmove = e => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+
+            const dx =
+                e.touches[0].clientX - e.touches[1].clientX;
+
+            const dy =
+                e.touches[0].clientY - e.touches[1].clientY;
+
+            const distance =
+                Math.sqrt(dx * dx + dy * dy);
+
+            if (!initialDistance) {
+                initialDistance = distance;
+                initialScale = mySeatMapScale;
+                return;
+            }
+
+            mySeatMapScale =
+                Math.min(
+                    3,
+                    Math.max(
+                        0.45,
+                        initialScale * (distance / initialDistance)
+                    )
+                );
+
+            map.style.transform =
+                `scale(${mySeatMapScale})`;
+        }
+    };
+
+    viewport.ontouchend = () => {
+        initialDistance = null;
+    };
 }
 
 setupModeTabs();
