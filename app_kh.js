@@ -899,6 +899,14 @@ function updateOrderOpenUI() {
     }
 }
 
+document.getElementById("clear-selection-btn")
+?.addEventListener("click", () => {
+    selectedSeats.clear();
+
+    renderSeats();
+    updateSummary();
+});
+
 setupZoomControls();
 setupConfirmButton();
 loadSeats();
