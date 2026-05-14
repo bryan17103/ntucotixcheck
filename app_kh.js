@@ -247,7 +247,7 @@ function addKhStage(seatMap, minCol, minRow, topOffset) {
     stage.textContent = "舞台";
 
     stage.style.gridColumn =
-        `${colIndex("AF") - minCol + 2} / ${colIndex("BZ") - minCol + 3}`;
+        `${colIndex("AC") - minCol + 2} / ${colIndex("CC") - minCol + 3}`;
     stage.style.gridRow =
         `${35 - minRow + 1 + topOffset} / ${41 - minRow + 2 + topOffset}`;
 
