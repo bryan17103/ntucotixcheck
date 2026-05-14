@@ -34,7 +34,7 @@ STATS_CONFIG_SHEETS = {
 _ws_cache = {}
 _sold_cache = {}
 _sold_cache_time = {}
-_SOLD_CACHE_TTL = 2
+_SOLD_CACHE_TTL = 30
 
 HEADERS = [
     "訂單日期與時間",
