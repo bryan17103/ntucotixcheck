@@ -1,10 +1,10 @@
+/* 主視覺更改時改這邊就好*/
 :root {
     --orders-main: #4f6f73;
     --orders-accent: #7f9f98;
     --orders-accent-hover: #6d8d87;
 }
 
-/* # Reset / Base */
 * { box-sizing: border-box; }
 
 body.orders-page {
