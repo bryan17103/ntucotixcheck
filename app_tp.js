@@ -8,11 +8,13 @@ let seatMapBaseWidth = 0;
 let seatMapBaseHeight = 0;
 
 const SECOND_FLOOR_START_ROW = 33; 
-async function loadSeats() {
+async function loadSeats(showLoading = true) {
     const loadingOverlay = document.getElementById("loading-overlay");
 
     try {
-        loadingOverlay?.classList.remove("hidden");
+        if (showLoading) {
+            loadingOverlay?.classList.remove("hidden");
+        }
 
         const res = await fetch("/api/tp/seats");
         const data = await res.json();
@@ -31,7 +33,9 @@ async function loadSeats() {
         console.error(err);
 
     } finally {
-        loadingOverlay?.classList.add("hidden");
+        if (showLoading) {
+            loadingOverlay?.classList.add("hidden");
+        }
     }
 }
 
@@ -458,7 +462,7 @@ function setupConfirmButton() {
             );
         
             selectedSeats.clear();
-            loadSeats();
+            loadSeats(false);
         
         } else {
             showSuccessModal(
