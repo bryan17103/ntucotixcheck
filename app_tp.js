@@ -111,7 +111,7 @@ function setupZoomControls() {
     if (zoomOutBtn && !zoomOutBtn.dataset.bound) {
         zoomOutBtn.dataset.bound = "true";
         zoomOutBtn.addEventListener("click", () => {
-            zoomLevel = Math.max(0.5, zoomLevel - 0.1);
+            zoomLevel = Math.max(0.45, zoomLevel - 0.1);
             applyZoom();
         });
     }
@@ -575,3 +575,15 @@ function updateOrderOpenUI() {
         confirmBtn.textContent = "確認選位";
     }
 }
+
+document.getElementById("clear-selection-btn")
+?.addEventListener("click", () => {
+    selectedSeats.clear();
+
+    renderSeats();
+    updateSummary();
+});
+
+setupZoomControls();
+setupConfirmButton();
+loadSeats();
