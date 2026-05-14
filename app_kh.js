@@ -14,7 +14,9 @@ async function loadSeats() {
     try {
         loadingOverlay?.classList.remove("hidden");
 
-        const res = await fetch("/api/kh/seats");
+        const res = await fetch(
+            `/api/kh/seats?show_third=${SHOW_KH_THIRD_FLOOR}`
+        );
         const data = await res.json();
 
         seatData = (data.seats || []).filter(seat => {
