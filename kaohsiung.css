@@ -485,16 +485,20 @@ body::after {
     color: #37403d;
     letter-spacing: 0.06em;
 }
+
 .selected-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    margin-bottom: 10px;
+    width: 100%;
+    margin-bottom: 14px;
 }
 
-.selected-header h2 {
-    margin: 0;
+.selected-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #3f4642;
 }
 
 #clear-selection-btn {
