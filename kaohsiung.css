@@ -132,6 +132,24 @@ body::after {
     color: #9a3f3f;
 }
 
+.seat-reference-link {
+    margin-top: 8px;
+    display: inline-block;
+
+    font-family: "Noto Sans TC", sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+
+    color: #4e6b68;
+    text-decoration: none;
+    border-bottom: 1.5px solid rgba(78,107,104,0.45);
+}
+
+.seat-reference-link:hover {
+    color: #344f4b;
+    border-bottom-color: #344f4b;
+}
+
 /* Layout */
 
 .app-shell {
