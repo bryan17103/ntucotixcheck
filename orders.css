@@ -350,6 +350,16 @@ body.orders-page {
     transform: none;
     box-shadow: 0 4px 12px rgba(0,0,0,.04);
 }
+
+.seat-map-card.disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.seat-map-card.disabled:hover {
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,.04);
+}
 /* # Orders Table */
 .orders-table-card { border: 1.5px solid #e8e8e8; border-radius: 26px; overflow: hidden; background: #fff; }
 .orders-table-scroll { overflow-x: auto; }
@@ -444,7 +454,9 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
 .my-seat-legend { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; color: #555; font-size: 13px; font-weight: 800; }
 .my-seat-legend span { display: inline-flex; align-items: center; gap: 6px; }
 .legend-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
-.legend-500 { background: #cf6f6d; }
+.legend-800 { background: #b96b68; }
+.legend-500-tp { background: #cf6f6d; }
+.legend-500-kh { background: #d1a980; }
 .legend-300 { background: #b9cf8c; }
 .legend-200 { background: #9fc3ea; }
 .legend-dot.legend-sold { background: #7a7a7a; }
