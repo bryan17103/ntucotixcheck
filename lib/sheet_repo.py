@@ -306,6 +306,7 @@ def group_order_rows(rows: List[dict]) -> List[dict]:
                 "seats": [],
                 "price": 0,
                 "price_counts": {
+                    "800": 0,
                     "500": 0,
                     "300": 0,
                     "200": 0,
@@ -353,16 +354,19 @@ def group_order_rows(rows: List[dict]) -> List[dict]:
     return results
 
 
-def get_manual_points(name: str) -> float:
-    member_map = load_section_members()
+def get_manual_points(name: str, concert_code="tp") -> float:
+    member_map = load_section_members(concert_code)
     info = member_map.get(normalize_text(name))
+
     if not info:
         return 0
-    return float(info.get("manual_points", 0))
+
+    return float(info.get("manual_points", 0) or 0)
 
 
-def get_orders_by_name(name: str):
+def get_orders_by_name(name: str, concert_code="tp"):
     target = normalize_text(name)
+
     if not target:
         return {
             "orders": [],
@@ -371,17 +375,23 @@ def get_orders_by_name(name: str):
         }
 
     rows = [
-        row for row in get_all_records()
+        row for row in get_all_records(concert_code)
         if normalize_text(row.get("名字")) == target
     ]
 
     orders = group_order_rows(rows)
-    manual_points = get_manual_points(target)
+
+    for order in orders:
+        order["concert_code"] = concert_code
+
+    manual_points = get_manual_points(target, concert_code)
     base_points = 0
 
     for order in orders:
         price_counts = order.get("price_counts", {}) or {}
-        base_points += float(price_counts.get("500", 0) or 0) * 3.0
+
+        base_points += float(price_counts.get("800", 0) or 0) * 4.5
+        base_points += float(price_counts.get("500", 0) or 0) * 2.5
         base_points += float(price_counts.get("300", 0) or 0) * 1.5
         base_points += float(price_counts.get("200", 0) or 0) * 1.0
 
@@ -390,7 +400,6 @@ def get_orders_by_name(name: str):
         "manual_points": manual_points,
         "total_points": base_points + manual_points,
     }
-
 
 def admin_search_orders(keyword: str) -> List[dict]:
     target = normalize_text(keyword)
@@ -408,9 +417,9 @@ def admin_search_orders(keyword: str) -> List[dict]:
     return group_order_rows(rows)
 
 
-def update_order_note(order_id: str, note: str, floor: str = "", row_label: str = "") -> bool:
-    ws = get_worksheet()
-    records = get_all_records()
+def update_order_note(order_id: str, note: str, floor: str = "", row_label: str = "", concert_code="tp") -> bool:
+    ws = get_worksheet(concert_code)
+    records = get_all_records(concert_code)
     updated_any = False
 
     for idx, row in enumerate(records, start=2):
@@ -422,17 +431,18 @@ def update_order_note(order_id: str, note: str, floor: str = "", row_label: str 
 
     return updated_any
 
-
-def mark_order_deleted(order_id: str, floor: str = "", row_label: str = "") -> bool:
-    ws = get_worksheet()
-    records = get_all_records()
+def mark_order_deleted(order_id: str, floor: str = "", row_label: str = "", concert_code="tp") -> bool:
+    ws = get_worksheet(concert_code)
+    records = get_all_records(concert_code)
     matched_rows = []
 
     for idx, row in enumerate(records, start=2):
         if row_matches_scope(row, order_id, floor, row_label):
             status = normalize_text(row.get("訂單狀態")).lower()
+
             if status == "locked":
                 return False
+
             matched_rows.append(idx)
 
     if not matched_rows:
@@ -441,9 +451,8 @@ def mark_order_deleted(order_id: str, floor: str = "", row_label: str = "") -> b
     for idx in matched_rows:
         ws.update_cell(idx, 3, "deleted")
 
-    clear_caches()
+    clear_caches(concert_code)
     return True
-
 
 def update_order_pickup_status(
     order_id: str,
@@ -451,9 +460,10 @@ def update_order_pickup_status(
     picked_up: bool = None,
     floor: str = "",
     row_label: str = "",
+    concert_code="tp",
 ) -> bool:
-    ws = get_worksheet()
-    records = get_all_records()
+    ws = get_worksheet(concert_code)
+    records = get_all_records(concert_code)
     updated_any = False
 
     for idx, row in enumerate(records, start=2):
@@ -462,15 +472,16 @@ def update_order_pickup_status(
         if status in {"active", "locked"} and row_matches_scope(row, order_id, floor, row_label):
             if pickup_open is not None:
                 ws.update_cell(idx, 10, bool(pickup_open))
+
             if picked_up is not None:
                 ws.update_cell(idx, 11, bool(picked_up))
+
             updated_any = True
 
     if updated_any:
-        clear_caches()
+        clear_caches(concert_code)
 
     return updated_any
-
 
 def admin_toggle_lock_status(order_id: str, floor: str = "", row_label: str = ""):
     ws = get_worksheet()
@@ -688,21 +699,25 @@ def save_stats_config_rows(rows):
     ws.clear()
     ws.update("A1", values)
 
-def load_section_members():
+def load_section_members(concert_code="tp"):
     member_to_section = {}
 
     try:
         ws = get_config_worksheet("section_members")
-        rows = ws.get_all_records(expected_headers=["姓名", "聲部", "手動加分_TP", "手動加分_KH"])
+        rows = ws.get_all_records(
+            expected_headers=["姓名", "聲部", "手動加分_TP", "手動加分_KH"]
+        )
     except Exception:
         return member_to_section
+
+    manual_col = "手動加分_KH" if concert_code == "kh" else "手動加分_TP"
 
     for row in rows:
         name = normalize_text(row.get("姓名"))
         section = normalize_text(row.get("聲部"))
 
         try:
-            manual_points = float(row.get("手動加分_TP") or 0)
+            manual_points = float(row.get(manual_col) or 0)
         except Exception:
             manual_points = 0
 
@@ -715,6 +730,8 @@ def load_section_members():
     return member_to_section
 
 def price_to_reward_zone(price: int) -> str:
+    if price in {800, 640}:
+        return "800"
     if price in {500, 400}:
         return "500"
     if price in {300, 240}:
@@ -723,22 +740,21 @@ def price_to_reward_zone(price: int) -> str:
         return "200"
     return str(price)
 
-
 def price_to_points(price: int) -> float:
+    if price in {800, 640}:
+        return 4.5
     if price in {500, 400}:
-        return 3.0
+        return 2.5
     if price in {300, 240}:
         return 1.5
     if price in {200, 160}:
         return 1.0
     return 0.0
 
-
 def format_points(value: float) -> str:
     if float(value).is_integer():
         return str(int(value))
     return str(value)
-
 
 def load_stats_config():
     config = {
