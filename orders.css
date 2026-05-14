@@ -283,7 +283,6 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
 .save-btn:hover {
     background: var(--orders-accent-hover);
 }
-.save-btn:hover { background: #e85d31; }
 .cell-center { display: flex; align-items: center; justify-content: center; width: 100%; }
 
 /* # Delete / Pickup Buttons */
