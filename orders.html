@@ -43,49 +43,110 @@
         </div>
 
         <div class="orders-summary-grid" id="orders-summary-grid">
-            <div class="summary-card">
-                <div class="summary-label">金額統計</div>
-                <div class="summary-value">
-                    <div class="summary-line">已付金額：<span id="paid-amount">$0</span></div>
-                    <div class="summary-line">未付金額：<span id="unpaid-amount">$0</span></div>
+        
+            <div class="summary-card summary-card-money">
+                <div class="summary-card-header">
+                    <div class="summary-icon">💰</div>
+                    <div class="summary-label">金額統計</div>
                 </div>
-            </div>
-
-            <div class="summary-card">
-                <div class="summary-label">票數統計</div>
-                <div class="summary-value">
-                    <div class="summary-line">已取票數：<span id="picked-count">0</span> 張</div>
-                    <div class="summary-line">未取票數：<span id="unpicked-count">0</span> 張</div>
-                </div>
-            </div>
-
-            <div class="summary-card">
-                <button class="summary-label stats-help-trigger" type="button" id="stats-help-btn">
-                    推票統計（點我查看說明）
-                </button>
-                <div class="ticket-stats-value">
-                    <div class="ticket-stats-row">
-                        <span id="stats-800-wrapper">
-                            800元：<span id="count-800">0</span> |
-                        </span>
-                        500元：<span id="count-500">0</span> |
-                        300元：<span id="count-300">0</span> |
-                        200元：<span id="count-200">0</span>
+        
+                <div class="summary-metric-row">
+                    <div class="summary-metric-label">
+                        <span class="summary-dot"></span>
+                        已付金額
                     </div>
-                    <div class="ticket-stats-points">
-                        累積推票積分：<span id="total-points">0</span>
+                    <div class="summary-metric-value" id="paid-amount">$0</div>
+                </div>
+        
+                <div class="summary-divider"></div>
+        
+                <div class="summary-metric-row">
+                    <div class="summary-metric-label">
+                        <span class="summary-dot muted"></span>
+                        未付金額
+                    </div>
+                    <div class="summary-metric-value" id="unpaid-amount">$0</div>
+                </div>
+            </div>
+        
+            <div class="summary-card summary-card-ticket">
+                <div class="summary-card-header">
+                    <div class="summary-icon">🎟️</div>
+                    <div class="summary-label">票數統計</div>
+                </div>
+        
+                <div class="summary-metric-row">
+                    <div class="summary-metric-label">
+                        <span class="summary-dot"></span>
+                        已取票數
+                    </div>
+                    <div class="summary-metric-value"><span id="picked-count">0</span> 張</div>
+                </div>
+        
+                <div class="summary-divider"></div>
+        
+                <div class="summary-metric-row">
+                    <div class="summary-metric-label">
+                        <span class="summary-dot muted"></span>
+                        未取票數
+                    </div>
+                    <div class="summary-metric-value"><span id="unpicked-count">0</span> 張</div>
+                </div>
+            </div>
+        
+            <div class="summary-card summary-card-points">
+                <div class="summary-card-header">
+                    <div class="summary-icon">🪧</div>
+                    <button class="summary-label stats-help-trigger" type="button" id="stats-help-btn">
+                        推票統計
+                        <span class="summary-help-text">（可點我查看說明）</span>
+                    </button>
+                </div>
+        
+                <div class="ticket-price-grid">
+                    <div class="ticket-price-item" id="stats-800-wrapper">
+                        <span>800元</span>
+                        <strong id="count-800">0</strong>
+                    </div>
+                    <div class="ticket-price-item">
+                        <span>500元</span>
+                        <strong id="count-500">0</strong>
+                    </div>
+                    <div class="ticket-price-item">
+                        <span>300元</span>
+                        <strong id="count-300">0</strong>
+                    </div>
+                    <div class="ticket-price-item">
+                        <span>200元</span>
+                        <strong id="count-200">0</strong>
+                    </div>
+                </div>
+        
+                <div class="summary-divider"></div>
+        
+                <div class="summary-points-row">
+                    <div class="summary-metric-label">
+                        <span class="summary-star">✦</span>
+                        累積推票積分
                         <span id="manual-points-note"></span>
                     </div>
+                    <div class="summary-metric-value" id="total-points">0</div>
                 </div>
             </div>
-
+        
             <button class="summary-card seat-map-card" type="button" id="my-seat-map-btn">
-                <div class="summary-label">查看已購買座位</div>
+                <div class="summary-card-header">
+                    <div class="summary-icon">💺</div>
+                    <div class="summary-label">查看已購買座位</div>
+                </div>
+        
                 <div class="seat-map-card-main">不支援查看座位圖</div>
                 <div class="seat-map-card-sub">請切換至台北場或高雄場查看座位</div>
+        
+                <div class="seat-map-arrow">›</div>
             </button>
+        
         </div>
-
         <div class="orders-table-card">
             <div class="orders-table-scroll">
                 <table class="orders-table">
