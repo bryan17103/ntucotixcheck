@@ -457,25 +457,29 @@ body.orders-page {
 }
 
 .stats-help-trigger {
+    margin: 0;
+    padding: 0;
     border: none;
     background: transparent;
-    padding: 0;
 
     cursor: pointer;
     text-align: left;
+
+    font-family: "Noto Serif TC", "Songti TC", serif;
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    line-height: 1;
+
+    color: #2f3c39;
+
+    transition:
+        color .14s ease,
+        transform .14s ease;
 }
 
 .stats-help-trigger:hover {
     color: var(--orders-main);
-    text-decoration: underline;
-}
-
-.summary-help-text {
-    font-family: "Noto Sans TC", sans-serif;
-    font-size: 13px;
-    font-weight: 800;
-    color: rgba(55,64,61,0.62);
-    letter-spacing: 0;
 }
 
 .ticket-price-grid {
