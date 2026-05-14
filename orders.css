@@ -123,7 +123,34 @@ body.orders-page {
     align-items: center;
     justify-content: center;
 }
+.orders-mode-tabs {
+    display: flex;
+    gap: 10px;
+    margin: -10px 0 22px;
+    flex-wrap: wrap;
+}
 
+.orders-mode-tab {
+    height: 38px;
+    padding: 0 18px;
+
+    border: 1.5px solid rgba(120,130,126,0.24);
+    border-radius: 999px;
+
+    background: rgba(255,255,255,0.72);
+    color: #4a5652;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.orders-mode-tab.active {
+    border-color: transparent;
+    background: var(--orders-accent);
+    color: white;
+}
 /* # Search */
 .orders-search-card { display: flex; gap: 14px; align-items: center; margin-bottom: 24px; flex-wrap: wrap; }
 .orders-search-input {
@@ -314,7 +341,15 @@ body.orders-page {
     line-height: 1.25;
 }
 .seat-map-card-sub { margin-top: 4px; color: #777; font-size: 13px; font-weight: 700; }
+.seat-map-card.disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
 
+.seat-map-card.disabled:hover {
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,.04);
+}
 /* # Orders Table */
 .orders-table-card { border: 1.5px solid #e8e8e8; border-radius: 26px; overflow: hidden; background: #fff; }
 .orders-table-scroll { overflow-x: auto; }
