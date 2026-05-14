@@ -27,24 +27,101 @@ body.orders-page {
 
 /* # Page Shell / Header */
 .orders-shell {
+    position: relative;
+    height: calc(100vh - 24px - 38px);
+    overflow-y: auto;
     background: var(--orders-shell-bg);
     border-radius: 28px;
-    padding: 24px;
+    padding: 28px 32px 26px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-    min-height: calc(100vh - 24px);
 }
-.orders-topbar {
-    display: flex; justify-content: space-between; align-items: flex-start;
-    gap: 16px; margin-bottom: 24px; flex-wrap: wrap;
+
+.orders-hero {
+    position: relative;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 18px;
+
+    margin-bottom: 24px;
 }
-.orders-title-wrap h1 { margin: 0; font-size: 24px; color: #222; font-weight: 800; }
-.orders-title-wrap p { margin: 8px 0 0; color: #7a7a7a; font-size: 15px; font-weight: 500; }
-.orders-note.main { margin: 6px 0 2px; font-weight: 500; }
-.orders-note.sub { font-size: 13px; opacity: 0.75; margin: 0; }
+
+.orders-title-wrap {
+    padding-right: 180px;
+}
+
+.orders-title-wrap h1 {
+    margin: 0;
+
+    font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.35;
+
+    color: #37403d;
+}
+
+.orders-hero-subtitle {
+    margin: 8px 0 0;
+
+    font-family: "Noto Sans TC", sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+
+    color: rgba(55, 64, 61, 0.72);
+}
+
+.orders-title-wrap p {
+    margin: 8px 0 0;
+}
+
+.orders-note.main {
+    font-family: "Noto Sans TC", sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+
+    color: rgba(55, 64, 61, 0.72);
+}
+
+.orders-help-trigger {
+    margin-top: 12px;
+
+    border: none;
+    background: transparent;
+    padding: 0;
+
+    font-family: "Noto Sans TC", sans-serif;
+    color: var(--orders-main);
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
 .back-link-btn {
-    height: 44px; padding: 0 20px; border-radius: 16px; border: 2px solid #dddddd;
-    background: #fff; color: #4a4a4a; font-size: 15px; font-weight: 700; text-decoration: none;
-    display: inline-flex; align-items: center; justify-content: center;
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    height: 44px;
+    padding: 0 20px;
+
+    border-radius: 16px;
+    border: 1.5px solid rgba(120,130,126,0.24);
+    background: rgba(255,255,255,0.72);
+
+    color: #4a5652;
+    font-size: 15px;
+    font-weight: 800;
+    text-decoration: none;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* # Search */
@@ -372,7 +449,22 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
     border: 1.5px solid #fff;
 }
 
+.page-footer {
+    position: relative;
+    z-index: 2;
 
+    height: 38px;
+    min-height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: Georgia, serif;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: rgba(55, 64, 61, 0.68);
+}
 /* # Animations */
 @keyframes modalPop {
     from { opacity: 0; transform: translateY(8px) scale(.98); }
@@ -390,15 +482,28 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
 }
 /* Order Cards */
 @media (max-width: 768px) {
-    .orders-topbar {
-        flex-direction: column;
-        align-items: stretch;
+    .orders-shell {
+        height: auto;
+        min-height: calc(100vh - 24px - 38px);
+        padding: 20px 16px;
     }
-
+    
+    .orders-hero {
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+    
+    .orders-title-wrap {
+        padding-right: 0;
+    }
+    
+    .orders-title-wrap h1 {
+        font-size: 22px;
+    }
+    
     .back-link-btn {
+        position: static;
         width: 100%;
-        align-self: flex-start;
-        height: 42px;
     }
 
     .orders-search-card {
