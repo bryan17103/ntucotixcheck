@@ -578,7 +578,7 @@ function renderKhMySeatMap(allSeats, rowLabels, orders) {
         btn.style.gridRow = Number(seat.excel_row) - minRow + 1;
 
         if (purchased.has(seatKey)) {
-            btn.classList.add("my-seat-owned", `my-seat-${priceZone}`);
+            btn.classList.add("my-seat-owned", ownedSeatClass(priceZone));
 
             const matchedOrder = orders.find(order => {
                 const seats = Array.isArray(order.seats) ? order.seats : [];
@@ -770,7 +770,9 @@ function updateSeatMapLegendByMode() {
 
 function ownedSeatClass(priceZone) {
     if (priceZone === "500") {
-        return currentConcertMode === "kh" ? "my-seat-500-kh" : "my-seat-500-tp";
+        return currentConcertMode === "kh"
+            ? "my-seat-500-kh"
+            : "my-seat-500-tp";
     }
 
     return `my-seat-${priceZone}`;
