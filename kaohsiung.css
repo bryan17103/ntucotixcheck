@@ -485,6 +485,34 @@ body::after {
     color: #37403d;
     letter-spacing: 0.06em;
 }
+.selected-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 10px;
+}
+
+.selected-header h2 {
+    margin: 0;
+}
+
+#clear-selection-btn {
+    border: none;
+    background: transparent;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    color: #6a7e78;
+
+    cursor: pointer;
+    transition: .18s;
+}
+
+#clear-selection-btn:hover {
+    color: #415b57;
+}
 
 #selected-list {
     min-height: 220px;
