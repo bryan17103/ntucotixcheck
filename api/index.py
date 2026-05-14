@@ -123,17 +123,23 @@ def api_tp_seats():
     })
 
 
-@app.route("/api/kh/seats", methods=["GET"])
+@app.route("/api/kh/seats")
 def api_kh_seats():
+    show_third = request.args.get("show_third", "false") == "true"
 
     result_seats, row_labels = build_result_seats("kh")
+
+    if not show_third:
+        result_seats = [
+            seat for seat in result_seats
+            if seat.get("floor") != "3樓"
+        ]
 
     return jsonify({
         "success": True,
         "seats": result_seats,
         "row_labels": row_labels,
-      
-        "order_open": get_order_open("kh")
+        "order_open": get_order_open("kh"),
     })
 
 @app.route("/api/debug/kh-seat-count")
