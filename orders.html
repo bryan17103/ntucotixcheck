@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>《嶋聲》團內購票訂單查詢</title>
     <link rel="icon" type="image/png" href="/NTUCO.png">
-    <!-- Google Fonts -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 
-    <!-- CSS -->
     <link rel="stylesheet" href="/orders.css">
 </head>
 
@@ -25,11 +23,7 @@
                 <p class="orders-hero-subtitle">查詢訂單、付款狀態、取票狀態與推票積分</p>
                 <p class="orders-note main">票務每天晚上都會上來鎖定，鎖定後即無法刪除！</p>
 
-                <button
-                    class="orders-help-trigger"
-                    type="button"
-                    id="orders-help-btn"
-                >
+                <button class="orders-help-trigger" type="button" id="orders-help-btn">
                     購票、取票、寄票相關說明請點我
                 </button>
             </div>
@@ -43,15 +37,9 @@
         </div>
 
         <div class="orders-mode-tabs">
-            <button class="orders-mode-tab active" type="button" data-mode="all">
-                全部
-            </button>
-            <button class="orders-mode-tab" type="button" data-mode="tp">
-                台北場
-            </button>
-            <button class="orders-mode-tab" type="button" data-mode="kh">
-                高雄場
-            </button>
+            <button class="orders-mode-tab active" type="button" data-mode="all">全部</button>
+            <button class="orders-mode-tab" type="button" data-mode="tp">台北場</button>
+            <button class="orders-mode-tab" type="button" data-mode="kh">高雄場</button>
         </div>
 
         <div class="orders-summary-grid" id="orders-summary-grid">
@@ -72,17 +60,29 @@
             </div>
 
             <div class="summary-card">
-                <button class="summary-label stats-help-trigger" type="button" id="stats-help-btn">推票統計（點我查看說明）</button>
+                <button class="summary-label stats-help-trigger" type="button" id="stats-help-btn">
+                    推票統計（點我查看說明）
+                </button>
                 <div class="ticket-stats-value">
-                    <div class="ticket-stats-row">500元：<span id="count-500">0</span> | 300元：<span id="count-300">0</span> | 200元：<span id="count-200">0</span></div>
-                    <div class="ticket-stats-points">累積推票積分：<span id="total-points">0</span> <span id="manual-points-note"></span></div>
+                    <div class="ticket-stats-row">
+                        <span id="stats-800-wrapper">
+                            800元：<span id="count-800">0</span> |
+                        </span>
+                        500元：<span id="count-500">0</span> |
+                        300元：<span id="count-300">0</span> |
+                        200元：<span id="count-200">0</span>
+                    </div>
+                    <div class="ticket-stats-points">
+                        累積推票積分：<span id="total-points">0</span>
+                        <span id="manual-points-note"></span>
+                    </div>
                 </div>
             </div>
 
             <button class="summary-card seat-map-card" type="button" id="my-seat-map-btn">
                 <div class="summary-label">查看已購買座位</div>
-                <div class="seat-map-card-main">打開座位圖</div>
-                <div class="seat-map-card-sub">依票價顏色標示已購買的座位</div>
+                <div class="seat-map-card-main">不支援查看座位圖</div>
+                <div class="seat-map-card-sub">請切換至台北場或高雄場查看座位</div>
             </button>
         </div>
 
@@ -91,130 +91,110 @@
                 <table class="orders-table">
                     <thead>
                         <tr>
-                            <th>訂單日期與時間</th><th>排數</th><th>座位</th><th>票價</th><th>備註</th><th>刪除</th><th>取票狀態</th>
+                            <th>訂單日期與時間</th>
+                            <th>排數</th>
+                            <th>座位</th>
+                            <th>票價</th>
+                            <th>備註</th>
+                            <th>刪除</th>
+                            <th>取票狀態</th>
                         </tr>
                     </thead>
                     <tbody id="orders-tbody">
-                        <tr class="empty-row"> <td colspan="7"> <div class="empty-state">請先輸入姓名以查詢訂單！</div> </td> </tr>
+                        <tr class="empty-row">
+                            <td colspan="7">
+                                <div class="empty-state">請先輸入姓名以查詢訂單！</div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
 
     </main>
+
     <footer class="page-footer">
         © 2026 NTUCO All Rights Reserved.
     </footer>
-    
+
     <div id="orders-help-modal" class="modal-overlay hidden">
         <div class="modal-card orders-help-modal-card">
-    
-            <button
-                class="modal-close-btn"
-                type="button"
-                id="orders-help-close-btn"
-            >
-                ×
-            </button>
-    
-            <h2 class="orders-help-title">
-                購票／取票／寄票說明
-            </h2>
-    
+            <button class="modal-close-btn" type="button" id="orders-help-close-btn">×</button>
+
+            <h2 class="orders-help-title">購票／取票／寄票說明</h2>
+
             <div class="orders-help-content">
-    
                 <section class="orders-help-section">
                     <h3>【關於購票】</h3>
-    
                     <p>
                         台北場團內購票截止時間為
-                        <strong style="color:#d64545;"> 2026/07/10 23:59</strong>，請把握時間！超過期限後僅能至 Opentix 以原價購票 QQ
+                        <strong style="color:#d64545;"> 2026/07/10 23:59</strong>；
+                        高雄場團內購票截止時間為
+                        <strong style="color:#d64545;"> 2026/07/24 23:59</strong>，請把握時間！
                     </p>
-    
                     <p>
                         若需更改單一位置，請將該排座位刪除後重新劃位。目前系統僅支援「同一下訂時間中的單排座位」一起刪除。
                     </p>
                 </section>
-    
+
                 <section class="orders-help-section">
                     <h3>【關於取票】</h3>
-    
                     <p>
                         當該排訂單狀態顯示為
                         <strong class="pickup-open-text">已開放取票</strong>
                         時即可領票。
                     </p>
-    
                     <p>
                         請於加練期間直接找票務領票，並以<strong style="color:#d64545;">「一手交錢、一手交票」</strong>為原則。
                     </p>
-    
                     <p>
                         請盡量備好零錢！！若當下票務手邊零錢不足，可能無法立即完成領票 (･･;)
                     </p>
-    
                     <p>
                         累積金額超過
                         <strong style="color:#d64545;"> $1,600</strong>（可跨不同排數累計）才可選擇轉帳付款。若需轉帳請事先於試算表備註，並於領票時<strong style="color:#d64545;">當面</strong>完成轉帳。
                     </p>
-    
                     <p>
                         無論是否需要寄票或對方是否需付款，皆需由訂票人先完成付款，票務才會將票券交付及協助寄票。
                     </p>
-    
                     <p>
                         ⚠️ 台北場取票截止時間：
                         <strong style="color:#d64545;">台北場總彩 07/15（三）17:00</strong>
                     </p>
                 </section>
-    
+
                 <section class="orders-help-section">
                     <h3>【關於寄票】</h3>
-    
                     <p>
-                        「寄票」是指將親友票券寄放於前台，
-                        聽眾抵達中山堂後，
-                        可於前台付款（或直接領票）後取得票券。
+                        「寄票」是指將親友票券寄放於前台，聽眾抵達演出場館後，可於前台付款（或直接領票）後取得票券。
                     </p>
-    
                     <p>
-                        活動結束後，
-                        前台會再統一整理票款並歸還給您。
+                        活動結束後，前台會再統一整理票款並歸還給您。
                     </p>
-    
                     <p>
-                        為加速本次前台作業流程，
-                        本次公演與今年冬季公演相同，
-                        將架設「團內購票取票查詢系統」，
-                        詳細資訊請待下回更新～
+                        為加速本次前台作業流程，本次公演將架設「團內購票取票查詢系統」，詳細資訊請待下回更新～
                     </p>
                 </section>
-    
             </div>
-    
-            <button
-                class="orders-help-confirm-btn"
-                type="button"
-                id="orders-help-confirm-btn"
-            >
+
+            <button class="orders-help-confirm-btn" type="button" id="orders-help-confirm-btn">
                 讚啦肯定是沒問題的
             </button>
-    
         </div>
     </div>
 
     <div id="stats-help-modal" class="modal-overlay hidden">
         <div class="modal-card">
             <button class="modal-close-btn" type="button" id="stats-help-close">×</button>
-            <h2>推票獎勵說明</h2>
-            <p>關於台北場之推票獎勵，積分計算方式如下：</p>
+            <h2>推票獎勵積分說明</h2>
+            <p>關於本年度暑假巡迴公演之推票獎勵，積分計算方式如下：</p>
             <div class="points-rule-list">
                 <div>200 元票區 = <strong>1 分</strong></div>
                 <div>300 元票區 = <strong>1.5 分</strong></div>
-                <div>500 元票區 = <strong>3 分</strong></div>
+                <div>500 元票區 = <strong>2.5 分</strong></div>
+                <div>800 元票區 = <strong>4.5 分</strong></div>
             </div>
-            <p>累積推票積分為「單場」推票積分加總。</p>
+            <p>累積推票積分可依「全部／單場」切換查看。</p>
             <p>若親友於 Opentix 上使用文化幣購票，請務必私訊票務協助手動加分。手動加分之計算方式與上述票區積分相同。</p>
         </div>
     </div>
@@ -222,365 +202,29 @@
     <div id="my-seat-map-modal" class="modal-overlay hidden">
         <div class="modal-card my-seat-map-modal-card">
             <button class="modal-close-btn" type="button" id="my-seat-map-close">×</button>
+
             <div class="my-seat-map-header">
                 <div>
                     <h2>已購買座位</h2>
                     <p id="my-seat-map-subtitle">請先查詢訂單後再查看座位圖。</p>
                 </div>
+
                 <div class="my-seat-legend">
+                    <span id="legend-800-wrapper"><i class="legend-dot legend-800"></i>800 元區（已購買）</span>
                     <span><i class="legend-dot legend-500"></i>500 元區（已購買）</span>
                     <span><i class="legend-dot legend-300"></i>300 元區（已購買）</span>
                     <span><i class="legend-dot legend-200"></i>200 元區（已購買）</span>
-                    <span> <i class="legend-dot legend-sold"></i> 其他已售座位 </span>
-                    <span> <i class="legend-dot legend-empty"></i> 未售出座位 </span>
+                    <span><i class="legend-dot legend-sold"></i>其他已售座位</span>
+                    <span><i class="legend-dot legend-empty"></i>未售出座位</span>
                 </div>
             </div>
-            <div class="my-seat-map-scroll"><div id="my-seat-map" class="my-seat-map"></div></div>
+
+            <div class="my-seat-map-scroll">
+                <div id="my-seat-map" class="my-seat-map"></div>
+            </div>
         </div>
     </div>
 
-    <script>
-        let currentSearchName = "";
-        let currentOrders = [];
-        let currentConcertMode = "all";
-        let cachedSeatMapData = null;
-        const SECOND_FLOOR_START_ROW = 33;
-
-        function escapeHtml(text) {
-            return String(text ?? "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#039;");
-        }
-        function formatNumber(value) { const num = Number(value || 0); return Number.isInteger(num) ? String(num) : num.toFixed(1); }
-        function formatMoney(value) { return `$${Number(value || 0).toLocaleString()}`; }
-        function pickupClass(order) { if (order.picked_up) return "done"; if (order.pickup_open) return "open"; return "closed"; }
-        function pickupStatusHtml(order) {
-            const paymentText = order.payment_done ? "已付款" : "未付款";
-            let pickupText = "尚未開放取票";
-            if (order.picked_up) pickupText = "已取票";
-            else if (order.pickup_open) pickupText = "已開放取票";
-            return `<button class="pickup-pill ${pickupClass(order)}" type="button">${paymentText}｜${pickupText}</button>`;
-        }
-        function orderNoteInputId(order) { return `note-${order.order_id}-${order.floor}-${order.row_label}`; }
-        function makeSeatKey(floor, rowLabel, seatNumber) { return `${String(floor || "").trim()}|${String(rowLabel || "").trim()}|${Number(seatNumber)}`; }
-        function floorFromSeat(seat) { return seat.floor || (Number(seat.excel_row) >= SECOND_FLOOR_START_ROW ? "2樓" : "1樓"); }
-        function normalizePriceZone(price) {
-            const value = Number(price || 0);
-            if (value === 500 || value === 400) return "500";
-            if (value === 300 || value === 240) return "300";
-            if (value === 200 || value === 160) return "200";
-            return "";
-        }
-
-        function updateOrdersSummary(orders) {
-            orders = Array.isArray(orders) ? orders : [];
-            let paidAmount = 0, unpaidAmount = 0, pickedCount = 0, unpickedCount = 0;
-            let count500 = 0, count300 = 0, count200 = 0, basePoints = 0;
-            for (const order of orders) {
-                const price = Number(order.price || 0);
-                const seats = Array.isArray(order.seats) ? order.seats : [];
-                const seatCount = seats.length;
-                if (order.payment_done) paidAmount += price; else unpaidAmount += price;
-                if (order.picked_up) pickedCount += seatCount; else unpickedCount += seatCount;
-                const priceCounts = order.price_counts || {};
-                let c500 = Number(priceCounts["500"] || 0), c300 = Number(priceCounts["300"] || 0), c200 = Number(priceCounts["200"] || 0);
-                if (c500 + c300 + c200 === 0 && seatCount > 0) {
-                    const unitPrice = price / seatCount;
-                    if (unitPrice === 500 || unitPrice === 400) c500 = seatCount;
-                    else if (unitPrice === 300 || unitPrice === 240) c300 = seatCount;
-                    else if (unitPrice === 200 || unitPrice === 160) c200 = seatCount;
-                }
-                count500 += c500; count300 += c300; count200 += c200;
-                basePoints += c500 * 3 + c300 * 1.5 + c200 * 1;
-            }
-            document.getElementById("paid-amount").textContent = formatMoney(paidAmount);
-            document.getElementById("unpaid-amount").textContent = formatMoney(unpaidAmount);
-            document.getElementById("picked-count").textContent = pickedCount;
-            document.getElementById("unpicked-count").textContent = unpickedCount;
-            document.getElementById("count-500").textContent = count500;
-            document.getElementById("count-300").textContent = count300;
-            document.getElementById("count-200").textContent = count200;
-            document.getElementById("total-points").textContent = formatNumber(basePoints);
-            document.getElementById("manual-points-note").textContent = "";
-        }
-
-        function renderOrdersTable(orders) {
-            orders = Array.isArray(orders) ? orders : [];
-            const tbody = document.getElementById("orders-tbody");
-            if (!tbody) return;
-            if (!orders.length) {
-                tbody.innerHTML = `<tr><td colspan="7" class="empty-state">查無資料</td></tr>`;
-                updateOrdersSummary([]);
-                return;
-            }
-            tbody.innerHTML = orders.map(order => {
-                const seats = Array.isArray(order.seats) ? order.seats : [];
-                const noteInputId = orderNoteInputId(order);
-                return `
-                    <tr>
-                        <td class="order-strong">${escapeHtml(order.datetime)}</td>
-                        <td class="order-strong">${escapeHtml(order.floor)}${escapeHtml(order.row_label)}排</td>
-                        <td class="order-strong">${seats.map(seat => `${escapeHtml(seat)}`).join("、")}</td>
-                        <td class="order-strong">$${Number(order.price || 0).toLocaleString()}</td>
-                        <td><div class="note-wrap"><input id="${escapeHtml(noteInputId)}" class="note-input" type="text" value="${escapeHtml(order.note || "")}" placeholder="自行輸入備註" /><button class="save-btn" type="button" onclick="saveNote('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">儲存</button></div></td>
-                        <td><div class="cell-center">${order.order_status === "locked" ? `<button class="delete-btn locked" type="button" disabled title="已鎖定！">已鎖定！</button>` : `<button class="delete-btn" type="button" onclick="deleteOrder('${escapeHtml(order.order_id)}', '${escapeHtml(order.floor)}', '${escapeHtml(order.row_label)}')">刪除</button>`}</div></td>
-                        <td><div class="cell-center">${pickupStatusHtml(order)}</div></td>
-                    </tr>`;
-            }).join("");
-        }
-
-        async function searchOrders() {
-            const input = document.getElementById("order-name-input");
-            const name = input.value.trim();
-            if (!name) { alert("請輸入姓名"); return; }
-            currentSearchName = name;
-            const res = await fetch(
-                `/api/orders?name=${encodeURIComponent(name)}&mode=${encodeURIComponent(currentConcertMode)}`
-            );
-            const raw = await res.text();
-            let data;
-            try { data = JSON.parse(raw); } catch { console.log(raw); alert(`查詢回傳不是 JSON：${res.status}`); return; }
-            if (!res.ok || !data.success) { alert(data.message || "查詢失敗"); return; }
-            const orders = Array.isArray(data.orders) ? data.orders : [];
-            currentOrders = orders;
-            renderOrdersTable(orders);
-            updateOrdersSummary(orders);
-            const manualPoints = Number(data.manual_points || 0);
-            const currentBasePoints = Number(document.getElementById("total-points").textContent || 0);
-            const finalTotalPoints = currentBasePoints + manualPoints;
-            document.getElementById("total-points").textContent = formatNumber(finalTotalPoints);
-            document.getElementById("manual-points-note").textContent = manualPoints > 0 ? `（含手動加分 ${formatNumber(manualPoints)}）` : "";
-        }
-
-        async function saveNote(orderId, floor, rowLabel) {
-            const input = document.getElementById(`note-${orderId}-${floor}-${rowLabel}`);
-            const note = input ? input.value.trim() : "";
-            const url = `/api/orders/${encodeURIComponent(orderId)}/note?floor=${encodeURIComponent(floor)}&row_label=${encodeURIComponent(rowLabel)}`;
-            const res = await fetch(url, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ note }) });
-            const raw = await res.text();
-            let data = {};
-            try { data = JSON.parse(raw); } catch { alert(`回傳不是 JSON：${raw}`); return; }
-            if (!res.ok || !data.success) { alert(data.message || "更新失敗"); return; }
-            alert("備註已更新");
-            if (currentSearchName) searchOrders();
-        }
-
-        async function deleteOrder(orderId, floor, rowLabel) {
-            const ok = confirm("確定要刪除這一排的座位嗎？刪除後座位會重新釋出。");
-            if (!ok) return;
-            const url = `/api/orders/${encodeURIComponent(orderId)}?floor=${encodeURIComponent(floor)}&row_label=${encodeURIComponent(rowLabel)}`;
-            const res = await fetch(url, { method: "DELETE" });
-            const raw = await res.text();
-            let data = {};
-            try { data = JSON.parse(raw); } catch { alert(`回傳不是 JSON：${raw}`); return; }
-            if (!res.ok || !data.success) { alert(data.message || "刪除失敗"); return; }
-            alert(data.message || "刪除成功");
-            if (currentSearchName) searchOrders();
-        }
-
-        async function fetchSeatMapData() {
-            if (cachedSeatMapData) return cachedSeatMapData;
-            const res = await fetch("/api/seats");
-            const raw = await res.text();
-            let data;
-            try { data = JSON.parse(raw); } catch { console.log(raw); alert(`座位圖回傳不是 JSON：${res.status}`); throw new Error("Seat map API returned non-JSON"); }
-            cachedSeatMapData = data;
-            return data;
-        }
-        function buildPurchasedSeatSet(orders) {
-            const purchased = new Set();
-            for (const order of orders) {
-                const seats = Array.isArray(order.seats) ? order.seats : [];
-                for (const seatNumber of seats) purchased.add(makeSeatKey(order.floor, order.row_label, seatNumber));
-            }
-            return purchased;
-        }
-        function renderMySeatMap(allSeats, rowLabels, orders) {
-            const mapEl = document.getElementById("my-seat-map");
-            const subtitle = document.getElementById("my-seat-map-subtitle");
-            if (!mapEl) return;
-            allSeats = Array.isArray(allSeats) ? allSeats : [];
-            rowLabels = rowLabels || {};
-            mapEl.innerHTML = "";
-            if (!allSeats.length) { mapEl.innerHTML = `<div class="my-seat-map-empty">目前無法載入座位圖</div>`; return; }
-            const purchased = buildPurchasedSeatSet(orders);
-            subtitle.textContent = currentSearchName ? `${currentSearchName} 已劃座位（右上角打勾代表已取票）` : "已劃座位（右上角打勾代表已取票）";
-            const minCol = Math.min(...allSeats.map(s => Number(s.excel_col)));
-            const maxCol = Math.max(...allSeats.map(s => Number(s.excel_col)));
-            const minRow = Math.min(...allSeats.map(s => Number(s.excel_row)));
-            const maxRow = Math.max(...allSeats.map(s => Number(s.excel_row)));
-            const totalCols = (maxCol - minCol + 1) + 2;
-            const topTitleOffset = 1;
-            const totalRows = (maxRow - minRow + 1) + topTitleOffset;
-            const gridColSize = 24;
-            const gridRowSize = 22;
-            mapEl.style.gridTemplateColumns = `${gridColSize}px repeat(${maxCol - minCol + 1}, ${gridColSize}px) ${gridColSize}px`;
-            mapEl.style.gridTemplateRows = `repeat(${totalRows}, ${gridRowSize}px)`;
-            const firstFloorSeats = allSeats.filter(seat => floorFromSeat(seat) !== "2樓");
-            const secondFloorSeats = allSeats.filter(seat => floorFromSeat(seat) === "2樓");
-            if (firstFloorSeats.length > 0) {
-                const floor1 = document.createElement("div");
-                floor1.className = "my-map-floor-label";
-                floor1.textContent = "1樓";
-                floor1.style.gridColumn = `1 / ${totalCols + 1}`;
-                floor1.style.gridRow = 1;
-                mapEl.appendChild(floor1);
-            }
-            Object.entries(rowLabels).forEach(([excelRow, label]) => {
-                const displayRow = (Number(excelRow) - minRow + 1) + topTitleOffset;
-                const left = document.createElement("div");
-                left.className = "my-map-row-label"; left.textContent = label; left.style.gridColumn = 1; left.style.gridRow = displayRow; mapEl.appendChild(left);
-                const right = document.createElement("div");
-                right.className = "my-map-row-label"; right.textContent = label; right.style.gridColumn = totalCols; right.style.gridRow = displayRow; mapEl.appendChild(right);
-            });
-            if (secondFloorSeats.length > 0) {
-                const secondFloorTopExcelRow = Math.min(...secondFloorSeats.map(seat => Number(seat.excel_row)));
-                let secondFloorTitleRow = (secondFloorTopExcelRow - minRow) + topTitleOffset;
-                if (secondFloorTitleRow < 2) secondFloorTitleRow = 2;
-                const floor2 = document.createElement("div");
-                floor2.className = "my-map-floor-label";
-                floor2.textContent = "2樓";
-                floor2.style.gridColumn = `1 / ${totalCols + 1}`;
-                floor2.style.gridRow = secondFloorTitleRow;
-                mapEl.appendChild(floor2);
-            }
-            for (const seat of allSeats) {
-                const btn = document.createElement("button");
-                const floor = floorFromSeat(seat);
-                const seatKey = makeSeatKey(floor, seat.row_label, seat.seat_number);
-                const priceZone = normalizePriceZone(seat.price);
-                btn.type = "button";
-                btn.className = "my-map-seat";
-                btn.textContent = seat.seat_number || "";
-                btn.disabled = true;
-                btn.style.gridColumn = Number(seat.excel_col) - minCol + 2;
-                btn.style.gridRow = (Number(seat.excel_row) - minRow + 1) + topTitleOffset;
-                if (purchased.has(seatKey)) {
-                
-                    btn.classList.add("my-seat-owned", `my-seat-${priceZone}`);
-                
-                    const matchedOrder = orders.find(order => {
-                        const seats = Array.isArray(order.seats) ? order.seats : [];
-                
-                        return (
-                            order.floor === floor &&
-                            order.row_label === seat.row_label &&
-                            seats.includes(seat.seat_number)
-                        );
-                    });
-                
-                    if (matchedOrder?.picked_up) {
-                        btn.innerHTML = `
-                            ${seat.seat_number}
-                            <span class="seat-check">✓</span>
-                        `;
-                    }
-                
-                    btn.title = `${floor}${seat.row_label}排${seat.seat_number}號｜${priceZone} 元區`;
-                } else if (seat.sold) {
-                    btn.classList.add("my-seat-other-sold");
-                    btn.title = "其他已售座位";
-                } else {
-                    btn.classList.add("my-seat-not-owned");
-                    btn.title = "未購買座位";
-                }
-                mapEl.appendChild(btn);
-            }
-        }
-        async function openMySeatMapModal() {
-            if (!currentOrders.length) { alert("請先查詢姓名，並確認有訂單資料。"); return; }
-            const modal = document.getElementById("my-seat-map-modal");
-            if (!modal) return;
-            try {
-                const data = await fetchSeatMapData();
-                renderMySeatMap(data.seats || [], data.row_labels || {}, currentOrders);
-                modal.classList.remove("hidden");
-            } catch (error) { console.error(error); }
-        }
-        function closeMySeatMapModal() {
-            const modal = document.getElementById("my-seat-map-modal");
-            if (!modal) return;
-            modal.classList.add("hidden");
-        }
-
-        function updateSeatMapButtonByMode() {
-            const btn = document.getElementById("my-seat-map-btn");
-            if (!btn) return;
-        
-            if (currentConcertMode === "all") {
-                btn.disabled = true;
-                btn.classList.add("disabled");
-                btn.querySelector(".seat-map-card-main").textContent = "不支援查看座位圖";
-                btn.querySelector(".seat-map-card-sub").textContent = "請切換至台北場或高雄場查看座位";
-            } else {
-                btn.disabled = false;
-                btn.classList.remove("disabled");
-                btn.querySelector(".seat-map-card-main").textContent = "打開座位圖";
-                btn.querySelector(".seat-map-card-sub").textContent = "依票價顏色標示已購買的座位";
-            }
-        }
-        
-        document.querySelectorAll(".orders-mode-tab").forEach(btn => {
-            btn.addEventListener("click", () => {
-                currentConcertMode = btn.dataset.mode || "all";
-        
-                document.querySelectorAll(".orders-mode-tab").forEach(item => {
-                    item.classList.toggle("active", item === btn);
-                });
-        
-                cachedSeatMapData = null;
-        
-                updateSeatMapButtonByMode();
-        
-                if (currentSearchName) {
-                    searchOrders();
-                }
-            });
-        });
-        document.getElementById("order-search-btn").addEventListener("click", searchOrders);
-        document.getElementById("order-name-input").addEventListener("keydown", (e) => { if (e.key === "Enter") searchOrders(); });
-        const statsHelpBtn = document.getElementById("stats-help-btn");
-        const statsHelpModal = document.getElementById("stats-help-modal");
-        const statsHelpClose = document.getElementById("stats-help-close");
-        function openStatsHelpModal() { if (!statsHelpModal) return; statsHelpModal.classList.remove("hidden"); }
-        function closeStatsHelpModal() { if (!statsHelpModal) return; statsHelpModal.classList.add("hidden"); }
-        statsHelpBtn?.addEventListener("click", openStatsHelpModal);
-        statsHelpClose?.addEventListener("click", closeStatsHelpModal);
-        statsHelpModal?.addEventListener("click", (e) => { if (e.target === statsHelpModal) closeStatsHelpModal(); });
-        const mySeatMapBtn = document.getElementById("my-seat-map-btn");
-        const mySeatMapModal = document.getElementById("my-seat-map-modal");
-        const mySeatMapClose = document.getElementById("my-seat-map-close");
-        mySeatMapBtn?.addEventListener("click", openMySeatMapModal);
-        mySeatMapClose?.addEventListener("click", closeMySeatMapModal);
-        mySeatMapModal?.addEventListener("click", (e) => { if (e.target === mySeatMapModal) closeMySeatMapModal(); });
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") { closeStatsHelpModal(); closeMySeatMapModal(); }
-        });
-
-        const ordersHelpModal = document.getElementById("orders-help-modal");
-        const ordersHelpBtn = document.getElementById("orders-help-btn");
-        const ordersHelpCloseBtn = document.getElementById("orders-help-close-btn");
-        const ordersHelpConfirmBtn = document.getElementById("orders-help-confirm-btn");
-        
-        function openOrdersHelpModal() {
-            ordersHelpModal?.classList.remove("hidden");
-        }
-        
-        function closeOrdersHelpModal() {
-            ordersHelpModal?.classList.add("hidden");
-        }
-        
-        ordersHelpBtn?.addEventListener("click", openOrdersHelpModal);
-        
-        ordersHelpCloseBtn?.addEventListener("click", closeOrdersHelpModal);
-        
-        ordersHelpConfirmBtn?.addEventListener("click", closeOrdersHelpModal);
-        
-        ordersHelpModal?.addEventListener("click", (e) => {
-            if (e.target === ordersHelpModal) {
-                closeOrdersHelpModal();
-            }
-        });
-
-        updateSeatMapButtonByMode();
-    </script>
+    <script src="/orders.js"></script>
 </body>
 </html>
