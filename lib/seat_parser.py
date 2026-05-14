@@ -243,11 +243,11 @@ KH_ROW_LABEL_RULES = [
     {"label": "F1", "mode": "row", "row": 26, "start_col": "AL", "end_col": "BR"},
 
     # ===== 二樓：A 區橫排 =====
-    {"label": "A1", "mode": "row", "row": 61, "start_col": "AC", "end_col": "CA"},
-    {"label": "A2", "mode": "row", "row": 62, "start_col": "AC", "end_col": "CA"},
-    {"label": "A3", "mode": "row", "row": 63, "start_col": "AC", "end_col": "CA"},
-    {"label": "A4", "mode": "row", "row": 64, "start_col": "AC", "end_col": "CA"},
-    {"label": "A5", "mode": "row", "row": 65, "start_col": "AC", "end_col": "CA"},
+    {"label": "A1", "mode": "row", "row": 61, "start_col": "X", "end_col": "CF"},
+    {"label": "A2", "mode": "row", "row": 62, "start_col": "X", "end_col": "CF"},
+    {"label": "A3", "mode": "row", "row": 63, "start_col": "X", "end_col": "CF"},
+    {"label": "A4", "mode": "row", "row": 64, "start_col": "X", "end_col": "CF"},
+    {"label": "A5", "mode": "row", "row": 65, "start_col": "X", "end_col": "CF"},
 
     {"label": "A6", "mode": "row", "row": 66, "start_col": "AH", "end_col": "AM"},
     {"label": "A6", "mode": "row", "row": 66, "start_col": "BR", "end_col": "BW"},
