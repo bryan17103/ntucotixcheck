@@ -19,10 +19,7 @@ async function loadSeats() {
         );
         const data = await res.json();
 
-        seatData = (data.seats || []).filter(seat => {
-            if (SHOW_KH_THIRD_FLOOR) return true;
-            return seat.floor !== "3樓";
-        });
+        seatData = data.seats || [];
 
         ORDER_OPEN = data.order_open !== false;
 
