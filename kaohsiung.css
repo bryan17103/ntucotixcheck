@@ -496,22 +496,22 @@ body::after {
 }
 
 .selected-title {
-    font-size: 22px;
-    font-weight: 800;
-    color: #3f4642;
+    font-family: "Noto Serif TC", "Songti TC", serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #37403d;
+    letter-spacing: 0.06em;
 }
 
 #clear-selection-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
     border: none;
     background: transparent;
-
     font-size: 13px;
     font-weight: 800;
-
     color: #6a7e78;
-
     cursor: pointer;
-    transition: .18s;
 }
 
 #clear-selection-btn:hover {
