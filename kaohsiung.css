@@ -90,7 +90,7 @@ body::after {
 .kh-third-floor-note {
     margin-left: 5px;
 
-    font-size: 17;
+    font-size: 0.60em;
     font-weight: 700;
 
     color: rgba(70, 82, 78, 0.72);
@@ -146,7 +146,7 @@ body::after {
 
     font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
     font-size: 17px;
-    font-weight: 800;
+    font-weight: 700;
 
     color: #4e6b68;
     text-decoration: none;
