@@ -421,7 +421,7 @@ function buildPurchasedSeatSet(orders) {
     return purchased;
 }
 
-function renderMySeatMap(allSeats, rowLabels, orders) {
+function renderTpMySeatMap(allSeats, rowLabels, orders) {
     const mapEl = document.getElementById("my-seat-map");
     const subtitle = document.getElementById("my-seat-map-subtitle");
 
@@ -527,6 +527,84 @@ function renderMySeatMap(allSeats, rowLabels, orders) {
     }
 }
 
+function renderKhMySeatMap(allSeats, rowLabels, orders) {
+    const mapEl = document.getElementById("my-seat-map");
+    const subtitle = document.getElementById("my-seat-map-subtitle");
+
+    if (!mapEl) return;
+
+    mapEl.innerHTML = "";
+
+    if (!allSeats.length) {
+        mapEl.innerHTML = `<div class="my-seat-map-empty">目前無法載入座位圖</div>`;
+        return;
+    }
+
+    const purchased = buildPurchasedSeatSet(orders);
+
+    subtitle.textContent = currentSearchName
+        ? `${currentSearchName} 已劃高雄場座位（右上角打勾代表已取票）`
+        : "已劃高雄場座位（右上角打勾代表已取票）";
+
+    const minCol = Math.min(...allSeats.map(s => Number(s.excel_col)));
+    const maxCol = Math.max(...allSeats.map(s => Number(s.excel_col)));
+    const minRow = Math.min(...allSeats.map(s => Number(s.excel_row)));
+    const maxRow = Math.max(...allSeats.map(s => Number(s.excel_row)));
+
+    const gridColSize = 18;
+    const gridRowSize = 18;
+
+    mapEl.style.gridTemplateColumns =
+        `repeat(${maxCol - minCol + 3}, ${gridColSize}px)`;
+
+    mapEl.style.gridTemplateRows =
+        `repeat(${maxRow - minRow + 2}, ${gridRowSize}px)`;
+
+    allSeats.forEach(seat => {
+        const btn = document.createElement("button");
+
+        const floor = seat.floor || "";
+        const seatKey = makeSeatKey(floor, seat.row_label, seat.seat_number);
+        const priceZone = normalizePriceZone(seat.price);
+
+        btn.type = "button";
+        btn.className = "my-map-seat";
+        btn.textContent = seat.seat_number || "";
+        btn.disabled = true;
+
+        btn.style.gridColumn = Number(seat.excel_col) - minCol + 2;
+        btn.style.gridRow = Number(seat.excel_row) - minRow + 1;
+
+        if (purchased.has(seatKey)) {
+            btn.classList.add("my-seat-owned", `my-seat-${priceZone}`);
+
+            const matchedOrder = orders.find(order => {
+                const seats = Array.isArray(order.seats) ? order.seats : [];
+
+                return (
+                    order.floor === floor &&
+                    order.row_label === seat.row_label &&
+                    seats.includes(seat.seat_number)
+                );
+            });
+
+            if (matchedOrder?.picked_up) {
+                btn.innerHTML = `
+                    ${seat.seat_number}
+                    <span class="seat-check">✓</span>
+                `;
+            }
+
+            btn.title = `${floor}${seat.row_label}排${seat.seat_number}號｜${priceZone} 元區`;
+        } else if (seat.sold) {
+            btn.classList.add("my-seat-other-sold");
+        } else {
+            btn.classList.add("my-seat-not-owned");
+        }
+
+        mapEl.appendChild(btn);
+    });
+}
 async function openMySeatMapModal() {
     if (currentConcertMode === "all") {
         alert("全部模式不支援查看座位圖，請切換至台北場或高雄場。");
@@ -543,13 +621,18 @@ async function openMySeatMapModal() {
 
     try {
         const data = await fetchSeatMapData();
-        renderMySeatMap(data.seats || [], data.row_labels || {}, currentOrders);
+
+        if (currentConcertMode === "kh") {
+            renderKhMySeatMap(data.seats || [], data.row_labels || {}, currentOrders);
+        } else {
+            renderTpMySeatMap(data.seats || [], data.row_labels || {}, currentOrders);
+        }
+
         modal.classList.remove("hidden");
     } catch (error) {
         console.error(error);
     }
 }
-
 function closeMySeatMapModal() {
     const modal = document.getElementById("my-seat-map-modal");
     if (!modal) return;
@@ -646,7 +729,18 @@ function setupBasicEvents() {
         }
     });
 }
+function updateSeatMapLegendByMode() {
+    const dot500 = document.getElementById("legend-500-dot");
+    if (!dot500) return;
 
+    dot500.classList.remove("legend-500-tp", "legend-500-kh");
+
+    if (currentConcertMode === "kh") {
+        dot500.classList.add("legend-500-kh");
+    } else {
+        dot500.classList.add("legend-500-tp");
+    }
+}
 setupModeTabs();
 setupBasicEvents();
 
