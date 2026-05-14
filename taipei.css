@@ -453,6 +453,38 @@ body::after {
     letter-spacing: 0.06em;
 }
 
+.selected-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    margin-bottom: 14px;
+}
+
+.selected-title {
+    font-family: "Noto Serif TC", "Songti TC", serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #37403d;
+    letter-spacing: 0.06em;
+}
+
+#clear-selection-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    font-weight: 800;
+    color: #6a7e78;
+    cursor: pointer;
+}
+
+#clear-selection-btn:hover {
+    color: #415b57;
+}
+
 #selected-list {
     min-height: 220px;
     max-height: none;
