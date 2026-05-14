@@ -555,13 +555,20 @@ function renderKhMySeatMap(allSeats, rowLabels, orders) {
     const gridColSize = 18;
     const gridRowSize = 18;
 
+    const TOP_TITLE_OFFSET = 0;
+    
     mapEl.style.gridTemplateColumns =
         `repeat(${maxCol - minCol + 3}, ${gridColSize}px)`;
-
+    
     mapEl.style.gridTemplateRows =
         `repeat(${maxRow - minRow + 2}, ${gridRowSize}px)`;
     
-    addKhStageToMyMap(mapEl, minCol, minRow);
+    addKhFloorFramesToMap(mapEl, minCol, minRow, TOP_TITLE_OFFSET, false);
+    addKhStageToMap(mapEl, minCol, minRow, TOP_TITLE_OFFSET, {
+        className: "my-map-stage kh-stage",
+        text: "舞台"
+    });
+    addKhRowMarkersToMap(mapEl, minCol, minRow, TOP_TITLE_OFFSET, false);
     
     allSeats.forEach(seat => {
         const btn = document.createElement("button");
@@ -576,7 +583,7 @@ function renderKhMySeatMap(allSeats, rowLabels, orders) {
         btn.disabled = true;
 
         btn.style.gridColumn = Number(seat.excel_col) - minCol + 2;
-        btn.style.gridRow = Number(seat.excel_row) - minRow + 1;
+        btn.style.gridRow = Number(seat.excel_row) - minRow + 1 + TOP_TITLE_OFFSET;
 
         if (purchased.has(seatKey)) {
             btn.classList.add("my-seat-owned", ownedSeatClass(priceZone));
