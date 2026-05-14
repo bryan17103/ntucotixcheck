@@ -3,6 +3,9 @@
     --orders-main: #4f6f73;
     --orders-accent: #7f9f98;
     --orders-accent-hover: #6d8d87;
+    --orders-bg-start: #0f3b3a;
+    --orders-bg-end: #4b1f11;
+    --orders-shell-bg: rgba(255,255,255,0.94);
 }
 
 * { box-sizing: border-box; }
@@ -10,14 +13,21 @@
 body.orders-page {
     margin: 0;
     font-family: Arial, "Noto Sans TC", sans-serif;
-    background: linear-gradient(135deg, #0f3b3a, #4b1f11);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--orders-bg-start),
+            var(--orders-bg-end)
+        );
+
     min-height: 100vh;
     padding: 12px;
 }
 
 /* # Page Shell / Header */
 .orders-shell {
-    background: rgba(255, 255, 255, 0.96);
+    background: var(--orders-shell-bg);
     border-radius: 28px;
     padding: 24px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
