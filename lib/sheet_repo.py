@@ -34,7 +34,14 @@ STATS_CONFIG_SHEETS = {
 _ws_cache = {}
 _sold_cache = {}
 _sold_cache_time = {}
+_orders_cache = {}
+_orders_cache_time = {}
+_section_members_cache = None
+_section_members_cache_time = 0
+
 _SOLD_CACHE_TTL = 30
+_ORDERS_CACHE_TTL = 20
+_SECTION_MEMBERS_CACHE_TTL = 60
 
 HEADERS = [
     "訂單日期與時間",
@@ -83,20 +90,24 @@ def get_config_worksheet(name: str):
 
 
 def clear_caches(concert_code=None):
-    global _sold_cache, _sold_cache_time
-
-    if _sold_cache is None:
-        _sold_cache = {}
-
-    if _sold_cache_time is None:
-        _sold_cache_time = {}
+    global _sold_cache
+    global _sold_cache_time
+    global _orders_cache
+    global _orders_cache_time
 
     if concert_code:
         _sold_cache.pop(concert_code, None)
         _sold_cache_time.pop(concert_code, None)
+
+        _orders_cache.pop(concert_code, None)
+        _orders_cache_time.pop(concert_code, None)
+
     else:
         _sold_cache = {}
         _sold_cache_time = {}
+
+        _orders_cache = {}
+        _orders_cache_time = {}
 
 
 def ensure_headers() -> None:
@@ -135,8 +146,21 @@ def normalize_bool(value) -> bool:
 
 
 def get_all_records(concert_code="tp") -> List[dict]:
+    now = time.time()
+
+    if (
+        concert_code in _orders_cache
+        and (now - _orders_cache_time.get(concert_code, 0)) < _ORDERS_CACHE_TTL
+    ):
+        return _orders_cache[concert_code]
+
     ws = get_worksheet(concert_code)
-    return ws.get_all_records()
+    rows = ws.get_all_records()
+
+    _orders_cache[concert_code] = rows
+    _orders_cache_time[concert_code] = now
+
+    return rows
 
 def get_order_open(concert_code="tp"):
     config_sheet = STATS_CONFIG_SHEETS.get(concert_code, "stats_config_tp")
