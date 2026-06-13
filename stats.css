@@ -729,3 +729,352 @@ tr:last-child td {
         font-size: 12px;
     }
 }
+/* Responsive */
+
+@media (max-width: 1180px) {
+    .overview-row,
+    .overview-row:first-child {
+        grid-template-columns: 84px repeat(3, minmax(120px, 1fr));
+    }
+
+    .stats-content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ranking-panel-card,
+    .chart-panel-card,
+    .reward-panel-card,
+    .section-summary-panel-card {
+        height: auto;
+        min-height: auto;
+    }
+
+    .ranking-table-scroll,
+    .section-summary-list,
+    .reward-table-scroll {
+        max-height: 420px;
+    }
+}
+
+@media (max-width: 768px) {
+    body.stats-page {
+        padding: 8px;
+        overflow-x: hidden;
+    }
+
+    .stats-shell {
+        min-height: calc(100vh - 16px);
+        padding: 18px 14px 16px;
+        border-radius: 24px;
+        overflow-x: hidden;
+    }
+
+    .stats-topbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+
+    .stats-title-wrap h1 {
+        font-size: 24px;
+        line-height: 1.35;
+        letter-spacing: 0.05em;
+    }
+
+    .stats-title-wrap p {
+        padding-right: 0;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .back-link-btn {
+        width: 100%;
+        min-height: 44px;
+        border-radius: 999px;
+    }
+
+    /* 上方總覽卡片：手機改成單欄 */
+    .hero-grid {
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .overview-row,
+    .overview-row:first-child {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .overview-row-title {
+        padding: 2px 2px 0;
+        font-size: 15px;
+    }
+
+    .hero-card {
+        min-height: 86px;
+        padding: 15px 16px;
+        border-radius: 20px;
+    }
+
+    .hero-label {
+        margin-bottom: 8px;
+        font-size: 13px;
+    }
+
+    .hero-progress-main,
+    .hero-money-main,
+    .hero-zone-main {
+        font-size: 27px;
+    }
+
+    .hero-progress-target {
+        font-size: 14px;
+    }
+
+    .hero-message-main {
+        font-size: 17px;
+    }
+
+    /* 四大內容區 */
+    .stats-content-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .stats-left-column,
+    .stats-right-column {
+        gap: 14px;
+    }
+
+    .panel-card {
+        width: 100%;
+        padding: 16px 14px;
+        border-radius: 22px;
+    }
+
+    .card-title {
+        margin-bottom: 12px;
+        font-size: 18px;
+        line-height: 1.35;
+    }
+
+    .ranking-panel-card,
+    .chart-panel-card,
+    .reward-panel-card,
+    .section-summary-panel-card {
+        height: auto;
+        min-height: auto;
+    }
+
+    .ranking-table-scroll,
+    .section-summary-list,
+    .reward-table-scroll {
+        max-height: none;
+        overflow: visible;
+        border-radius: 0;
+    }
+
+    /* 排行榜：手機改卡片，不要表格擠爆 */
+    .ranking-table,
+    .ranking-table thead,
+    .ranking-table tbody,
+    .ranking-table th,
+    .ranking-table td,
+    .ranking-table tr {
+        display: block;
+        width: 100%;
+    }
+
+    .ranking-table thead {
+        display: none;
+    }
+
+    .ranking-table tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .ranking-table tbody tr {
+        position: relative;
+        padding: 14px 14px 12px 58px;
+        border: 1px solid var(--table-border);
+        border-radius: 18px;
+        background: #fbfcfa;
+        box-shadow: 0 4px 12px rgba(64, 91, 89, 0.06);
+    }
+
+    .ranking-table tbody td {
+        border-bottom: none;
+        padding: 0;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+
+    .ranking-table tbody td:first-child {
+        position: absolute;
+        left: 14px;
+        top: 14px;
+        width: 34px;
+        margin: 0;
+    }
+
+    .ranking-table tbody td:last-child {
+        margin-bottom: 0;
+    }
+
+    .rank-badge {
+        min-width: 34px;
+        height: 34px;
+        font-size: 13px;
+    }
+
+    .ranking-name {
+        font-size: 16px;
+        line-height: 1.35;
+    }
+
+    .ranking-section {
+        font-size: 13px;
+    }
+
+    .ranking-ticket {
+        font-size: 15px;
+    }
+
+    /* 圖表 */
+    .chart-wrap {
+        max-width: 280px;
+        padding-top: 0;
+    }
+
+    /* 各聲部統計：手機卡片化 */
+    .section-summary-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .section-block {
+        display: block;
+        padding: 14px;
+        border: 1px solid var(--table-border);
+        border-radius: 18px;
+        background: #fbfcfa;
+        box-shadow: 0 4px 12px rgba(64, 91, 89, 0.05);
+    }
+
+    .section-name-cell {
+        margin-bottom: 4px;
+        font-size: 16px;
+    }
+
+    .section-total-cell {
+        text-align: left;
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+
+    .section-members-cell {
+        gap: 6px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .section-member-chip {
+        padding: 4px 8px;
+        max-width: 100%;
+    }
+
+    .section-member-name,
+    .section-member-count {
+        font-size: 13px;
+    }
+
+    /* 獎勵表格：保留橫向滑動，避免被壓爛 */
+    .reward-table-scroll {
+        overflow-x: auto;
+        overflow-y: visible;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 4px;
+        border-radius: 16px;
+    }
+
+    .reward-table {
+        min-width: 560px;
+        table-layout: fixed;
+    }
+
+    .reward-table th,
+    .reward-table td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+
+    .reward-table th {
+        height: 44px;
+    }
+
+    .reward-condition-chip {
+        min-height: 26px;
+        padding: 0 9px;
+        font-size: 12px;
+    }
+
+    .reward-count {
+        font-size: 15px;
+    }
+
+    .reward-names {
+        font-size: 13px;
+        line-height: 1.65;
+    }
+
+    .page-footer {
+        height: auto;
+        min-height: 34px;
+        padding: 10px 0 2px;
+        font-size: 11px;
+        letter-spacing: 0.08em;
+        text-align: center;
+    }
+}
+
+@media (max-width: 420px) {
+    .stats-shell {
+        padding: 16px 12px 14px;
+        border-radius: 22px;
+    }
+
+    .stats-title-wrap h1 {
+        font-size: 22px;
+    }
+
+    .hero-card {
+        padding: 14px;
+    }
+
+    .hero-progress-main,
+    .hero-money-main,
+    .hero-zone-main {
+        font-size: 25px;
+    }
+
+    .panel-card {
+        padding: 15px 12px;
+    }
+
+    .ranking-table tbody tr {
+        padding-left: 54px;
+    }
+
+    .chart-wrap {
+        max-width: 250px;
+    }
+
+    .reward-table {
+        min-width: 520px;
+    }
+}
