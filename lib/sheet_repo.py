@@ -1146,7 +1146,7 @@ def build_stats_summary(concert_code="tp"):
             if member_to_section.get(name, {}).get("section", "未分類")
             not in EXCLUDED_RANKING_SECTIONS
         ],
-        key=lambda x: (x["points"], x["tickets"]),
+        key=lambda x: (x["tickets"], x["points"]),
         reverse=True
     )
 
@@ -1298,7 +1298,25 @@ def build_stats_summary_all():
             "points": item["points"],
         })
 
-    sections = list(section_map.values())
+        sections = list(section_map.values())
+
+        # 每個聲部裡面的成員，依照總累積推票積分 / 張數排序
+        for section in sections:
+            section["members"] = sorted(
+                section.get("members", []),
+                key=lambda x: (
+                    number_safe(x.get("points")),
+                    number_safe(x.get("tickets"))
+                ),
+                reverse=True
+            )
+
+        # 聲部區塊本身，依照總累積推票張數排序
+        sections = sorted(
+            sections,
+            key=lambda x: number_safe(x.get("subtotal")),
+            reverse=True
+        )
 
     # 推票獎勵
     stats_config = load_stats_config("tp")
