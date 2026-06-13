@@ -2,7 +2,10 @@ import os
 import time
 from threading import Lock
 
-from flask import Flask, jsonify, request, session
+from dotenv import load_dotenv
+load_dotenv()
+
+from flask import Flask, jsonify, request, session, send_from_directory
 from functools import wraps
 
 from lib.seat_parser import parse_seat_map
@@ -20,6 +23,7 @@ from lib.sheet_repo import (
     admin_toggle_ticket_adjusted_status,
     admin_delete_order,
     build_stats_summary,
+    build_stats_summary_all,
     get_all_records,
     normalize_text,
     get_section_members_rows,
@@ -31,6 +35,7 @@ from lib.sheet_repo import (
 
 app = Flask(__name__)
 
+
 app.secret_key = os.environ.get("SECRET_KEY", "dev-secret")
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 SEAT_FILES = {
@@ -40,6 +45,9 @@ SEAT_FILES = {
 
 SEAT_CACHE = {}
 SEAT_CACHE_TTL = 86400
+_query_cache = {}
+_query_cache_time = {}
+_QUERY_CACHE_TTL = 10
 SECOND_FLOOR_START_ROW = 33
 confirm_lock = Lock()
 
@@ -331,41 +339,37 @@ def api_orders():
             "orders": []
         }), 400
 
-    if mode == "tp":
-        result = get_orders_by_name(name, concert_code="tp")
+    cache_key = f"{name}_{mode}"
+    now = time.time()
 
-    elif mode == "kh":
-        result = get_orders_by_name(name, concert_code="kh")
+    if (
+        cache_key in _query_cache
+        and now - _query_cache_time.get(cache_key, 0) < _QUERY_CACHE_TTL
+    ):
+        return jsonify(_query_cache[cache_key])
 
-    else:
-        tp_result = get_orders_by_name(name, concert_code="tp")
-        kh_result = get_orders_by_name(name, concert_code="kh")
+    result = get_orders_by_name(name, concert_code=mode)
 
-        tp_orders = tp_result.get("orders", [])
-        kh_orders = kh_result.get("orders", [])
-
-        for order in tp_orders:
-            order["concert_code"] = "tp"
-
-        for order in kh_orders:
-            order["concert_code"] = "kh"
-
-        result = {
-            "orders": tp_orders + kh_orders,
-            "manual_points":
-                float(tp_result.get("manual_points", 0) or 0)
-                + float(kh_result.get("manual_points", 0) or 0),
-            "total_points":
-                float(tp_result.get("total_points", 0) or 0)
-                + float(kh_result.get("total_points", 0) or 0),
-        }
-
-    return jsonify({
+    response_data = {
         "success": True,
-        "orders": result["orders"],
-        "manual_points": result["manual_points"],
-        "total_points": result["total_points"],
-    })
+        "orders": result.get("orders", []),
+        "manual_points": result.get("manual_points", 0),
+        "total_points": result.get("total_points", 0),
+        "identity_code": result.get("identity_code", "5"),
+        "identity": result.get("identity", "暫時未分類，請耐心等待"),
+        "all_total_points": result.get("all_total_points", 0),
+        "discount_amount": result.get("discount_amount", 0),
+    }
+
+    _query_cache[cache_key] = response_data
+    _query_cache_time[cache_key] = now
+
+    return jsonify(response_data)
+
+    _query_cache[cache_key] = response_data
+    _query_cache_time[cache_key] = now
+
+    return jsonify(response_data)
 
 @app.route("/api/orders/<order_id>/note", methods=["PATCH"])
 def api_update_order_note(order_id):
@@ -506,7 +510,12 @@ def require_admin(fn):
 @app.route("/api/admin/toggle-order-open", methods=["POST"])
 @require_admin
 def api_admin_toggle_order_open():
+    mode = normalize_mode(request.args.get("mode", "tp"))
+    if mode == "all":
+        mode = "tp"
+
     rows = get_stats_config_rows()
+    target_name = f"order_open_{mode}"
 
     target_index = None
 
@@ -514,14 +523,14 @@ def api_admin_toggle_order_open():
         row_type = str(row.get("type", "")).strip()
         row_name = str(row.get("name", "")).strip()
 
-        if row_type == "open" and row_name == "order_open":
+        if row_type == "open" and row_name == target_name:
             target_index = i
             break
 
     if target_index is None:
         rows.append({
             "type": "open",
-            "name": "order_open",
+            "name": target_name,
             "condition": "false"
         })
         new_value = False
@@ -534,21 +543,23 @@ def api_admin_toggle_order_open():
 
     return jsonify({
         "success": True,
-        "order_open": new_value
+        "order_open": new_value,
+        "mode": mode
     })
 
 @app.route("/api/admin/orders", methods=["GET"])
 @require_admin
 def api_admin_orders():
     keyword = request.args.get("keyword", "").strip()
+    mode = normalize_mode(request.args.get("mode", "tp"))
+    if mode == "all":
+        mode = "tp"
 
-    if keyword:
-        orders = admin_search_orders(keyword)
-    else:
-        orders = admin_search_orders("")  # 空字串代表全部訂單
+    orders = admin_search_orders(keyword, concert_code=mode)
 
     return jsonify({
         "success": True,
+        "mode": mode,
         "orders": orders
     })
 
@@ -557,17 +568,66 @@ def api_admin_orders():
 def api_admin_ticket_adjusted(order_id):
     floor = request.args.get("floor", "").strip()
     row_label = request.args.get("row_label", "").strip()
-    ok, message = admin_toggle_ticket_adjusted_status(order_id, floor=floor, row_label=row_label)
+    mode = normalize_mode(request.args.get("mode", "tp"))
+
+    if mode == "all":
+        mode = "tp"
+
+    ok, message = admin_toggle_ticket_adjusted_status(
+        order_id,
+        floor=floor,
+        row_label=row_label,
+        concert_code=mode
+    )
+
     if not ok:
-        return jsonify({"success": False, "message": message}), 404
-    return jsonify({"success": True, "message": message})
+        return jsonify({
+            "success": False,
+            "message": message
+        }), 404
+
+    return jsonify({
+        "success": True,
+        "message": message
+    })
+
+@app.route("/api/admin/orders/<order_id>/pickup/advance", methods=["PATCH"])
+@require_admin
+def api_admin_pickup_advance(order_id):
+    floor = request.args.get("floor", "").strip()
+    row_label = request.args.get("row_label", "").strip()
+    mode = normalize_mode(request.args.get("mode", "tp"))
+
+    if mode == "all":
+        mode = "tp"
+
+    ok, message = admin_advance_pickup_status(
+        order_id,
+        floor=floor,
+        row_label=row_label,
+        concert_code=mode
+    )
+
+    if not ok:
+        return jsonify({
+            "success": False,
+            "message": message
+        }), 404
+
+    return jsonify({
+        "success": True,
+        "message": message
+    })
     
 @app.route("/api/admin/orders/<order_id>/lock", methods=["PATCH"])
 @require_admin
 def api_admin_lock(order_id):
     floor = request.args.get("floor", "").strip()
     row_label = request.args.get("row_label", "").strip()
-    ok, message = admin_toggle_lock_status(order_id, floor=floor, row_label=row_label)
+    mode = normalize_mode(request.args.get("mode", "tp"))
+    if mode == "all":
+        mode = "tp"
+    ok, message = admin_toggle_lock_status(order_id, floor=floor, row_label=row_label, concert_code=mode)
     if not ok:
         return jsonify({"success": False, "message": message}), 404
     return jsonify({"success": True, "message": message})
@@ -578,18 +638,15 @@ def api_admin_lock(order_id):
 def api_admin_payment(order_id):
     floor = request.args.get("floor", "").strip()
     row_label = request.args.get("row_label", "").strip()
-    ok, message = admin_toggle_payment_status(order_id, floor=floor, row_label=row_label)
-    if not ok:
-        return jsonify({"success": False, "message": message}), 404
-    return jsonify({"success": True, "message": message})
-
-
-@app.route("/api/admin/orders/<order_id>/pickup/advance", methods=["PATCH"])
-@require_admin
-def api_admin_pickup_advance(order_id):
-    floor = request.args.get("floor", "").strip()
-    row_label = request.args.get("row_label", "").strip()
-    ok, message = admin_advance_pickup_status(order_id, floor=floor, row_label=row_label)
+    mode = normalize_mode(request.args.get("mode", "tp"))
+    if mode == "all":
+        mode = "tp"
+    ok, message = admin_toggle_payment_status(
+    order_id,
+    floor=floor,
+    row_label=row_label,
+    concert_code=mode
+)
     if not ok:
         return jsonify({"success": False, "message": message}), 404
     return jsonify({"success": True, "message": message})
@@ -600,7 +657,10 @@ def api_admin_pickup_advance(order_id):
 def api_admin_delete(order_id):
     floor = request.args.get("floor", "").strip()
     row_label = request.args.get("row_label", "").strip()
-    ok, message = admin_delete_order(order_id, floor=floor, row_label=row_label)
+    mode = normalize_mode(request.args.get("mode", "tp"))
+    if mode == "all":
+        mode = "tp"
+    ok, message = admin_delete_order(order_id, floor=floor, row_label=row_label, concert_code=mode)
     if not ok:
         return jsonify({"success": False, "message": message}), 403
     return jsonify({"success": True, "message": message})
@@ -660,9 +720,28 @@ def api_edit_stats_config():
 
 @app.route("/api/stats", methods=["GET"])
 def api_stats():
+
+    mode = normalize_mode(
+        request.args.get("mode", "tp")
+    )
+
+    if mode == "all":
+        return jsonify({
+            "success": True,
+            "data": build_stats_summary_all()
+        })
+
     return jsonify({
         "success": True,
-        "data": build_stats_summary()
+        "data": build_stats_summary(
+            concert_code=mode
+        )
     })
 
+@app.route("/")
+def serve_index():
+    return send_from_directory(PROJECT_ROOT, "index.html")
 
+@app.route("/<path:filename>")
+def serve_static_file(filename):
+    return send_from_directory(PROJECT_ROOT, filename)

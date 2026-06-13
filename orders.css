@@ -1,18 +1,24 @@
-/* 主視覺更改時改這邊就好*/
+/* 主視覺更改時改這邊就好 */
 :root {
     --orders-main: #4f6f73; /* 主色：標題、重點文字、統計數字 */
     --orders-accent: #7f9f98; /* 強調色：按鈕、focus、互動元件 */
     --orders-accent-hover: #6d8d87; /* 強調色 hover：按鈕滑過時 */
     --orders-bg-start: #5f7f82; /* 背景漸層起始色（左上） */
     --orders-bg-end: #8ea7a3; /* 背景漸層結束色（右下） */
-    --orders-shell-bg: rgba(255,255,255,0.88); /* 主內容大框背景（半透明白） */
+    --orders-shell-bg: rgba(255,255,255,0.88); /* 主內容大框背景 */
 }
 
-* { box-sizing: border-box; }
+* {
+    box-sizing: border-box;
+}
 
 body.orders-page {
     margin: 0;
+    min-height: 100vh;
+    padding: 12px;
+
     font-family: Arial, "Noto Sans TC", sans-serif;
+    color: #3f4642;
 
     background:
         linear-gradient(
@@ -20,19 +26,20 @@ body.orders-page {
             var(--orders-bg-start),
             var(--orders-bg-end)
         );
-
-    min-height: 100vh;
-    padding: 12px;
 }
 
-/* # Page Shell / Header */
+/* Page Shell / Header */
+
 .orders-shell {
     position: relative;
+
     height: calc(100vh - 24px - 38px);
     overflow-y: auto;
+
     background: var(--orders-shell-bg);
     border-radius: 28px;
     padding: 28px 32px 26px;
+
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
@@ -87,19 +94,23 @@ body.orders-page {
 }
 
 .orders-help-trigger {
-    margin-top: 12px;
+    margin-top: 10px;
+    padding: 0;
 
     border: none;
     background: transparent;
-    padding: 0;
 
     font-family: "Noto Sans TC", sans-serif;
-    color: var(--orders-main);
-
     font-size: 14px;
     font-weight: 800;
 
+    color: var(--orders-main);
+
     cursor: pointer;
+}
+
+.orders-help-trigger:hover {
+    text-decoration: underline;
 }
 
 .back-link-btn {
@@ -123,11 +134,70 @@ body.orders-page {
     align-items: center;
     justify-content: center;
 }
+
+.back-link-btn:hover {
+    background: rgba(255,255,255,0.92);
+}
+
+/* Search */
+
+.orders-search-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+
+    margin-bottom: 24px;
+}
+
+.orders-search-input {
+    width: 410px;
+    max-width: 100%;
+    height: 46px;
+
+    border: 2px solid #d8d8d8;
+    border-radius: 18px;
+
+    padding: 0 18px;
+
+    font-size: 15px;
+    outline: none;
+    background: #fff;
+}
+
+.orders-search-input:focus {
+    border-color: var(--orders-accent);
+    box-shadow: 0 0 0 4px rgba(127,159,152,0.16);
+}
+
+.orders-search-btn {
+    height: 46px;
+    padding: 0 24px;
+
+    border: none;
+    border-radius: 18px;
+
+    background: var(--orders-accent);
+    color: white;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.orders-search-btn:hover {
+    background: var(--orders-accent-hover);
+}
+
+/* Mode Tabs */
+
 .orders-mode-tabs {
     display: flex;
     gap: 10px;
-    margin: -10px 0 22px;
     flex-wrap: wrap;
+
+    margin: -10px 0 22px;
 }
 
 .orders-mode-tab {
@@ -151,159 +221,14 @@ body.orders-page {
     background: var(--orders-accent);
     color: white;
 }
-/* # Search */
-.orders-search-card { display: flex; gap: 14px; align-items: center; margin-bottom: 24px; flex-wrap: wrap; }
-.orders-search-input {
-    width: 410px; max-width: 100%; height: 46px; border: 2px solid #d8d8d8;
-    border-radius: 18px; padding: 0 18px; font-size: 15px; outline: none; background: #fff;
-}
-.orders-search-input:focus {
-    border-color: var(--orders-accent);
-    box-shadow: 0 0 0 4px rgba(242,108,65,.12);
-}
-.orders-search-btn {
-    height: 46px;
-    padding: 0 24px;
-    border: none;
-    border-radius: 18px;
 
-    background: var(--orders-accent);
-    color: white;
-
-    font-size: 15px;
-    font-weight: 800;
-
-    cursor: pointer;
-}
-
-.orders-search-btn:hover {
-    background: var(--orders-accent-hover);
-}
-.orders-table tbody tr.empty-row { background: transparent; border: none; box-shadow: none; padding: 0; }
-.orders-table tbody tr.empty-row td { padding: 10px 0; margin: 0; }
-.orders-table tbody tr.empty-row td::before { display: none !important; }
-
-/* # Orders Help Trigger */
-.orders-help-trigger {
-    margin-top: 10px;
-
-    border: none;
-    background: transparent;
-
-    padding: 0;
-
-    color: var(--orders-main);
-
-    font-size: 14px;
-    font-weight: 800;
-
-    cursor: pointer;
-}
-
-.orders-help-trigger:hover {
-    text-decoration: underline;
-}
-
-/* # Orders Help Modal */
-.orders-help-modal-card {
-    width: min(720px, 92vw);
-    max-height: 82vh;
-
-    overflow-y: auto;
-}
-
-.orders-help-title {
-    margin: 0 0 20px;
-
-    font-size: 26px;
-    font-weight: 900;
-    color: #222;
-}
-
-.orders-help-content {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-}
-
-.orders-help-section h3 {
-    margin: 0 0 10px;
-
-    color: var(--orders-main);
-
-    font-size: 18px;
-    font-weight: 900;
-}
-
-.orders-help-section p {
-    margin: 0 0 10px;
-
-    color: #444;
-    font-size: 15px;
-    line-height: 1.8;
-}
-
-.orders-help-confirm-btn {
-    margin-top: 24px;
-
-    width: 100%;
-    height: 50px;
-
-    border: none;
-    border-radius: 18px;
-
-    background: #65997b;
-    color: #fff;
-
-    font-size: 15px;
-    font-weight: 900;
-
-    cursor: pointer;
-}
-
-.orders-help-modal-card {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0,0,0,.18) transparent;
-}
-
-.orders-help-modal-card::-webkit-scrollbar {
-    width: 8px;
-}
-
-.orders-help-modal-card::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.orders-help-modal-card::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,.16);
-    border-radius: 999px;
-}
-
-.orders-help-modal-card::-webkit-scrollbar-thumb:hover {
-    background: rgba(0,0,0,.26);
-}
-
-.pickup-open-text {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 2px 10px;
-
-    border-radius: 999px;
-
-    background: #eaf8ef;
-    color: #1f9d55;
-
-    font-weight: 900;
-    font-size: 14px;
-}
-/* # Summary Cards */
+/* Summary Cards */
 
 .orders-summary-grid {
     display: grid;
     grid-template-columns: 1.05fr 1.05fr 1.45fr 1.05fr;
     gap: 18px;
+
     margin-bottom: 22px;
 }
 
@@ -365,6 +290,7 @@ body.orders-page {
     box-shadow: 0 8px 18px rgba(79,111,115,0.16);
 
     font-size: 22px;
+    flex-shrink: 0;
 }
 
 .summary-label {
@@ -374,6 +300,7 @@ body.orders-page {
     font-size: 20px;
     font-weight: 900;
     letter-spacing: 0.05em;
+    line-height: 1.15;
 
     color: #2f3c39;
 }
@@ -384,11 +311,21 @@ body.orders-page {
     align-items: center;
     justify-content: space-between;
     gap: 16px;
-    margin-top: 2px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
 }
 
-#total-points {
-    font-size: 21px;
+.summary-points-row::-webkit-scrollbar {
+    height: 6px;
+}
+
+.summary-points-row::-webkit-scrollbar-thumb {
+    background: rgba(95, 129, 120, 0.25);
+    border-radius: 999px;
 }
 
 .summary-metric-label {
@@ -405,8 +342,10 @@ body.orders-page {
 .summary-dot {
     width: 9px;
     height: 9px;
+
     border-radius: 50%;
     background: var(--orders-accent);
+    flex-shrink: 0;
 }
 
 .summary-dot.muted {
@@ -428,13 +367,16 @@ body.orders-page {
 
     font-size: 12px;
     font-weight: 900;
+    flex-shrink: 0;
 }
 
 .summary-metric-value {
     color: var(--orders-main);
+
     font-family: "Noto Sans TC", sans-serif;
     font-size: 21px;
     font-weight: 900;
+
     white-space: nowrap;
 }
 
@@ -450,57 +392,29 @@ body.orders-page {
     );
 }
 
-/* 推票統計 */
+/* Points Card */
 
 .summary-card-points {
     min-width: 0;
 }
 
-.stats-help-trigger {
+.summary-card-points .summary-label.stats-help-trigger {
     margin: 0;
-    padding: 0;
-    border: none;
-    background: transparent;
-
-    cursor: pointer;
-    text-align: left;
 
     font-family: "Noto Serif TC", "Songti TC", serif;
     font-size: 20px;
     font-weight: 900;
     letter-spacing: 0.05em;
-    line-height: 1;
+    line-height: 1.15;
 
     color: #2f3c39;
 
-    transition:
-        color .14s ease,
-        transform .14s ease;
+    cursor: pointer;
 }
 
-.stats-help-trigger:hover {
+.summary-card-points .summary-label.stats-help-trigger:hover {
     color: var(--orders-main);
-}
-
-.ticket-price-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0;
-
-    margin-top: 4px;
-}
-
-.ticket-price-item {
-    min-width: 0;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-
-    padding: 0 10px;
-
-    border-right: 1px solid rgba(95,124,121,0.18);
+    text-decoration: underline;
 }
 
 .ticket-price-inline {
@@ -523,16 +437,21 @@ body.orders-page {
     font-weight: 900;
 }
 
+#total-points {
+    font-size: 21px;
+}
+
 #manual-points-note {
     font-size: 12px;
     font-weight: 700;
     color: #777;
 }
 
-/* 座位圖卡片 */
+/* Seat Map Summary Card */
 
 .seat-map-card {
     border: 1px solid rgba(255,255,255,0.62);
+
     cursor: pointer;
     text-align: left;
     font-family: inherit;
@@ -554,6 +473,7 @@ body.orders-page {
     margin-top: 10px;
 
     color: var(--orders-main);
+
     font-family: "Noto Serif TC", "Songti TC", serif;
     font-size: 24px;
     font-weight: 900;
@@ -604,89 +524,158 @@ body.orders-page {
         inset 0 1px 0 rgba(255,255,255,0.86);
 }
 
-/* Loading Modal */
-.orders-loading-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 99999;
+/* Orders Table */
 
-    background: rgba(245, 248, 246, 0.72);
-    backdrop-filter: blur(8px);
+.orders-table-card {
+    border: 1.5px solid #e8e8e8;
+    border-radius: 26px;
+    overflow: hidden;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: #fff;
 }
 
-.orders-loading-overlay.hidden {
-    display: none;
+.orders-table-scroll {
+    overflow-x: auto;
 }
 
-.orders-loading-card {
-    min-width: 220px;
-    padding: 28px 32px;
-    border-radius: 24px;
+table.orders-table {
+    width: 100%;
+    min-width: 100%;
 
-    background: rgba(255,255,255,0.92);
-    box-shadow: 0 18px 40px rgba(64, 91, 89, 0.18);
-
-    text-align: center;
-    color: #405f5b;
-    font-weight: 800;
+    border-collapse: collapse;
+    table-layout: fixed;
 }
 
-.orders-loading-spinner {
-    width: 38px;
-    height: 38px;
-    margin: 0 auto 14px;
-
-    border: 4px solid rgba(78,107,104,0.18);
-    border-top-color: #4e6b68;
-    border-radius: 50%;
-
-    animation: ordersLoadingSpin 0.9s linear infinite;
-}
-
-@keyframes ordersLoadingSpin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* # Orders Table */
-.orders-table-card { border: 1.5px solid #e8e8e8; border-radius: 26px; overflow: hidden; background: #fff; }
-.orders-table-scroll { overflow-x: auto; }
-table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed; min-width: 100%; }
 .orders-table thead th {
-    background: #fafafa; color: #2f2f2f; font-size: 15px; font-weight: 800; text-align: center;
-    padding: 16px; border-bottom: 1px solid #ececec; white-space: nowrap; letter-spacing: .5px;
+    padding: 16px;
+
+    background: #fafafa;
+    border-bottom: 1px solid #ececec;
+
+    color: #2f2f2f;
+    font-size: 15px;
+    font-weight: 800;
+    text-align: center;
+    white-space: nowrap;
+    letter-spacing: .5px;
 }
-.orders-table tbody td { padding: 14px; border-bottom: 1px solid #efefef; vertical-align: middle; text-align: center; font-size: 15px; }
-.orders-table tbody tr:last-child td { border-bottom: none; }
-.orders-table th:nth-child(1), .orders-table td:nth-child(1) { width: 160px; }
-.orders-table th:nth-child(2), .orders-table td:nth-child(2) { width: 110px; }
-.orders-table th:nth-child(3), .orders-table td:nth-child(3) { width: 180px; white-space: normal; word-break: break-word; line-height: 1.5; }
-.orders-table th:nth-child(4), .orders-table td:nth-child(4) { width: 90px; }
-.orders-table th:nth-child(5) { width: 360px; }
-.orders-table td:nth-child(5) { width: 360px; text-align: left; }
-.orders-table th:nth-child(6), .orders-table td:nth-child(6) { width: 160px; text-align: center; }
-.orders-table th:nth-child(7), .orders-table td:nth-child(7) { width: 210px; text-align: center; }
+
+.orders-table tbody td {
+    padding: 14px;
+
+    border-bottom: 1px solid #efefef;
+
+    vertical-align: middle;
+    text-align: center;
+    font-size: 15px;
+}
+
+.orders-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.orders-table tbody tr.empty-row {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.orders-table tbody tr.empty-row td {
+    padding: 10px 0;
+    margin: 0;
+}
+
+.orders-table tbody tr.empty-row td::before {
+    display: none !important;
+}
+
+.orders-table th:nth-child(1),
+.orders-table td:nth-child(1) {
+    width: 160px;
+}
+
+.orders-table th:nth-child(2),
+.orders-table td:nth-child(2) {
+    width: 110px;
+}
+
+.orders-table th:nth-child(3),
+.orders-table td:nth-child(3) {
+    width: 180px;
+    white-space: normal;
+    word-break: break-word;
+    line-height: 1.5;
+}
+
+.orders-table th:nth-child(4),
+.orders-table td:nth-child(4) {
+    width: 90px;
+}
+
+.orders-table th:nth-child(5),
+.orders-table td:nth-child(5) {
+    width: 360px;
+}
+
+.orders-table td:nth-child(5) {
+    text-align: left;
+}
+
+.orders-table th:nth-child(6),
+.orders-table td:nth-child(6) {
+    width: 160px;
+    text-align: center;
+}
+
+.orders-table th:nth-child(7),
+.orders-table td:nth-child(7) {
+    width: 210px;
+    text-align: center;
+}
+
 .order-strong {
     color: var(--orders-main);
     font-weight: 800;
 }
-.empty-state { text-align: center; color: #888; font-size: 16px; padding: 32px 20px; }
 
-/* # Note / Row Actions */
-.note-wrap { display: flex; align-items: center; gap: 14px; }
-.note-input {
-    width: 300px; max-width: 100%; height: 46px; border: 2px solid #d5d5d5; border-radius: 18px;
-    padding: 0 18px; font-size: 15px; color: #444; outline: none; background: #fff;
+.empty-state {
+    text-align: center;
+    color: #888;
+    font-size: 16px;
+    padding: 32px 20px;
 }
+
+/* Note / Row Actions */
+
+.note-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.note-input {
+    width: 300px;
+    max-width: 100%;
+    height: 46px;
+
+    border: 2px solid #d5d5d5;
+    border-radius: 18px;
+
+    padding: 0 18px;
+
+    font-size: 15px;
+    color: #444;
+
+    outline: none;
+    background: #fff;
+}
+
 .note-input:focus {
     border-color: var(--orders-accent);
-    box-shadow: 0 0 0 4px rgba(242,108,65,.12);
+    box-shadow: 0 0 0 4px rgba(127,159,152,0.16);
 }
+
 .save-btn {
     height: 46px;
     min-width: 90px;
@@ -708,38 +697,398 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
 .save-btn:hover {
     background: var(--orders-accent-hover);
 }
-.cell-center { display: flex; align-items: center; justify-content: center; width: 100%; }
 
-/* # Delete / Pickup Buttons */
+.cell-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+}
+
 .delete-btn {
-    height: 46px; min-width: 90px; padding: 0 22px; border: 2px solid #f0a59a; border-radius: 18px;
-    background: #fff8f7; color: #e45c4a; font-size: 15px; font-weight: 800; cursor: pointer;
+    height: 46px;
+    min-width: 90px;
+    padding: 0 22px;
+
+    border: 2px solid #f0a59a;
+    border-radius: 18px;
+
+    background: #fff8f7;
+    color: #e45c4a;
+
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
 }
-.delete-btn:hover { background: #fff2ef; }
-.delete-btn.locked { border-color: #ddd; background: #f3f3f3; color: #9a9a9a; cursor: not-allowed; }
+
+.delete-btn:hover {
+    background: #fff2ef;
+}
+
+.delete-btn.locked {
+    border-color: #ddd;
+    background: #f3f3f3;
+    color: #9a9a9a;
+
+    cursor: not-allowed;
+}
+
 .pickup-pill {
-    height: 58px; min-width: 220px; padding: 0 24px; border: none; border-radius: 999px;
-    font-size: 15px; font-weight: 800; cursor: default; white-space: nowrap;
+    height: 54px;
+    min-width: 180px;   /* 原本 220 */
+    padding: 0 18px;    /* 原本 24 */
+
+    border: none;
+    border-radius: 999px;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: default;
+    white-space: nowrap;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
-.pickup-pill.closed { background: #eeeeee; color: #8f8f8f; }
-.pickup-pill.open { background: #e9f7ef; color: #249167; }
-.pickup-pill.done { background: #e7efff; color: #356fcb; }
 
-/* # Stats Help Modal */
-.stats-help-trigger { border: none; background: transparent; padding: 0; cursor: pointer; text-align: left; font-size: 14px; font-weight: 800; color: #777; line-height: 1; }
-.stats-help-trigger:hover { color: #276fb7; text-decoration: underline; }
-.points-rule-list { background: #f7f9fc; border: 1.5px solid #e5ecf6; border-radius: 18px; padding: 14px 16px; margin: 14px 0; display: grid; gap: 8px; font-size: 15px; color: #276fb7; font-weight: 800; }
+.pickup-pill.closed {
+    background: #eeeeee;
+    color: #8f8f8f;
+}
 
-/* # Modal Base */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.42); display: flex; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
-.modal-overlay.hidden { display: none; }
-.modal-card { position: relative; width: min(520px, 100%); background: #fff; border-radius: 26px; padding: 28px 30px; box-shadow: 0 18px 48px rgba(0,0,0,.28); color: #333; animation: modalPop .16s ease-out; }
-.modal-card h2 { margin: 0 0 14px; font-size: 22px; font-weight: 900; color: #222; }
-.modal-card p { margin: 12px 0; font-size: 15px; line-height: 1.7; color: #555; }
-.modal-close-btn { position: absolute; top: 14px; right: 16px; width: 34px; height: 34px; border: none; border-radius: 50%; background: #f1f1f1; color: #555; font-size: 24px; line-height: 1; cursor: pointer; }
-.modal-close-btn:hover { background: #e5e5e5; }
+.pickup-pill.open {
+    background: #e9f7ef;
+    color: #249167;
+}
 
-/* # Purchased Seat Map Modal */
+.pickup-pill.done {
+    background: #e7efff;
+    color: #356fcb;
+}
+
+/* Modal Base */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0,0,0,.42);
+}
+
+.modal-overlay.hidden {
+    display: none;
+}
+
+.modal-card {
+    position: relative;
+
+    width: min(520px, 100%);
+
+    background: #fff;
+    border-radius: 26px;
+    padding: 28px 30px;
+
+    box-shadow: 0 18px 48px rgba(0,0,0,.28);
+
+    color: #333;
+
+    animation: modalPop .16s ease-out;
+}
+
+.modal-card h2 {
+    margin: 0 0 14px;
+
+    font-size: 22px;
+    font-weight: 900;
+    color: #222;
+}
+
+.modal-card p {
+    margin: 12px 0;
+
+    font-size: 15px;
+    line-height: 1.7;
+    color: #555;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+
+    width: 34px;
+    height: 34px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #f1f1f1;
+    color: #555;
+
+    font-size: 24px;
+    line-height: 1;
+
+    cursor: pointer;
+}
+
+.modal-close-btn:hover {
+    background: #e5e5e5;
+}
+
+/* Orders Help Modal */
+
+.orders-help-modal-card {
+    width: min(720px, 92vw);
+    max-height: 82vh;
+
+    overflow-y: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0,0,0,.18) transparent;
+}
+
+.orders-help-modal-card::-webkit-scrollbar {
+    width: 8px;
+}
+
+.orders-help-modal-card::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.orders-help-modal-card::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,.16);
+    border-radius: 999px;
+}
+
+.orders-help-modal-card::-webkit-scrollbar-thumb:hover {
+    background: rgba(0,0,0,.26);
+}
+
+.orders-help-title {
+    margin: 0 0 20px;
+
+    font-size: 26px;
+    font-weight: 900;
+    color: #222;
+}
+
+.orders-help-content {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.orders-help-section h3 {
+    margin: 0 0 10px;
+
+    color: var(--orders-main);
+
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.orders-help-section p {
+    margin: 0 0 10px;
+
+    color: #444;
+    font-size: 15px;
+    line-height: 1.8;
+}
+
+.orders-help-confirm-btn {
+    margin-top: 24px;
+
+    width: 100%;
+    height: 50px;
+
+    border: none;
+    border-radius: 18px;
+
+    background: #65997b;
+    color: #fff;
+
+    font-size: 15px;
+    font-weight: 900;
+
+    cursor: pointer;
+}
+
+.pickup-open-text {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 2px 10px;
+
+    border-radius: 999px;
+
+    background: #eaf8ef;
+    color: #1f9d55;
+
+    font-size: 14px;
+    font-weight: 900;
+}
+
+/* Stats Help Modal */
+
+.points-rule-list {
+    display: grid;
+    gap: 8px;
+
+    margin: 14px 0;
+    padding: 14px 16px;
+
+    background: #f7f9fc;
+    border: 1.5px solid #e5ecf6;
+    border-radius: 18px;
+
+    color: var(--orders-main);
+    font-size: 15px;
+    font-weight: 800;
+}
+
+/* Loading Modal */
+
+.orders-loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(245, 248, 246, 0.72);
+    backdrop-filter: blur(8px);
+}
+
+.orders-loading-overlay.hidden {
+    display: none;
+}
+
+.orders-loading-card {
+    min-width: 220px;
+    padding: 28px 32px;
+
+    border-radius: 24px;
+    background: rgba(255,255,255,0.92);
+    box-shadow: 0 18px 40px rgba(64, 91, 89, 0.18);
+
+    text-align: center;
+    color: #405f5b;
+    font-weight: 800;
+}
+
+.orders-loading-spinner {
+    width: 38px;
+    height: 38px;
+
+    margin: 0 auto 14px;
+
+    border: 4px solid rgba(78,107,104,0.18);
+    border-top-color: #4e6b68;
+    border-radius: 50%;
+
+    animation: ordersLoadingSpin 0.9s linear infinite;
+}
+
+.stats-help-tabs {
+    display: flex;
+    gap: 10px;
+    margin: 18px 0 22px;
+}
+
+.stats-help-tab {
+    flex: 1;
+    border: none;
+    border-radius: 999px;
+    padding: 10px 14px;
+    background: #eef3f0;
+    color: #53645d;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.stats-help-tab.active {
+    background: #6f928b;
+    color: white;
+}
+
+.stats-help-content {
+    display: none;
+}
+
+.stats-help-content.active {
+    display: block;
+}
+
+.stats-identity-box,
+.stats-discount-box {
+    background: #f4f6f3;
+    border-radius: 14px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    line-height: 1.7;
+}
+
+.stats-discount-box strong {
+    color: #b24535;
+}
+
+.discount-threshold-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin: 18px 0;
+}
+
+.discount-th-item {
+    background: #f4f6f3;
+    border-radius: 16px;
+    padding: 14px;
+}
+
+.discount-role {
+    font-weight: 700;
+    font-size: 16px;
+    color: #44524d;
+    margin-bottom: 6px;
+}
+
+.discount-threshold {
+    font-size: 14px;
+    color: #66736d;
+    line-height: 1.6;
+}
+
+.discount-rule-intro {
+    line-height: 1.8;
+    color: #53615b;
+}
+
+.discount-note {
+    margin-top: 16px;
+    color: #8b5c4f;
+    line-height: 1.8;
+}
+@keyframes ordersLoadingSpin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Purchased Seat Map Modal */
 
 .my-seat-map-modal-card {
     width: min(1120px, 96vw);
@@ -788,6 +1137,7 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
 .legend-dot {
     width: 12px;
     height: 12px;
+
     border-radius: 50%;
     display: inline-block;
 }
@@ -825,7 +1175,7 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
     flex: 1;
     min-height: 0;
 
-    overflow: hidden;
+    overflow: auto;
     position: relative;
 
     border: 1.5px solid #eee;
@@ -882,15 +1232,15 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
     width: 22px;
     height: 22px;
 
-    border-radius: 50%;
     border: none;
+    border-radius: 50%;
+
+    padding: 0;
 
     font-family: "Noto Sans TC", sans-serif;
     font-size: 9px;
     line-height: 22px;
-
     text-align: center;
-    padding: 0;
 
     user-select: none;
 
@@ -966,7 +1316,7 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
     border: 1.5px solid #fff;
 }
 
-/* 高雄 orders 座位圖：舞台、樓層框線、排數 */
+/* Kaohsiung Seat Map Decorations */
 
 .my-map-stage {
     z-index: 1;
@@ -1021,10 +1371,9 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
     background: rgba(255,255,255,0.96);
     border-radius: 999px;
 
+    color: #42504a;
     font-size: 14px;
     font-weight: 900;
-    color: #42504a;
-
     line-height: 1;
     white-space: nowrap;
     writing-mode: horizontal-tb;
@@ -1047,15 +1396,17 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
 .my-seat-map .kh-row-marker {
     z-index: 3;
 
+    color: #59615e;
     font-size: 10px;
     font-weight: 800;
-    color: #59615e;
     opacity: 0.82;
 
     display: flex;
     align-items: center;
     justify-content: center;
 }
+
+/* Footer */
 
 .page-footer {
     position: relative;
@@ -1073,42 +1424,75 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
     letter-spacing: 0.12em;
     color: rgba(55, 64, 61, 0.68);
 }
-/* # Animations */
+
+/* Animations */
+
 @keyframes modalPop {
-    from { opacity: 0; transform: translateY(8px) scale(.98); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
+    from {
+        opacity: 0;
+        transform: translateY(8px) scale(.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
-/* # Responsive */
-@media (max-width: 1180px) { .orders-summary-grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 980px) {
-    .orders-summary-grid { grid-template-columns: 1fr; }
-    .orders-shell { padding: 18px; }
-    .my-seat-map-modal-card { width: 96vw; height: 86vh; padding: 22px 18px; }
-    .my-seat-map-header { flex-direction: column; gap: 10px; padding-right: 38px; }
-    .my-seat-legend { justify-content: flex-start; }
+/* Responsive */
+
+@media (max-width: 1180px) {
+    .orders-summary-grid {
+        grid-template-columns: 1fr 1fr;
+    }
 }
-/* Order Cards */
+
+@media (max-width: 980px) {
+    .orders-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .orders-shell {
+        padding: 18px;
+    }
+
+    .my-seat-map-modal-card {
+        width: 96vw;
+        height: 86vh;
+        padding: 22px 18px;
+    }
+
+    .my-seat-map-header {
+        flex-direction: column;
+        gap: 10px;
+        padding-right: 38px;
+    }
+
+    .my-seat-legend {
+        justify-content: flex-start;
+    }
+}
+
 @media (max-width: 768px) {
     .orders-shell {
         height: auto;
         min-height: calc(100vh - 24px - 38px);
         padding: 20px 16px;
     }
-    
+
     .orders-hero {
         flex-direction: column;
         margin-bottom: 20px;
     }
-    
+
     .orders-title-wrap {
         padding-right: 0;
     }
-    
+
     .orders-title-wrap h1 {
         font-size: 22px;
     }
-    
+
     .back-link-btn {
         position: static;
         width: 100%;
@@ -1122,6 +1506,11 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
     .orders-search-input,
     .orders-search-btn {
         width: 100%;
+    }
+
+    .summary-card {
+        min-height: auto;
+        padding: 16px 18px;
     }
 
     .orders-table-card {
@@ -1166,6 +1555,7 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
         border: none;
         padding: 0;
         margin-bottom: 8px;
+
         text-align: left !important;
         width: 100% !important;
     }
@@ -1181,6 +1571,7 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
         display: flex;
         align-items: baseline;
         gap: 6px;
+
         font-size: 15px;
         line-height: 1.6;
     }
@@ -1206,6 +1597,7 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
     .orders-table td:nth-child(3)::before,
     .orders-table td:nth-child(4)::before {
         flex-shrink: 0;
+
         color: #777;
         font-size: 14px;
         font-weight: 900;
@@ -1215,7 +1607,9 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
     .orders-table td:nth-child(6)::before,
     .orders-table td:nth-child(7)::before {
         display: block;
+
         margin: 12px 0 8px;
+
         color: #777;
         font-size: 14px;
         font-weight: 900;
@@ -1234,7 +1628,7 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
     }
 
     .order-strong {
-        color: #276fb7;
+        color: var(--orders-main);
         font-size: 15px;
         font-weight: 900;
     }
@@ -1251,7 +1645,9 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
         width: 100%;
         min-width: 0;
         height: 44px;
+
         border-radius: 999px;
+
         font-size: 14px;
         padding: 0 16px;
     }
@@ -1261,14 +1657,18 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
         min-width: 74px;
         height: 44px;
         padding: 0 16px;
+
         border-radius: 999px;
+
         font-size: 14px;
     }
 
     .delete-btn {
         width: 100%;
         height: 44px;
+
         border-radius: 999px;
+
         font-size: 14px;
     }
 
@@ -1276,21 +1676,13 @@ table.orders-table { width: 100%; border-collapse: collapse; table-layout: fixed
         width: 100%;
         min-width: 0;
         height: 46px;
+
         border-radius: 999px;
+
         font-size: 14px;
     }
 
     .cell-center {
         justify-content: stretch;
-    }
-
-    .summary-card {
-        min-height: auto;
-        padding: 16px 18px;
-    }
-
-    .summary-value,
-    .ticket-stats-value {
-        font-size: 16px;
     }
 }

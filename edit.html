@@ -4,256 +4,229 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>《嶋聲》修改資料</title>
+  <link rel="icon" type="image/png" href="/NTUCO.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="/admin.css">
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, "Noto Sans TC", sans-serif;
-      background: linear-gradient(135deg, #0f3b3a, #4b1f11);
-      min-height: 100vh;
-      padding: 12px;
-    }
-
-    .edit-shell {
-      background: rgba(255, 255, 255, 0.96);
-      border-radius: 28px;
-      padding: 24px;
-      min-height: calc(100vh - 24px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-    }
-
-    .edit-topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 22px;
-    }
-
-    .edit-title-wrap h1 {
-      margin: 0;
-      font-size: 28px;
-      font-weight: 900;
-      color: #222;
-    }
-
-    .edit-title-wrap p {
-      margin: 8px 0 0;
-      color: #777;
-      font-size: 14px;
-      line-height: 1.6;
-      font-weight: 500;
-    }
-
-    .top-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .back-link-btn {
-      height: 44px;
-      padding: 0 20px;
-      border-radius: 16px;
-      border: 2px solid #ddd;
-      background: #fff;
-      color: #444;
-      font-size: 15px;
-      font-weight: 700;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      white-space: nowrap;
-    }
-
     .edit-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 18px;
       align-items: start;
     }
 
-    .edit-card {
-      background: #fff;
-      border: 1.5px solid #e8e8e8;
-      border-radius: 24px;
-      padding: 18px;
-      overflow: hidden;
+    .edit-panel {
+      padding: 22px;
     }
 
-    .card-title {
-      font-size: 20px;
+    .edit-panel-header {
+      margin-bottom: 16px;
+    }
+
+    .edit-panel-title {
+      margin: 0;
+      font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+      font-size: 22px;
       font-weight: 900;
-      color: #222;
-      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+      color: #2f3c39;
     }
 
-    .card-desc {
-      font-size: 13px;
-      color: #777;
-      line-height: 1.6;
-      margin-bottom: 14px;
+    .edit-panel-desc {
+      margin: 8px 0 0;
+      color: #6b7471;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.7;
     }
 
-    .table-scroll {
-      overflow-x: auto;
-      overflow-y: auto;
+    .edit-table-scroll {
       max-height: 560px;
-    
-      border: 1.5px solid #eee;
-      border-radius: 18px;
+      overflow: auto;
+      border: 1.5px solid #e8e8e8;
+      border-radius: 20px;
       background: #fff;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .edit-table {
+      width: 100%;
+      min-width: 620px;
+      border-collapse: collapse;
+      table-layout: fixed;
     }
 
     .edit-table thead th {
       position: sticky;
       top: 0;
-      z-index: 2;
-    }
-
-    table.edit-table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 520px;
-    }
-
-    .edit-table th {
+      z-index: 10;
+      padding: 15px 12px;
       background: #fafafa;
-      color: #333;
+      border-bottom: 1px solid #ececec;
+      color: #2f2f2f;
       font-size: 14px;
       font-weight: 900;
       text-align: center;
-      padding: 13px 10px;
-      border-bottom: 1px solid #eee;
       white-space: nowrap;
+      letter-spacing: .5px;
     }
 
-    .edit-table td {
-      padding: 10px;
-      border-bottom: 1px solid #f0f0f0;
+    .edit-table tbody td {
+      padding: 12px;
+      border-bottom: 1px solid #efefef;
       vertical-align: middle;
+      text-align: center;
     }
 
-    .edit-table tr:last-child td {
+    .edit-table tbody tr:last-child td {
       border-bottom: none;
     }
 
     .cell-input {
       width: 100%;
-      height: 40px;
-      border: 1.5px solid #ddd;
-      border-radius: 12px;
-      padding: 0 12px;
+      height: 42px;
+      border: 2px solid #d5d5d5;
+      border-radius: 16px;
+      padding: 0 14px;
       font-size: 14px;
+      color: #444;
       outline: none;
       background: #fff;
     }
 
     .cell-input:focus {
-      border-color: #f26c41;
-      box-shadow: 0 0 0 3px rgba(242, 108, 65, 0.12);
-    }
-
-    .delete-row-btn {
-      height: 38px;
-      min-width: 72px;
-      border: 1.5px solid #f0a59a;
-      border-radius: 12px;
-      background: #fff7f6;
-      color: #d84b3b;
-      font-weight: 800;
-      cursor: pointer;
+      border-color: var(--admin-accent);
+      box-shadow: 0 0 0 4px rgba(127,159,152,0.16);
     }
 
     .action-row {
       display: flex;
       gap: 10px;
-      margin-top: 14px;
       flex-wrap: wrap;
+      margin-top: 16px;
     }
 
     .primary-btn,
-    .secondary-btn {
-      height: 44px;
-      padding: 0 20px;
-      border: none;
-      border-radius: 14px;
+    .secondary-btn,
+    .delete-row-btn {
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: 16px;
       font-size: 15px;
       font-weight: 800;
+      white-space: nowrap;
       cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
     }
 
     .primary-btn {
-      background: #f26c41;
-      color: white;
+      border: none;
+      background: var(--admin-accent);
+      color: #fff;
+    }
+
+    .primary-btn:hover {
+      background: var(--admin-accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(64, 91, 89, 0.20);
     }
 
     .secondary-btn {
-      background: #eee;
-      color: #444;
+      border: 1.5px solid rgba(120,130,126,0.24);
+      background: rgba(255,255,255,0.72);
+      color: #4a5652;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(255,255,255,0.92);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(64, 91, 89, 0.12);
+    }
+
+    .delete-row-btn {
+      min-width: 76px;
+      border: 1.5px solid #f0a59a;
+      background: #fff7f6;
+      color: #d84b3b;
+    }
+
+    .delete-row-btn:hover {
+      background: #fff0ed;
+      transform: translateY(-1px);
     }
 
     .status-text {
+      min-height: 20px;
       margin-top: 12px;
-      font-size: 13px;
       color: #777;
-      min-height: 18px;
+      font-size: 13px;
+      font-weight: 700;
     }
 
     .status-text.success {
       color: #249167;
-      font-weight: 700;
     }
 
     .status-text.error {
       color: #d84b3b;
-      font-weight: 700;
     }
 
     @media (max-width: 980px) {
       .edit-grid {
         grid-template-columns: 1fr;
       }
+    }
 
-      .edit-shell {
+    @media (max-width: 768px) {
+      .edit-panel {
         padding: 18px;
+      }
+
+      .action-row {
+        flex-direction: column;
+      }
+
+      .primary-btn,
+      .secondary-btn {
+        width: 100%;
       }
     }
   </style>
 </head>
 
-<body>
-  <div class="edit-shell">
-    <div class="edit-topbar">
-      <div class="edit-title-wrap">
+<body class="admin-page">
+  <main class="admin-shell">
+    <header class="admin-topbar">
+      <div class="admin-title-wrap">
         <h1>修改資料</h1>
         <p>
-          這裡會直接修改 Google Sheet 的 section_members 與 stats_config_tp 分頁。<br />
+          這裡會直接修改 Google Sheet 的 section_members 與 stats_config 分頁。<br />
           修改後統計頁會直接讀取最新資料，不需要重新部署。
         </p>
       </div>
 
-      <div class="top-actions">
-        <a href="/admin" class="back-link-btn">回到後台</a>
-        <a href="/stats" class="back-link-btn">查看統計</a>
+      <div>
+        <a href="/admin.html" class="back-link-btn">回到後台</a>
+        <a href="/stats.html" class="back-link-btn">查看統計</a>
       </div>
-    </div>
+    </header>
 
-    <div class="edit-grid">
-      <section class="edit-card">
-        <div class="card-title">聲部名單 section_members</div>
-        <div class="card-desc">
-          每列代表一位成員。姓名需與訂單查詢頁輸入的姓名一致。<br />
-          聲部建議使用：吹管、彈撥、拉弦、低音、打擊、特殊來源。
+    <section class="edit-grid">
+      <div class="admin-table-card edit-panel">
+        <div class="edit-panel-header">
+          <h2 class="edit-panel-title">聲部名單 section_members</h2>
+          <p class="edit-panel-desc">
+            每列代表一位成員。姓名需與訂單查詢頁輸入的姓名一致。<br />
+            聲部建議使用：吹管、彈撥、拉弦、低音、打擊、特殊來源。
+          </p>
         </div>
 
-        <div class="table-scroll">
+        <div class="edit-table-scroll">
           <table class="edit-table" id="section-table">
             <thead>
               <tr>
@@ -261,6 +234,7 @@
                 <th>聲部</th>
                 <th>手動加分_TP</th>
                 <th>手動加分_KH</th>
+                <th>身份</th>
                 <th>操作</th>
               </tr>
             </thead>
@@ -275,16 +249,18 @@
         </div>
 
         <div id="section-status" class="status-text"></div>
-      </section>
+      </div>
 
-      <section class="edit-card">
-        <div class="card-title">台北場統計設定 stats_config_tp</div>
-        <div class="card-desc">
-          target 用來設定總目標；reward 用來設定獎勵規則。<br />
-          條件格式例：TOTAL:30、500:32、500:10,300:5。
+      <div class="admin-table-card edit-panel">
+        <div class="edit-panel-header">
+          <h2 class="edit-panel-title">統計設定 stats_config</h2>
+          <p class="edit-panel-desc">
+            target 用來設定總目標；reward 用來設定獎勵規則；open / order_open_tp / order_open_kh 可控制購票開關。<br />
+            條件格式例：TOTAL:30、500:32、500:10,300:5、true / false。
+          </p>
         </div>
 
-        <div class="table-scroll">
+        <div class="edit-table-scroll">
           <table class="edit-table" id="stats-table">
             <thead>
               <tr>
@@ -305,9 +281,9 @@
         </div>
 
         <div id="stats-status" class="status-text"></div>
-      </section>
-    </div>
-  </div>
+      </div>
+    </section>
+  </main>
 
   <script>
     function escapeHtml(text) {
@@ -363,7 +339,10 @@
           <td>
             <input class="cell-input section-manual-points-kh" type="number" step="0.5" min="0" value="${escapeHtml(row.manual_points_kh ?? 0)}" placeholder="0" />
           </td>
-          <td style="text-align:center;">
+          <td>
+            <input class="cell-input section-identity" type="text" value="${escapeHtml(row.identity_code || row.identity || row["身份"] || "")}" placeholder="1 / 2 / 3 / 4 / 5" />
+          </td>
+          <td>
             <button class="delete-row-btn" type="button" onclick="this.closest('tr').remove()">刪除</button>
           </td>
         </tr>
@@ -374,15 +353,15 @@
       return `
         <tr>
           <td>
-            <input class="cell-input stats-type" type="text" value="${escapeHtml(row.type || "")}" placeholder="target / reward" />
+            <input class="cell-input stats-type" type="text" value="${escapeHtml(row.type || "")}" placeholder="target / reward / open" />
           </td>
           <td>
             <input class="cell-input stats-name" type="text" value="${escapeHtml(row.name || "")}" placeholder="名稱" />
           </td>
           <td>
-            <input class="cell-input stats-condition" type="text" value="${escapeHtml(row.condition || "")}" placeholder="TOTAL:30 或 500:32" />
+            <input class="cell-input stats-condition" type="text" value="${escapeHtml(row.condition || "")}" placeholder="TOTAL:30 或 true" />
           </td>
-          <td style="text-align:center;">
+          <td>
             <button class="delete-row-btn" type="button" onclick="this.closest('tr').remove()">刪除</button>
           </td>
         </tr>
@@ -443,26 +422,28 @@
 
     function collectSectionMembers() {
       const rows = [];
-    
+
       document.querySelectorAll("#section-table tbody tr").forEach(tr => {
         const name = tr.querySelector(".section-name")?.value.trim() || "";
         const section = tr.querySelector(".section-value")?.value.trim() || "";
         const manualPointsRaw = tr.querySelector(".section-manual-points")?.value.trim() || "0";
         const manualPointsKhRaw = tr.querySelector(".section-manual-points-kh")?.value.trim() || "0";
-    
+        const identityCode = tr.querySelector(".section-identity-code")?.value.trim() || "5";
+
         const manualPoints = Number(manualPointsRaw || 0);
         const manualPointsKh = Number(manualPointsKhRaw || 0);
-    
-        if (!name && !section && !manualPoints && !manualPointsKh) return;
-    
+
+        if (!name && !section && !manualPoints && !manualPointsKh && !identityCode) return;
+
         rows.push({
           name,
           section,
           manual_points: Number.isFinite(manualPoints) ? manualPoints : 0,
-          manual_points_kh: Number.isFinite(manualPointsKh) ? manualPointsKh : 0
+          manual_points_kh: Number.isFinite(manualPointsKh) ? manualPointsKh : 0,
+          identity_code: identityCode || "5"
         });
       });
-    
+
       return rows;
     }
 

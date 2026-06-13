@@ -1,0 +1,15 @@
+.env
+credentials.json
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+api/__pycache__/
+lib/__pycache__/
+
+api/old_index.py
+lib/old_sheet_repo.py
+old_admin.css
+old_admin.html
+sheet_repo.py

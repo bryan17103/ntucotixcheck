@@ -3,15 +3,21 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>《嶋聲》後台管理</title>
+    <title>《嶋聲》票務專用</title>
+    <link rel="icon" type="image/png" href="/NTUCO.png">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- CSS -->
     <link rel="stylesheet" href="/admin.css">
 </head>
 <body class="admin-page">
     <div class="admin-shell">
         <div class="admin-topbar">
             <div class="admin-title-wrap">
-                <h1>後台管理</h1>
-                <p>可搜尋訂單、切換鎖定狀態、付款狀態、取票狀態與刪除訂單</p>
+                <h1>《嶋聲》票務專用</h1>
+                <p>加油加油</p>
             </div>
         
             <div style="display:flex; flex-direction:column; gap:10px;">
@@ -25,27 +31,48 @@
                 </button>
         
                 <a href="/" class="back-link-btn">
-                    回到選位頁
+                    回到首頁
                 </a>
         
-                <a href="/edit" class="back-link-btn">
+                <a href="/edit.html" class="back-link-btn">
                     修改資料
                 </a>
         
             </div>
         </div>
 
-        <div class="admin-search-card">
-            <input
-                id="admin-keyword-input"
-                class="admin-search-input"
-                type="text"
-                placeholder="輸入姓名或訂單ID"
-            />
-            <button id="admin-search-btn" class="admin-search-btn" type="button">查詢</button>
-        </div>
+        <section class="admin-concert-card" id="admin-concert-card">
+            <div>
+                <h2>請先選擇場次</h2>
+                <p>選擇後才會讀取該場次的訂單資料。</p>
+            </div>
 
-        <div class="admin-table-card">
+            <div class="admin-concert-actions">
+                <button class="concert-select-btn" type="button" data-concert="tp">
+                    台北場
+                </button>
+                <button class="concert-select-btn" type="button" data-concert="kh">
+                    高雄場
+                </button>
+            </div>
+        </section>
+
+        <div class="admin-work-area hidden" id="admin-work-area">
+            <div class="admin-current-concert" id="admin-current-concert">
+                目前場次：尚未選擇
+            </div>
+
+            <div class="admin-search-card">
+                <input
+                    id="admin-keyword-input"
+                    class="admin-search-input"
+                    type="text"
+                    placeholder="輸入姓名或訂單ID"
+                />
+                <button id="admin-search-btn" class="admin-search-btn" type="button">查詢</button>
+            </div>
+
+            <div class="admin-table-card">
             <div class="admin-table-scroll">
                 <table class="admin-table">
                     <thead>
@@ -64,16 +91,33 @@
                     </thead>
                     <tbody id="admin-orders-tbody">
                         <tr>
-                            <td colspan="10" class="empty-state">請先輸入姓名或訂單ID查詢</td>
+                            <td colspan="10" class="empty-state">請先選擇場次</td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
             </div>
         </div>
     </div>
 
     <script>
         let authed = false;
+        let currentConcert = null;
+        const concertLabels = {
+            tp: "台北場",
+            kh: "高雄場"
+        };
+
+        function requireConcertSelected() {
+            if (currentConcert) return true;
+            alert("請先選擇台北場或高雄場");
+            return false;
+        }
+
+        function buildModeQuery(prefix = "?") {
+            if (!currentConcert) return "";
+            return `${prefix}mode=${encodeURIComponent(currentConcert)}`;
+        }
         
         function showUnauthorized() {
             document.body.innerHTML = `
@@ -83,7 +127,7 @@
                     align-items: center;
                     justify-content: center;
                     font-family: Arial, 'Noto Sans TC', sans-serif;
-                    background: linear-gradient(135deg, #0f3b3a, #4b1f11);
+                    background: linear-gradient(135deg, #5f7f82, #8ea7a3);
                     color: white;
                     font-size: 28px;
                     font-weight: 800;
@@ -215,17 +259,20 @@
 
         async function searchAdminOrders() {
             if (!authed) return;
+            if (!requireConcertSelected()) return;
         
             const input = document.getElementById("admin-keyword-input");
             const keyword = input.value.trim();
         
             currentKeyword = keyword;
         
-            const url = keyword
-                ? `/api/admin/orders?keyword=${encodeURIComponent(keyword)}`
-                : `/api/admin/orders`;
+            const params = new URLSearchParams();
+            params.set("mode", currentConcert);
+            if (keyword) {
+                params.set("keyword", keyword);
+            }
         
-            const res = await fetch(url);
+            const res = await fetch(`/api/admin/orders?${params.toString()}`);
             const data = await res.json();
         
             if (!res.ok || !data.success) {
@@ -241,7 +288,8 @@
         
             const url =
                 `/api/admin/orders/${encodeURIComponent(orderId)}/lock` +
-                `?floor=${encodeURIComponent(floor)}` +
+                `?mode=${encodeURIComponent(currentConcert)}` +
+                `&floor=${encodeURIComponent(floor)}` +
                 `&row_label=${encodeURIComponent(rowLabel)}`;
         
             const res = await fetch(url, {
@@ -263,7 +311,8 @@
         
             const url =
                 `/api/admin/orders/${encodeURIComponent(orderId)}/payment` +
-                `?floor=${encodeURIComponent(floor)}` +
+                `?mode=${encodeURIComponent(currentConcert)}` +
+                `&floor=${encodeURIComponent(floor)}` +
                 `&row_label=${encodeURIComponent(rowLabel)}`;
         
             const res = await fetch(url, {
@@ -285,7 +334,8 @@
         
             const url =
                 `/api/admin/orders/${encodeURIComponent(orderId)}/pickup/advance` +
-                `?floor=${encodeURIComponent(floor)}` +
+                `?mode=${encodeURIComponent(currentConcert)}` +
+                `&floor=${encodeURIComponent(floor)}` +
                 `&row_label=${encodeURIComponent(rowLabel)}`;
         
             const res = await fetch(url, {
@@ -307,7 +357,8 @@
         
             const url =
                 `/api/admin/orders/${encodeURIComponent(orderId)}/ticket-adjusted` +
-                `?floor=${encodeURIComponent(floor)}` +
+                `?mode=${encodeURIComponent(currentConcert)}` +
+                `&floor=${encodeURIComponent(floor)}` +
                 `&row_label=${encodeURIComponent(rowLabel)}`;
         
             const res = await fetch(url, {
@@ -332,7 +383,8 @@
         
             const url =
                 `/api/admin/orders/${encodeURIComponent(orderId)}` +
-                `?floor=${encodeURIComponent(floor)}` +
+                `?mode=${encodeURIComponent(currentConcert)}` +
+                `&floor=${encodeURIComponent(floor)}` +
                 `&row_label=${encodeURIComponent(rowLabel)}`;
         
             const res = await fetch(url, {
@@ -356,18 +408,68 @@
             }
         });
     
+        function setAdminEmptyState(message) {
+            const tbody = document.getElementById("admin-orders-tbody");
+            if (!tbody) return;
+
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="10" class="empty-state">${escapeHtml(message)}</td>
+                </tr>
+            `;
+        }
+
+        async function selectConcert(concertCode) {
+            if (!authed) return;
+
+            currentConcert = concertCode;
+            sessionStorage.setItem("admin_concert", concertCode);
+
+            document.querySelectorAll(".concert-select-btn").forEach(btn => {
+                btn.classList.toggle("active", btn.dataset.concert === concertCode);
+            });
+
+            const workArea = document.getElementById("admin-work-area");
+            const label = concertLabels[concertCode] || concertCode;
+            document.getElementById("admin-current-concert").textContent = `目前場次：${label}`;
+            workArea?.classList.remove("hidden");
+
+            const input = document.getElementById("admin-keyword-input");
+            if (input) input.value = currentKeyword || "";
+
+            setAdminEmptyState(`${label}資料載入中...`);
+            await loadOrderOpenStatus();
+            await searchAdminOrders();
+        }
+
+        document.querySelectorAll(".concert-select-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                selectConcert(btn.dataset.concert);
+            });
+        });
+
         window.onload = async () => {
             const ok = await requirePassword();
-            if (ok) {
-                searchAdminOrders();
+            if (!ok) return;
+
+            setAdminEmptyState("請先選擇台北場或高雄場");
+
+            const savedConcert = sessionStorage.getItem("admin_concert");
+            if (savedConcert === "tp" || savedConcert === "kh") {
+                selectConcert(savedConcert);
             }
         };
 
         const toggleBtn = document.getElementById("order-open-toggle-btn");
         
         async function loadOrderOpenStatus() {
+            if (!currentConcert) {
+                toggleBtn.textContent = "請先選擇場次";
+                toggleBtn.className = "order-open-btn";
+                return;
+            }
         
-            const res = await fetch("/api/seats");
+            const res = await fetch(`/api/${currentConcert}/seats`);
             const data = await res.json();
         
             renderOrderOpenButton(data.order_open);
@@ -375,9 +477,11 @@
         
         function renderOrderOpenButton(isOpen) {
         
+            const label = concertLabels[currentConcert] || "目前場次";
+
             toggleBtn.textContent = isOpen
-                ? "目前購票開放中｜點擊關閉"
-                : "目前購票已關閉｜點擊開放";
+                ? `${label}購票開放中｜點擊關閉`
+                : `${label}購票已關閉｜點擊開放`;
         
             toggleBtn.className = isOpen
                 ? "order-open-btn is-open"
@@ -390,7 +494,9 @@
         
             if (!ok) return;
         
-            const res = await fetch("/api/admin/toggle-order-open", {
+            if (!requireConcertSelected()) return;
+
+            const res = await fetch(`/api/admin/toggle-order-open?mode=${encodeURIComponent(currentConcert)}`, {
                 method: "POST"
             });
         
@@ -403,8 +509,6 @@
         
             renderOrderOpenButton(data.order_open);
         });
-        
-        loadOrderOpenStatus();
         
     </script>
     

@@ -3,6 +3,7 @@ let currentSearchName = "";
 let currentOrders = [];
 let currentConcertMode = "all"; // all | tp | kh
 let cachedSeatMapData = null;
+let currentRewardStats = {};
 
 const SECOND_FLOOR_START_ROW = 33;
 
@@ -193,7 +194,10 @@ function updateOrdersSummary(orders) {
     document.getElementById("count-300").textContent = count300;
     document.getElementById("count-200").textContent = count200;
 
-    document.getElementById("total-points").textContent = formatNumber(basePoints);
+    const totalPointsEl = document.getElementById("total-points");
+    totalPointsEl.textContent = formatNumber(basePoints);
+    totalPointsEl.dataset.base = basePoints;
+
     document.getElementById("manual-points-note").textContent = "";
 
     updateStatsDisplayByMode();
@@ -264,7 +268,6 @@ function renderOrdersTable(orders) {
         `;
     }).join("");
 }
-
 async function searchOrders() {
     const input = document.getElementById("order-name-input");
     const name = input.value.trim();
@@ -286,8 +289,10 @@ async function searchOrders() {
         const raw = await res.text();
 
         let data;
+
         try {
             data = JSON.parse(raw);
+        console.log("discount_amount =", data.discount_amount);     
         } catch {
             console.log(raw);
             alert(`查詢回傳不是 JSON：${res.status}`);
@@ -300,24 +305,47 @@ async function searchOrders() {
         }
 
         const orders = Array.isArray(data.orders) ? data.orders : [];
-
         currentOrders = orders;
+
+        currentRewardStats = {
+            manual_points: Number(data.manual_points || 0),
+            total_points: Number(data.total_points || 0),
+            all_total_points: Number(data.all_total_points || 0),
+            discount_amount: Number(data.discount_amount || 0),
+            identity: data.identity || "請先查詢姓名",
+        };
 
         renderOrdersTable(orders);
         updateOrdersSummary(orders);
 
         const manualPoints = Number(data.manual_points || 0);
-        const currentBasePoints = Number(document.getElementById("total-points").textContent || 0);
-        const finalTotalPoints = currentBasePoints + manualPoints;
 
-        document.getElementById("total-points").textContent = formatNumber(finalTotalPoints);
+        const totalPointsEl = document.getElementById("total-points");
+        const basePoints = Number(totalPointsEl.dataset.base || 0);
+
+        const finalTotalPoints = basePoints + manualPoints;
+
+        const discountAmount = Number(data.discount_amount || 0);
+        const discountText =
+            currentConcertMode === "all" && discountAmount > 0
+                ? `（可折 ${formatNumber(discountAmount)} 元）`
+                : "";
+
+        totalPointsEl.textContent =
+            `${formatNumber(finalTotalPoints)}${discountText}`;
+
         document.getElementById("manual-points-note").textContent =
-            manualPoints > 0 ? `（含手動加分 ${formatNumber(manualPoints)}）` : "";
+            manualPoints > 0
+                ? `（含手動加分 ${formatNumber(manualPoints)}）`
+                : "";
+
+        updateStatsHelpModalText();
 
     } finally {
         hideOrdersLoading();
     }
 }
+
 
 async function saveNote(orderId, floor, rowLabel, mode = currentConcertMode) {
     const input = document.getElementById(`note-${orderId}-${floor}-${rowLabel}`);
@@ -461,8 +489,8 @@ function renderTpMySeatMap(allSeats, rowLabels, orders) {
     const purchased = buildPurchasedSeatSet(orders);
 
     subtitle.textContent = currentSearchName
-        ? `${currentSearchName} 已劃座位（右上角打勾代表已取票）`
-        : "已劃座位（右上角打勾代表已取票）";
+        ? `右上角打勾代表已取票`
+        : "右上角打勾代表已取票";
 
     const minCol = Math.min(...allSeats.map(s => Number(s.excel_col)));
     const maxCol = Math.max(...allSeats.map(s => Number(s.excel_col)));
@@ -564,8 +592,8 @@ function renderKhMySeatMap(allSeats, rowLabels, orders) {
     const purchased = buildPurchasedSeatSet(orders);
 
     subtitle.textContent = currentSearchName
-        ? `${currentSearchName} 已劃高雄場座位（右上角打勾代表已取票）`
-        : "已劃高雄場座位（右上角打勾代表已取票）";
+        ? `右上角打勾代表已取票`
+        : "右上角打勾代表已取票";
 
     const minCol = Math.min(...allSeats.map(s => Number(s.excel_col)));
     const maxCol = Math.max(...allSeats.map(s => Number(s.excel_col)));
@@ -634,159 +662,8 @@ function renderKhMySeatMap(allSeats, rowLabels, orders) {
 
         mapEl.appendChild(btn);
     });
-    addKhMyFloorFrames(mapEl, minCol, minRow);
-    addKhMyRowMarkers(mapEl, minCol, minRow);
-    
+
     enableMySeatMapZoom();
-}
-function addKhFloorFrame(
-    mapEl,
-    minCol,
-    minRow,
-    startCol,
-    endCol,
-    startRow,
-    endRow,
-    label
-) {
-    const frame = document.createElement("div");
-
-    frame.className = "kh-floor-frame";
-
-    frame.style.gridColumn =
-        `${colIndex(startCol) - minCol + 2} / ${colIndex(endCol) - minCol + 3}`;
-
-    frame.style.gridRow =
-        `${startRow - minRow + 1} / ${endRow - minRow + 2}`;
-
-    const title = document.createElement("div");
-    title.className = "kh-floor-title";
-    title.textContent = label;
-
-    frame.appendChild(title);
-
-    mapEl.appendChild(frame);
-}
-
-function addKhMyFloorFrames(mapEl, minCol, minRow) {
-
-    addKhFloorFrame(
-        mapEl,
-        minCol,
-        minRow,
-        "AI",
-        "BV",
-        44,
-        55,
-        "1樓"
-    );
-
-    addKhFloorFrame(
-        mapEl,
-        minCol,
-        minRow,
-        "Q",
-        "CN",
-        25,
-        82,
-        "2樓"
-    );
-}
-
-function addKhMarker(
-    mapEl,
-    minCol,
-    minRow,
-    col,
-    row,
-    text
-) {
-    const marker = document.createElement("div");
-
-    marker.className = "kh-row-marker";
-    marker.textContent = text;
-
-    marker.style.gridColumn =
-        colIndex(col) - minCol + 2;
-
-    marker.style.gridRow =
-        row - minRow + 1;
-
-    mapEl.appendChild(marker);
-}
-function addKhMyRowMarkers(mapEl, minCol, minRow) {
-
-    /* 一樓 */
-
-    for (let r = 44; r <= 55; r++) {
-        const label = String(r - 43);
-
-        ["AI", "AT", "AV", "BI", "BK", "BV"].forEach(col => {
-            addKhMarker(
-                mapEl,
-                minCol,
-                minRow,
-                col,
-                r,
-                label
-            );
-        });
-    }
-
-    /* F 區 */
-
-    [
-        ["AS", 17, "F7"],
-        ["BK", 17, "F7"],
-
-        ["AR", 19, "F6"],
-        ["BK", 19, "F6"],
-
-        ["AR", 20, "F5"],
-        ["BK", 20, "F5"],
-
-        ["AR", 21, "F4"],
-        ["BK", 21, "F4"],
-
-        ["AR", 22, "F3"],
-        ["BK", 22, "F3"],
-
-        ["AR", 23, "F2"],
-        ["BK", 23, "F2"],
-
-        ["AK", 26, "F1"],
-        ["BS", 26, "F1"],
-    ].forEach(([col, row, text]) => {
-        addKhMarker(
-            mapEl,
-            minCol,
-            minRow,
-            col,
-            row,
-            text
-        );
-    });
-}
-function colIndex(col) {
-    let n = 0;
-    for (let i = 0; i < col.length; i++) {
-        n = n * 26 + (col.charCodeAt(i) - 64);
-    }
-    return n;
-}
-
-function addKhStageToMyMap(mapEl, minCol, minRow) {
-    const stage = document.createElement("div");
-    stage.className = "my-map-stage";
-    stage.textContent = "舞台";
-
-    stage.style.gridColumn =
-        `${colIndex("AF") - minCol + 2} / ${colIndex("BZ") - minCol + 3}`;
-
-    stage.style.gridRow =
-        `${35 - minRow + 1} / ${41 - minRow + 2}`;
-
-    mapEl.appendChild(stage);
 }
 
 async function openMySeatMapModal() {
@@ -830,6 +707,20 @@ function closeMySeatMapModal() {
 
     modal.classList.add("hidden");
 }
+function updateStatsHelpModalText() {
+    const identityEl = document.getElementById("stats-identity-text");
+    const discountEl = document.getElementById("stats-discount-text");
+
+    if (identityEl) {
+        identityEl.textContent =
+            currentRewardStats.identity || "請先查詢姓名";
+    }
+
+    if (discountEl) {
+        const discountAmount = Number(currentRewardStats.discount_amount || 0);
+        discountEl.textContent = `${formatNumber(discountAmount)} 元`;
+    }
+}
 
 function setupModeTabs() {
     document.querySelectorAll(".orders-mode-tab").forEach(btn => {
@@ -867,6 +758,19 @@ function setupBasicEvents() {
     const statsHelpClose = document.getElementById("stats-help-close");
 
     function openStatsHelpModal() {
+        updateStatsHelpModalText();
+
+        document.querySelectorAll(".stats-help-tab").forEach(btn => {
+            btn.classList.toggle("active", btn.dataset.tab === "points");
+        });
+
+        document.querySelectorAll(".stats-help-content").forEach(content => {
+            content.classList.toggle(
+                "active",
+                content.dataset.content === "points"
+            );
+        });
+
         statsHelpModal?.classList.remove("hidden");
     }
 
@@ -879,6 +783,23 @@ function setupBasicEvents() {
 
     statsHelpModal?.addEventListener("click", e => {
         if (e.target === statsHelpModal) closeStatsHelpModal();
+    });
+
+    document.querySelectorAll(".stats-help-tab").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const tab = btn.dataset.tab;
+
+            document.querySelectorAll(".stats-help-tab").forEach(item => {
+                item.classList.toggle("active", item === btn);
+            });
+
+            document.querySelectorAll(".stats-help-content").forEach(content => {
+                content.classList.toggle(
+                    "active",
+                    content.dataset.content === tab
+                );
+            });
+        });
     });
 
     const mySeatMapBtn = document.getElementById("my-seat-map-btn");

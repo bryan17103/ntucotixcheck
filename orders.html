@@ -28,7 +28,7 @@
                 </button>
             </div>
 
-            <a href="/" class="back-link-btn">回到選位頁</a>
+            <a href="/" class="back-link-btn">回到首頁</a>
         </header>
 
         <div class="orders-search-card">
@@ -97,9 +97,9 @@
             <div class="summary-card summary-card-points">
                 <div class="summary-card-header">
                     <div class="summary-icon">🪧</div>
-                    <button class="stats-help-trigger" type="button" id="stats-help-btn">
-                        推票統計
-                    </button>
+                    <div class="summary-label stats-help-trigger" id="stats-help-btn">
+                        推票統計（點我看說明）
+                    </div>
                 </div>
         
                 <div class="ticket-price-inline">
@@ -219,6 +219,10 @@
                         ⚠️ 台北場取票截止時間：
                         <strong style="color:#d64545;">台北場總彩 07/15（三）17:00</strong>
                     </p>
+                    <p>
+                        ⚠️ 高雄場取票截止時間：
+                        <strong style="color:#d64545;">高雄場總彩 07/28（二）17:00</strong>
+                    </p>
                 </section>
 
                 <section class="orders-help-section">
@@ -242,18 +246,114 @@
     </div>
 
     <div id="stats-help-modal" class="modal-overlay hidden">
-        <div class="modal-card">
+        <div class="modal-card stats-help-modal-card">
+
             <button class="modal-close-btn" type="button" id="stats-help-close">×</button>
-            <h2>推票獎勵積分說明</h2>
-            <p>關於本年度暑假巡迴公演之推票獎勵，積分計算方式如下：</p>
-            <div class="points-rule-list">
-                <div>200 元票區 = <strong>1 分</strong></div>
-                <div>300 元票區 = <strong>1.5 分</strong></div>
-                <div>500 元票區 = <strong>2.5 分</strong></div>
-                <div>800 元票區 = <strong>4.5 分</strong></div>
+
+            <h2 class="stats-help-title">推票獎勵積分說明</h2>
+
+            <div class="stats-help-tabs">
+                <button
+                    type="button"
+                    class="stats-help-tab active"
+                    data-tab="points"
+                >
+                    積分計算方式
+                </button>
+
+                <button
+                    type="button"
+                    class="stats-help-tab"
+                    data-tab="discount"
+                >
+                    折扣方式
+                </button>
             </div>
-            <p>累積推票積分可依「全部／單場」切換查看。</p>
-            <p>若親友於 Opentix 上使用文化幣購票，請務必私訊票務協助手動加分。手動加分之計算方式與上述票區積分相同。</p>
+
+            <!-- 積分 -->
+            <div class="stats-help-content active" data-content="points">
+
+                <p>關於本年度暑假巡迴公演之推票獎勵，積分計算方式如下：</p>
+
+                <div class="points-rule-list">
+                    <div>200 元票區 = <strong>1 分</strong></div>
+                    <div>300 元票區 = <strong>1.5 分</strong></div>
+                    <div>500 元票區 = <strong>2.5 分</strong></div>
+                    <div>800 元票區 = <strong>4.5 分</strong></div>
+                </div>
+
+                <p>
+                    累積推票積分可依「全部／單場」切換查看。
+                </p>
+
+                <p>
+                    若親友於 Opentix 上使用文化幣購票，
+                    請務必私訊票務協助手動加分。
+                    手動加分之計算方式與上述票區積分相同。
+                </p>
+
+            </div>
+
+            <!-- 折扣 -->
+            <div class="stats-help-content" data-content="discount">
+
+                <div class="stats-identity-box">
+                    你的身份為：
+                    <strong id="stats-identity-text">
+                        暫時未分類，請耐心等待
+                    </strong>
+                </div>
+
+                <div class="stats-discount-box">
+                    目前可折抵金額：
+                    <strong id="stats-discount-text">0 元</strong>
+                </div>
+
+                <p class="discount-rule-intro">
+                    兩場之推票積分合併計算，
+                    超過門檻後，每多 1 點可折抵 100 元。
+                </p>
+
+                <div class="discount-threshold-grid">
+
+                    <div class="discount-th-item">
+                        <div class="discount-role">團員</div>
+                        <div class="discount-threshold">
+                            達 10 點後，第 11 點開始折抵
+                        </div>
+                    </div>
+
+                    <div class="discount-th-item">
+                        <div class="discount-role">工人／協演</div>
+                        <div class="discount-threshold">
+                            達 2 點後，第 3 點開始折抵
+                        </div>
+                    </div>
+
+                    <div class="discount-th-item">
+                        <div class="discount-role">學生協奏</div>
+                        <div class="discount-threshold">
+                            達 55 點後，第 56 點開始折抵
+                        </div>
+                    </div>
+
+                    <div class="discount-th-item">
+                        <div class="discount-role">團長群</div>
+                        <div class="discount-threshold">
+                            達 30 點後，第 31 點開始折抵
+                        </div>
+                    </div>
+
+                </div>
+
+                <p class="discount-note">
+                    折扣額可自由選擇折抵台北場或高雄場；
+                    若折扣額超過實際應付金額，
+                    多出的部分不會另外找零或折現。
+                </p>
+
+            </div>
+
         </div>
     </div>
 

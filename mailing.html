@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>《嶋聲》寄票表單</title>
+    <link rel="icon" type="image/png" href="/NTUCO.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/orders.css">
+
+    <style>
+        .mailing-empty-wrap {
+            min-height: calc(100% - 120px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 16px 72px;
+        }
+
+        .mailing-empty-card {
+            width: min(620px, 100%);
+            padding: 52px 36px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.88);
+            border: 1px solid rgba(255,255,255,0.62);
+            box-shadow:
+                0 16px 36px rgba(45, 65, 62, 0.10),
+                inset 0 1px 0 rgba(255,255,255,0.86);
+            text-align: center;
+        }
+
+        .mailing-empty-icon {
+            width: 72px;
+            height: 72px;
+            margin: 0 auto 22px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(127,159,152,0.16);
+            box-shadow: 0 8px 18px rgba(79,111,115,0.16);
+            font-size: 34px;
+        }
+
+        .mailing-empty-title {
+            margin: 0;
+            font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+            font-size: 34px;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            line-height: 1.4;
+            color: #37403d;
+        }
+
+        .mailing-empty-subtitle {
+            margin: 14px 0 0;
+            font-family: "Noto Sans TC", sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            line-height: 1.8;
+            color: rgba(55, 64, 61, 0.68);
+        }
+
+        @media (max-width: 768px) {
+            .orders-title-wrap {
+                padding-right: 0;
+            }
+
+            .mailing-empty-wrap {
+                min-height: 56vh;
+                padding: 36px 0 52px;
+            }
+
+            .mailing-empty-card {
+                padding: 42px 22px;
+                border-radius: 26px;
+            }
+
+            .mailing-empty-title {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+
+<body class="orders-page">
+
+    <main class="orders-shell">
+
+        <header class="orders-hero">
+            <div class="orders-title-wrap">
+                <h1>《嶋聲》團內購票寄票表單</h1>
+                <p class="orders-hero-subtitle">寄票資料填寫與查詢</p>
+            </div>
+
+            <a href="/" class="back-link-btn">回到首頁</a>
+        </header>
+
+        <section class="mailing-empty-wrap">
+            <div class="mailing-empty-card">
+                <div class="mailing-empty-icon">✉️</div>
+                <h2 class="mailing-empty-title">尚未開放，請耐心等待～</h2>
+                <p class="mailing-empty-subtitle">
+                    剛考完期末的票務需要時間 QQ
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="page-footer">
+        © 2026 NTUCO All Rights Reserved.
+    </footer>
+
+</body>
+</html>
