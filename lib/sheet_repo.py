@@ -1164,7 +1164,7 @@ def build_stats_summary(concert_code="tp"):
                 }
                 for n, c in members.items()
             ],
-            key=lambda x: (x["points"], x["tickets"]),
+            key=lambda x: (x["tickets"], x["points"]),
             reverse=True
         )
 
@@ -1270,7 +1270,7 @@ def build_stats_summary_all():
 
     ranking = sorted(
         person_map.values(),
-        key=lambda x: (x["points"], x["tickets"]),
+        key=lambda x: (x["tickets"], x["points"]),
         reverse=True
     )
 
