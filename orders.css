@@ -1059,6 +1059,36 @@ table.orders-table {
     padding: 14px;
 }
 
+.discount-th-item.is-current-identity {
+    background: linear-gradient(135deg, #5f8f78, #3f6f5f);
+    color: #fff;
+    box-shadow: 0 10px 24px rgba(63, 111, 95, 0.24);
+    transform: translateY(-1px);
+}
+
+.discount-th-item.is-current-identity .discount-role,
+.discount-th-item.is-current-identity .discount-threshold {
+    color: #fff;
+}
+
+.discount-th-item.is-current-identity .discount-role::after {
+    content: "目前身份";
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-left: 8px;
+    padding: 3px 8px;
+
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.22);
+
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+}
+
+
 .discount-role {
     font-weight: 700;
     font-size: 16px;

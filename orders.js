@@ -312,6 +312,7 @@ async function searchOrders() {
             total_points: Number(data.total_points || 0),
             all_total_points: Number(data.all_total_points || 0),
             discount_amount: Number(data.discount_amount || 0),
+            identity_code: String(data.identity_code || "5"),
             identity: data.identity || "請先查詢姓名",
         };
 
@@ -707,6 +708,7 @@ function closeMySeatMapModal() {
 
     modal.classList.add("hidden");
 }
+
 function updateStatsHelpModalText() {
     const identityEl = document.getElementById("stats-identity-text");
     const discountEl = document.getElementById("stats-discount-text");
@@ -720,6 +722,18 @@ function updateStatsHelpModalText() {
         const discountAmount = Number(currentRewardStats.discount_amount || 0);
         discountEl.textContent = `${formatNumber(discountAmount)} 元`;
     }
+
+    highlightCurrentIdentity(currentRewardStats.identity_code);
+}
+
+function highlightCurrentIdentity(identityCode) {
+    document.querySelectorAll(".discount-th-item").forEach(item => {
+        item.classList.remove("is-current-identity");
+
+        if (String(item.dataset.identityCode) === String(identityCode)) {
+            item.classList.add("is-current-identity");
+        }
+    });
 }
 
 function setupModeTabs() {
