@@ -284,7 +284,7 @@ def generate_order_id(name: str, concert_code="tp") -> str:
     )
 
 
-def append_order_rows(name: str, seat_rows: List[Dict], concert_code="tp") -> str:
+def append_order_rows(name: str, seat_rows: List[Dict], note: str = "", concert_code="tp") -> str:
     ws = get_worksheet(concert_code)
     order_id = generate_order_id(name, concert_code)
     dt = now_str()
@@ -301,7 +301,7 @@ def append_order_rows(name: str, seat_rows: List[Dict], concert_code="tp") -> st
             str(seat["row_label"]),
             int(seat["seat_number"]),
             int(seat["price"]),
-            "",
+            note,                       # I 訂單備註
             False,
             False,
             False,

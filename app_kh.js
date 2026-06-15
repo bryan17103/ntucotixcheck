@@ -770,6 +770,10 @@ function setupConfirmButton() {
         const name = await askBuyerName();
         if (!name) return;
 
+        const note = await askOrderNote();
+        if (note === null) return;
+
+
         const res = await fetch("/api/kh/confirm", {
             method: "POST",
             headers: {
@@ -777,6 +781,7 @@ function setupConfirmButton() {
             },
             body: JSON.stringify({
                 name,
+                note,
                 seats: Array.from(selectedSeats)
             })
         });
@@ -862,6 +867,77 @@ function askBuyerName() {
         buyerNameInput.addEventListener("keydown", handleKeydown);
     });
 }
+
+function askOrderNote() {
+    return new Promise((resolve) => {
+        if (!nameModal) {
+            resolve("");
+            return;
+        }
+
+        const title = nameModal.querySelector("h2");
+        const desc = nameModal.querySelector("p");
+
+        const oldTitle = title ? title.textContent : "";
+        const oldDesc = desc ? desc.textContent : "";
+        const oldPlaceholder = buyerNameInput.getAttribute("placeholder") || "";
+        const oldMaxLength = buyerNameInput.getAttribute("maxlength");
+
+        if (title) title.textContent = "是否需要為這筆訂單下備註？";
+        if (desc) desc.textContent = "例如這張票是誰的";
+
+        buyerNameInput.value = "";
+        buyerNameInput.placeholder = "(選填)";
+        buyerNameInput.removeAttribute("maxlength");
+
+        nameModal.classList.remove("hidden");
+
+        setTimeout(() => {
+            buyerNameInput.focus();
+        }, 30);
+
+        function restoreModalText() {
+            if (title) title.textContent = oldTitle;
+            if (desc) desc.textContent = oldDesc;
+            buyerNameInput.placeholder = oldPlaceholder;
+
+            if (oldMaxLength !== null) {
+                buyerNameInput.setAttribute("maxlength", oldMaxLength);
+            }
+        }
+
+        function cleanup() {
+            nameModal.classList.add("hidden");
+            restoreModalText();
+
+            nameCancelBtn.removeEventListener("click", handleCancel);
+            nameConfirmBtn.removeEventListener("click", handleConfirm);
+            buyerNameInput.removeEventListener("keydown", handleKeydown);
+        }
+
+        function handleCancel() {
+            cleanup();
+            resolve(null);
+        }
+
+        function handleConfirm() {
+            const note = buyerNameInput.value.trim();
+            cleanup();
+            resolve(note);
+        }
+
+        function handleKeydown(e) {
+            if (e.key === "Enter") {
+                handleConfirm();
+            }
+        }
+
+        nameCancelBtn.addEventListener("click", handleCancel);
+        nameConfirmBtn.addEventListener("click", handleConfirm);
+        buyerNameInput.addEventListener("keydown", handleKeydown);
+    });
+}
+
 
 function showSuccessModal(title, message) {
     if (!successModal) return;

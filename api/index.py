@@ -224,6 +224,7 @@ def handle_confirm(concert_code):
         data = request.get_json(silent=True) or {}
 
         name = str(data.get("name", "")).strip()
+        note = str(data.get("note", "")).strip()
         selected_seat_ids = data.get("seats", [])
 
         if not name:
@@ -298,6 +299,7 @@ def handle_confirm(concert_code):
         order_id = append_order_rows(
             name=name,
             seat_rows=seat_rows_to_save,
+            note=note,
             concert_code=concert_code
         )
 
