@@ -883,7 +883,7 @@ function askOrderNote() {
         const oldPlaceholder = buyerNameInput.getAttribute("placeholder") || "";
         const oldMaxLength = buyerNameInput.getAttribute("maxlength");
 
-        if (title) title.textContent = "是否需要為這筆訂單下備註？";
+        if (title) title.textContent = "訂單備註";
         if (desc) desc.textContent = "例如這張票是誰的";
 
         buyerNameInput.value = "";
