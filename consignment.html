@@ -6,109 +6,287 @@
     <title>《嶋聲》寄票表單</title>
     <link rel="icon" type="image/png" href="/NTUCO.png">
 
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;500;700;900&display=swap"
+        rel="stylesheet"
+    >
 
-    <link rel="stylesheet" href="/orders.css">
-
-    <style>
-        .mailing-empty-wrap {
-            min-height: calc(100% - 120px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 48px 16px 72px;
-        }
-
-        .mailing-empty-card {
-            width: min(620px, 100%);
-            padding: 52px 36px;
-            border-radius: 30px;
-            background: rgba(255,255,255,0.88);
-            border: 1px solid rgba(255,255,255,0.62);
-            box-shadow:
-                0 16px 36px rgba(45, 65, 62, 0.10),
-                inset 0 1px 0 rgba(255,255,255,0.86);
-            text-align: center;
-        }
-
-        .mailing-empty-icon {
-            width: 72px;
-            height: 72px;
-            margin: 0 auto 22px;
-            border-radius: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(127,159,152,0.16);
-            box-shadow: 0 8px 18px rgba(79,111,115,0.16);
-            font-size: 34px;
-        }
-
-        .mailing-empty-title {
-            margin: 0;
-            font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
-            font-size: 34px;
-            font-weight: 900;
-            letter-spacing: 0.08em;
-            line-height: 1.4;
-            color: #37403d;
-        }
-
-        .mailing-empty-subtitle {
-            margin: 14px 0 0;
-            font-family: "Noto Sans TC", sans-serif;
-            font-size: 15px;
-            font-weight: 700;
-            letter-spacing: 0.04em;
-            line-height: 1.8;
-            color: rgba(55, 64, 61, 0.68);
-        }
-
-        @media (max-width: 768px) {
-            .orders-title-wrap {
-                padding-right: 0;
-            }
-
-            .mailing-empty-wrap {
-                min-height: 56vh;
-                padding: 36px 0 52px;
-            }
-
-            .mailing-empty-card {
-                padding: 42px 22px;
-                border-radius: 26px;
-            }
-
-            .mailing-empty-title {
-                font-size: 26px;
-            }
-        }
-    </style>
+    <!-- CSS -->
+    <link rel="stylesheet" href="/consignment.css">
 </head>
 
-<body class="orders-page">
+<body class="consignment-page">
 
-    <main class="orders-shell">
+    <main class="consignment-shell">
 
-        <header class="orders-hero">
-            <div class="orders-title-wrap">
-                <h1>《嶋聲》團內購票寄票表單</h1>
-                <p class="orders-hero-subtitle">寄票資料填寫與查詢</p>
+        <header class="consignment-hero">
+            <div class="consignment-title-wrap">
+                <h1>《嶋聲》寄票表單</h1>
+                <p class="consignment-note main">
+                    請務必於截止日期前給票務喔！
+                </p>
+
+                <button class="consignment-help-trigger" type="button" id="consignment-help-btn">
+                    寄票流程說明請點我！
+                </button>
             </div>
 
             <a href="/" class="back-link-btn">回到首頁</a>
         </header>
 
-        <section class="mailing-empty-wrap">
-            <div class="mailing-empty-card">
-                <div class="mailing-empty-icon">✉️</div>
-                <h2 class="mailing-empty-title">尚未開放，請耐心等待～</h2>
-                <p class="mailing-empty-subtitle">
-                    剛考完期末的票務需要時間 QQ
-                </p>
-            </div>
+        <div class="consignment-mode-tabs">
+            <button class="consignment-mode-tab active" type="button" data-tab="submit">
+                我要寄票
+            </button>
+
+            <button class="consignment-mode-tab" type="button" data-tab="query">
+                查詢寄票資料
+            </button>
+
+            <a class="consignment-mode-tab consignment-front-link" href="/consignment-front">
+                前往前台專用
+            </a>
+        </div>
+
+        <!-- 我要寄票 -->
+        <section id="submit-panel" class="consignment-panel active">
+
+            <form id="consignment-form">
+
+                <div class="consignment-summary-grid">
+
+                    <section class="summary-card consignment-owner-card">
+                        <div class="summary-card-header">
+                            <div class="summary-icon">👤</div>
+                            <div class="summary-label">寄票人資訊</div>
+                        </div>
+
+                        <div class="owner-mode-row">
+                            <button class="owner-mode-btn active" type="button" data-owner-mode="new">
+                                第一次寄票
+                            </button>
+                            <button class="owner-mode-btn" type="button" data-owner-mode="existing">
+                                已建立密碼
+                            </button>
+                        </div>
+
+                        <div class="consignment-form-grid">
+                            <label class="consignment-field">
+                                <span>寄票人姓名</span>
+                                <input id="owner-name" type="text" placeholder="請輸入您的姓名">
+                            </label>
+
+                            <label class="consignment-field">
+                                <span>寄票密碼</span>
+                                <input id="owner-password" type="password" placeholder="請輸入寄票密碼">
+                            </label>
+
+                            <label class="consignment-field" id="confirm-password-field">
+                                <span>確認密碼</span>
+                                <input id="confirm-password" type="password" placeholder="請再次輸入寄票密碼">
+                            </label>
+
+                            <label class="consignment-field">
+                                <span>場次</span>
+                                <select id="concert-code">
+                                    <option value="">請選擇場次</option>
+                                    <option value="tp">台北場</option>
+                                    <option value="kh">高雄場</option>
+                                </select>
+                            </label>
+                        </div>
+                    </section>
+
+                    <section class="summary-card consignment-stat-card">
+                        <div class="summary-card-header">
+                            <div class="summary-icon">🎟️</div>
+                            <div class="summary-label">本次寄票統計</div>
+                        </div>
+
+                        <div class="summary-metric-row">
+                            <div class="summary-metric-label">
+                                <span class="summary-dot"></span>
+                                寄票筆數（信封數）
+                            </div>
+                            <div class="summary-metric-value"><span id="item-count">0</span> 筆</div>
+                        </div>
+
+                        <div class="summary-divider"></div>
+
+                        <div class="summary-metric-row">
+                            <div class="summary-metric-label">
+                                <span class="summary-dot muted"></span>
+                                總張數
+                            </div>
+                            <div class="summary-metric-value"><span id="ticket-count">0</span> 張</div>
+                        </div>
+
+                        <div class="summary-divider"></div>
+
+                        <div class="summary-metric-row">
+                            <div class="summary-metric-label">
+                                <span class="summary-star">✦</span>
+                                前台共應收金額
+                            </div>
+                            <div class="summary-metric-value" id="total-amount">$0</div>
+                        </div>
+                    </section>
+
+                </div>
+
+                <section class="consignment-table-card">
+                    <div class="consignment-table-top">
+                        <div>
+                            <h2>取票人資料</h2>
+                            <p>
+                                一列代表一筆取票資料，也就是一個寄票信封。「應收金額」請填寫該信封需收的金額，若不需付款請留空。送出後每一筆都會產生取票編號，請將完整編號提供給取票人。
+                            </p>
+                        </div>
+
+                        <button id="add-item-btn" class="consignment-search-btn" type="button">
+                            ＋新增一筆
+                        </button>
+                    </div>
+
+                    <div class="consignment-table-scroll">
+                        <table class="consignment-table">
+                            <thead>
+                                <tr>
+                                    <th>取票人姓名</th>
+                                    <th>應收金額</th>
+                                    <th>張數</th>
+                                    <th>備註</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="items-tbody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <div id="form-message" class="form-message hidden"></div>
+
+                <div class="consignment-submit-row">
+                    <button id="submit-btn" class="consignment-submit-btn" type="submit">
+                        確認送出寄票資料
+                    </button>
+                </div>
+
+            </form>
+
+            <section id="result-card" class="consignment-result-card hidden">
+                <div class="result-header">
+                    <div>
+                        <h2>寄票資料已送出</h2>
+                        <p>請將以下「取票編號，例如 TP0001」（非批次編號）提供給取票人，取票人到場時可直接向前台報編號。</p>
+                    </div>
+
+                    <button id="new-submit-btn" class="consignment-mode-tab" type="button">
+                        繼續新增
+                    </button>
+                </div>
+
+                <div class="result-meta-grid">
+                    <div class="result-meta-item">
+                        <span>寄票人</span>
+                        <strong id="result-owner-name">-</strong>
+                    </div>
+                    <div class="result-meta-item">
+                        <span>批次編號</span>
+                        <strong id="result-batch-id">-</strong>
+                    </div>
+                    <div class="result-meta-item">
+                        <span>場次</span>
+                        <strong id="result-concert">-</strong>
+                    </div>
+                </div>
+
+                <div id="result-list" class="consignment-record-list"></div>
+            </section>
+
+        </section>
+
+        <!-- 查詢寄票資料 -->
+        <section id="query-panel" class="consignment-panel">
+            <section class="owner-query-bar">
+                <div class="owner-query-bar-title">
+                    <div class="summary-icon">🔐</div>
+                    <div>
+                        <div class="summary-label">寄票查詢</div>
+                        <p class="query-card-note">
+                            請登入您的寄票帳號！
+                        </p>
+                    </div>
+                </div>
+
+                <label class="consignment-field">
+                    <span>寄票人姓名</span>
+                    <input id="owner-query-name" type="text" placeholder="請輸入姓名">
+                </label>
+
+                <label class="consignment-field">
+                    <span>寄票密碼</span>
+                    <input id="owner-query-password" type="password" placeholder="請輸入密碼">
+                </label>
+
+                <button id="owner-query-btn" class="consignment-search-btn" type="button">
+                    查詢
+                </button>
+
+                <button id="forgot-password-btn" class="forgot-password-btn" type="button">
+                忘記密碼／重設密碼
+                </button>
+            </section>
+
+            <section id="query-result-card" class="consignment-result-card query-result-card hidden">
+                <div class="result-header">
+                    <div>
+                        <h2 id="query-result-title">查詢結果</h2>
+                        <p id="query-result-note">請確認以下資料。</p>
+                    </div>
+                </div>
+
+                <div id="owner-concert-tabs" class="consignment-mode-tabs hidden">
+                    <button class="consignment-mode-tab active" type="button" data-owner-record-mode="tp">
+                        台北場
+                    </button>
+                    <button class="consignment-mode-tab" type="button" data-owner-record-mode="kh">
+                        高雄場
+                    </button>
+                </div>
+
+                <div id="query-summary-grid" class="query-summary-grid hidden">
+                    <div class="query-summary-item">
+                        <span>寄放筆數 (信封數)</span>
+                        <strong id="query-envelope-count">0 筆</strong>
+                    </div>
+
+                    <div class="query-summary-item">
+                        <span>寄放張數</span>
+                        <strong id="query-ticket-count">0 張</strong>
+                    </div>
+
+                    <div class="query-summary-item highlight">
+                        <span>前台應收金額</span>
+                        <strong id="query-total-amount">$0</strong>
+                    </div>
+
+                    <div class="query-summary-item warning">
+                        <span>尚未交給票務</span>
+                        <strong id="query-pending-count">0 筆</strong>
+                    </div>
+
+                    <div class="query-summary-item blue">
+                        <span>已寄放前台</span>
+                        <strong id="query-sent-count">0 筆</strong>
+                    </div>
+                </div>
+
+                <div id="query-result-list" class="consignment-record-list"></div>
+            </section>
         </section>
 
     </main>
@@ -117,5 +295,1085 @@
         © 2026 NTUCO All Rights Reserved.
     </footer>
 
+    <div id="consignment-loading-overlay" class="orders-loading-overlay hidden">
+        <div class="orders-loading-card">
+            <div class="orders-loading-spinner"></div>
+            <div id="consignment-loading-text">處理中...</div>
+        </div>
+    </div>
+
+    <!-- 送出確認 Modal -->
+    <div id="submit-confirm-modal" class="modal-overlay hidden">
+        <div class="modal-card submit-confirm-card">
+            <button class="modal-close-btn" type="button" id="submit-confirm-close-btn">×</button>
+
+            <h2 class="orders-help-title">確認送出寄票資料</h2>
+
+            <p class="submit-confirm-note">
+                請再次確認以下資料是否正確。送出後系統會建立寄票紀錄與取票編號。
+            </p>
+
+            <div class="submit-confirm-grid">
+                <div class="submit-confirm-item">
+                    <span>場次</span>
+                    <strong id="confirm-concert">-</strong>
+                </div>
+
+                <div class="submit-confirm-item">
+                    <span>寄票筆數（信封數）</span>
+                    <strong id="confirm-item-count">0 筆</strong>
+                </div>
+
+                <div class="submit-confirm-item">
+                    <span>總張數</span>
+                    <strong id="confirm-ticket-count">0 張</strong>
+                </div>
+
+                <div class="submit-confirm-item highlight">
+                    <span>前台共應收金額</span>
+                    <strong id="confirm-total-amount">$0</strong>
+                </div>
+            </div>
+
+            <div class="submit-confirm-warning">
+                ⚠️「應收金額」為每一筆信封的總金額，若確認無誤，請按下方按鈕送出。
+            </div>
+
+            <div class="submit-confirm-actions">
+                <button id="submit-confirm-cancel-btn" class="submit-confirm-cancel-btn" type="button">
+                    返回修改
+                </button>
+
+                <button id="submit-confirm-ok-btn" class="orders-help-confirm-btn" type="button">
+                    確認送出
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 寄票說明 Modal -->
+    <div id="consignment-help-modal" class="modal-overlay hidden">
+        <div class="modal-card orders-help-modal-card">
+            <button class="modal-close-btn" type="button" id="consignment-help-close-btn">×</button>
+
+            <h2 class="orders-help-title">寄票說明</h2>
+
+            <div class="orders-help-content">
+                <section class="orders-help-section">
+                    <h3>【關於寄票】</h3>
+                    <p>
+                        「寄票」是指將親友票券寄放於前台，聽眾抵達演出場館後，向前台告知取票編號，即可付款（或無需付款）後取得票券。
+                    </p>
+                    <p>
+                        活動結束後，前台會再統一整理票款並歸還給您。
+                    </p>
+                </section>
+
+                <section class="orders-help-section">
+                    <h3>【寄票流程】</h3>
+
+                    <p>
+                        <strong style="color:#4986b1;">1. 建立帳號或登入</strong><br>
+                        第一次使用請先建立寄票帳號；若先前已建立過，請直接使用原本的姓名與密碼登入。
+                        密碼經系統單向雜湊處理，票務無法看到您的原始密碼，請完全放心！
+                    </p>
+
+                    <p>
+                        <strong style="color:#4986b1;">2. 填寫取票人資料</strong><br>
+                        每一筆資料代表一個信封，送出後系統會為每筆資料產生獨立的
+                        <strong style="color:#4f6f73;">取票編號</strong>。
+                        請將編號提供給對應的取票人，演出當天直接向前台報編號即可。
+                    </p>
+
+                    <p>
+                        <strong style="color:#4986b1;">3. 填寫金額、張數、備註</strong><br>
+                        若取票人需要在前台付款，請在「單筆應收金額」填寫
+                        <strong style="color:#d64545;">該筆信封</strong>
+                        總共應收的金額，例如
+                        <strong style="color:#d64545;">400</strong>。
+                        若不需付款，請將金額留空，系統會自動視為
+                        <strong style="color:#4f6f73;">無需付款</strong>。
+                    </p>
+
+                    <p>
+                        <strong style="color:#4986b1;">4. 將寄票信封交給票務本人</strong><br>
+                        送出表單後，狀態會先顯示為
+                        <strong style="color:#837660;">等待交票</strong>；
+                        接下來請找到票務並且把票放進信封中，票務收到你的票券後，才會更新為
+                        <strong style="color:#356fcb;">已寄放前台</strong>。
+                    </p>
+
+                    <p>
+                        <strong style="color:#d64545;">⚠️ 請注意</strong><br>
+                        僅填寫表單不代表寄票成功。請務必於截止日前將寄票信封交給票務，
+                        否則前台將無法協助取票人領票。
+                    </p>
+
+                    <p>
+                        ⚠️ 台北場寄票截止時間：
+                        <strong style="color:#d64545;">2026/07/10 23:59</strong>
+                        <br>
+                        ⚠️ 高雄場寄票截止時間：
+                        <strong style="color:#d64545;">2026/07/24 23:59</strong>
+                    </p>
+                </section>
+            </div>
+
+            <button class="orders-help-confirm-btn" type="button" id="consignment-help-confirm-btn">
+                讚啦肯定是沒問題的！
+            </button>
+        </div>
+    </div>
+
+    <div id="reset-password-modal" class="modal-overlay hidden">
+        <div class="modal-card reset-password-card">
+            <h2>重設寄票查詢密碼</h2>
+
+            <p class="modal-note">
+                請輸入寄票人姓名與任一取票編號，系統會確認資料是否吻合。
+            </p>
+
+            <label class="consignment-field">
+                <span>寄票人姓名</span>
+                <input id="reset-owner-name" type="text" placeholder="請輸入寄票人姓名">
+            </label>
+
+            <label class="consignment-field">
+                <span>任一取票編號</span>
+                <input id="reset-consignment-id" type="text" placeholder="例如 TP0001、KH0003">
+            </label>
+
+            <label class="consignment-field">
+                <span>新密碼</span>
+                <input id="reset-new-password" type="password" placeholder="請輸入新密碼">
+            </label>
+
+            <label class="consignment-field">
+                <span>確認新密碼</span>
+                <input id="reset-confirm-password" type="password" placeholder="請再次輸入新密碼">
+            </label>
+
+            <div id="reset-password-message" class="form-message hidden"></div>
+
+            <div class="modal-actions">
+                <button id="reset-password-cancel-btn" class="modal-secondary-btn" type="button">
+                    取消
+                </button>
+
+                <button id="reset-password-submit-btn" class="modal-primary-btn" type="button">
+                    確認重設密碼
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ownerModeButtons = document.querySelectorAll(".owner-mode-btn");
+        const tabButtons = document.querySelectorAll(".consignment-mode-tab[data-tab]");
+        const submitPanel = document.getElementById("submit-panel");
+        const queryPanel = document.getElementById("query-panel");
+
+        const form = document.getElementById("consignment-form");
+        const itemsTbody = document.getElementById("items-tbody");
+        const addItemBtn = document.getElementById("add-item-btn");
+        const submitBtn = document.getElementById("submit-btn");
+
+        const itemCountEl = document.getElementById("item-count");
+        const ticketCountEl = document.getElementById("ticket-count");
+        const totalAmountEl = document.getElementById("total-amount");
+        const formMessage = document.getElementById("form-message");
+
+        const resultCard = document.getElementById("result-card");
+        const resultOwnerName = document.getElementById("result-owner-name");
+        const resultBatchId = document.getElementById("result-batch-id");
+        const resultConcert = document.getElementById("result-concert");
+        const resultList = document.getElementById("result-list");
+        const newSubmitBtn = document.getElementById("new-submit-btn");
+
+        const confirmPasswordField = document.getElementById("confirm-password-field");
+        const confirmPasswordInput = document.getElementById("confirm-password");
+
+        const loadingOverlay = document.getElementById("consignment-loading-overlay");
+        const loadingText = document.getElementById("consignment-loading-text");
+
+        const helpBtn = document.getElementById("consignment-help-btn");
+        const helpModal = document.getElementById("consignment-help-modal");
+        const helpCloseBtn = document.getElementById("consignment-help-close-btn");
+        const helpConfirmBtn = document.getElementById("consignment-help-confirm-btn");
+
+        const ownerQueryName = document.getElementById("owner-query-name");
+        const ownerQueryPassword = document.getElementById("owner-query-password");
+        const ownerQueryBtn = document.getElementById("owner-query-btn");
+
+        const queryResultCard = document.getElementById("query-result-card");
+        const queryResultTitle = document.getElementById("query-result-title");
+        const queryResultNote = document.getElementById("query-result-note");
+        const queryResultList = document.getElementById("query-result-list");
+        const ownerConcertTabs = document.getElementById("owner-concert-tabs");
+
+        const querySummaryGrid = document.getElementById("query-summary-grid");
+        const queryEnvelopeCount = document.getElementById("query-envelope-count");
+        const queryTicketCount = document.getElementById("query-ticket-count");
+        const queryTotalAmount = document.getElementById("query-total-amount");
+        const queryPendingCount = document.getElementById("query-pending-count");
+        const querySentCount = document.getElementById("query-sent-count");
+
+        const submitConfirmModal = document.getElementById("submit-confirm-modal");
+        const submitConfirmCloseBtn = document.getElementById("submit-confirm-close-btn");
+        const submitConfirmCancelBtn = document.getElementById("submit-confirm-cancel-btn");
+        const submitConfirmOkBtn = document.getElementById("submit-confirm-ok-btn");
+
+        const confirmConcert = document.getElementById("confirm-concert");
+        const confirmItemCount = document.getElementById("confirm-item-count");
+        const confirmTicketCount = document.getElementById("confirm-ticket-count");
+        const confirmTotalAmount = document.getElementById("confirm-total-amount");
+
+        const forgotPasswordBtn = document.getElementById("forgot-password-btn");
+        const resetPasswordModal = document.getElementById("reset-password-modal");
+        const resetOwnerNameInput = document.getElementById("reset-owner-name");
+        const resetConsignmentIdInput = document.getElementById("reset-consignment-id");
+        const resetNewPasswordInput = document.getElementById("reset-new-password");
+        const resetConfirmPasswordInput = document.getElementById("reset-confirm-password");
+        const resetPasswordMessage = document.getElementById("reset-password-message");
+        const resetPasswordCancelBtn = document.getElementById("reset-password-cancel-btn");
+        const resetPasswordSubmitBtn = document.getElementById("reset-password-submit-btn");
+
+        let pendingSubmitPayload = null;
+
+        let ownerRecordsCache = {
+            tp: [],
+            kh: [],
+        };
+
+        let currentOwnerQuery = {
+            owner_name: "",
+            password: "",
+        };
+
+        let ownerMode = "new";
+
+        const concertLabels = {
+            tp: "台北場",
+            kh: "高雄場",
+        };
+
+        tabButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                const target = button.dataset.tab;
+
+                tabButtons.forEach((btn) => btn.classList.remove("active"));
+                button.classList.add("active");
+
+                submitPanel.classList.toggle("active", target === "submit");
+                queryPanel.classList.toggle("active", target === "query");
+            });
+        });
+
+        ownerModeButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+                ownerMode = button.dataset.ownerMode;
+
+                ownerModeButtons.forEach((btn) => btn.classList.remove("active"));
+                button.classList.add("active");
+
+                if (ownerMode === "new") {
+                    confirmPasswordField.classList.remove("hidden");
+                    confirmPasswordInput.value = "";
+                } else {
+                    confirmPasswordField.classList.add("hidden");
+                    confirmPasswordInput.value = "";
+                }
+            });
+        });
+
+        addItemBtn.addEventListener("click", () => {
+            addItemRow();
+            updateSummary();
+        });
+
+        newSubmitBtn.addEventListener("click", () => {
+            resultCard.classList.add("hidden");
+            form.classList.remove("hidden");
+            clearMessage();
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        helpBtn.addEventListener("click", () => {
+            helpModal.classList.remove("hidden");
+        });
+
+        helpCloseBtn.addEventListener("click", () => {
+            helpModal.classList.add("hidden");
+        });
+
+        helpConfirmBtn.addEventListener("click", () => {
+            helpModal.classList.add("hidden");
+        });
+
+        helpModal.addEventListener("click", (event) => {
+            if (event.target === helpModal) {
+                helpModal.classList.add("hidden");
+            }
+        });
+
+        submitConfirmCloseBtn.addEventListener("click", closeSubmitConfirmModal);
+        submitConfirmCancelBtn.addEventListener("click", closeSubmitConfirmModal);
+
+        submitConfirmModal.addEventListener("click", (event) => {
+            if (event.target === submitConfirmModal) {
+                closeSubmitConfirmModal();
+            }
+        });
+
+        submitConfirmOkBtn.addEventListener("click", () => {
+            if (!pendingSubmitPayload) {
+                closeSubmitConfirmModal();
+                return;
+            }
+
+            const payload = pendingSubmitPayload;
+            closeSubmitConfirmModal();
+            sendConsignmentPayload(payload);
+        });
+
+        ownerQueryBtn.addEventListener("click", queryOwnerRecords);
+
+        ownerConcertTabs.querySelectorAll("[data-owner-record-mode]").forEach((button) => {
+            button.addEventListener("click", () => {
+                const mode = button.dataset.ownerRecordMode;
+
+                ownerConcertTabs
+                    .querySelectorAll("[data-owner-record-mode]")
+                    .forEach((btn) => btn.classList.remove("active"));
+
+                button.classList.add("active");
+
+                renderQueryRecords(ownerRecordsCache[mode] || []);
+            });
+        });
+
+        forgotPasswordBtn.addEventListener("click", () => {
+            openResetPasswordModal();
+        });
+
+        resetPasswordCancelBtn.addEventListener("click", () => {
+            closeResetPasswordModal();
+        });
+
+        resetPasswordModal.addEventListener("click", (event) => {
+            if (event.target === resetPasswordModal) {
+                closeResetPasswordModal();
+            }
+        });
+
+        resetPasswordSubmitBtn.addEventListener("click", submitResetPassword);
+
+        function openResetPasswordModal() {
+            resetOwnerNameInput.value = "";
+            resetConsignmentIdInput.value = "";
+            resetNewPasswordInput.value = "";
+            resetConfirmPasswordInput.value = "";
+
+            resetPasswordMessage.textContent = "";
+            resetPasswordMessage.classList.add("hidden");
+
+            resetPasswordModal.classList.remove("hidden");
+
+            setTimeout(() => {
+                resetOwnerNameInput.focus();
+            }, 50);
+        }
+
+        function closeResetPasswordModal() {
+            resetPasswordModal.classList.add("hidden");
+        }
+
+        function showResetPasswordMessage(message, type = "error") {
+            resetPasswordMessage.textContent = message;
+            resetPasswordMessage.classList.remove("hidden");
+            resetPasswordMessage.classList.toggle("success", type === "success");
+            resetPasswordMessage.classList.toggle("error", type !== "success");
+        }
+
+        async function submitResetPassword() {
+            const ownerName = resetOwnerNameInput.value.trim();
+            const consignmentId = resetConsignmentIdInput.value.trim();
+            const newPassword = resetNewPasswordInput.value.trim();
+            const confirmPassword = resetConfirmPasswordInput.value.trim();
+
+            if (!ownerName || !consignmentId || !newPassword || !confirmPassword) {
+                showResetPasswordMessage("請完整填寫所有欄位");
+                return;
+            }
+
+            if (newPassword.length < 4) {
+                showResetPasswordMessage("新密碼至少需要 4 個字");
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                showResetPasswordMessage("兩次輸入的新密碼不一致");
+                return;
+            }
+
+            resetPasswordSubmitBtn.disabled = true;
+            resetPasswordSubmitBtn.textContent = "重設中...";
+
+            try {
+                const response = await fetch("/api/consignment/reset-password", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        owner_name: ownerName,
+                        consignment_id: consignmentId,
+                        new_password: newPassword,
+                    }),
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    showResetPasswordMessage(result.message || "重設失敗");
+                    return;
+                }
+
+                showResetPasswordMessage("密碼已重設，請用新密碼查詢寄票資料。", "success");
+
+                setTimeout(() => {
+                    closeResetPasswordModal();
+
+                    const ownerQueryPasswordInput = document.getElementById("owner-query-password");
+
+                    if (ownerQueryPasswordInput) {
+                        ownerQueryPasswordInput.value = "";
+                        ownerQueryPasswordInput.focus();
+                    }
+                }, 900);
+
+            } catch (error) {
+                showResetPasswordMessage("網路或伺服器錯誤，請稍後再試");
+            } finally {
+                resetPasswordSubmitBtn.disabled = false;
+                resetPasswordSubmitBtn.textContent = "確認重設密碼";
+            }
+        }
+
+
+        function closeSubmitConfirmModal() {
+            submitConfirmModal.classList.add("hidden");
+            pendingSubmitPayload = null;
+        }
+
+        function addItemRow(defaults = {}) {
+            const tr = document.createElement("tr");
+
+            tr.innerHTML = `
+                <td data-label="取票人姓名">
+                    <input class="table-input audience-input" type="text" placeholder="請輸入取票人姓名" value="${escapeHtml(defaults.audience_name || "")}">
+                </td>
+                <td data-label="單筆應收金額">
+                    <input class="table-input amount-input" type="number" min="0" step="1" placeholder="該信封總金額，留空＝無需付款" value="${defaults.price ?? ""}">
+                </td>
+                <td data-label="張數">
+                    <input class="table-input quantity-input" type="number" min="1" step="1" value="${defaults.quantity || 1}">
+                </td>
+                <td data-label="備註">
+                    <input class="table-input note-input" type="text" placeholder="可留空" value="${escapeHtml(defaults.note || "")}">
+                </td>
+                <td data-label="操作">
+                    <button class="delete-btn remove-item-btn" type="button">刪除</button>
+                </td>
+            `;
+
+            itemsTbody.appendChild(tr);
+
+            tr.querySelector(".remove-item-btn").addEventListener("click", () => {
+                tr.remove();
+
+                if (itemsTbody.children.length === 0) {
+                    addItemRow();
+                }
+
+                updateSummary();
+            });
+
+            tr.querySelectorAll("input").forEach((input) => {
+                input.addEventListener("input", updateSummary);
+            });
+        }
+
+        function collectItems() {
+            const rows = Array.from(itemsTbody.querySelectorAll("tr"));
+
+            return rows.map((row) => {
+                const amountValue = row.querySelector(".amount-input").value.trim();
+
+                return {
+                    audience_name: row.querySelector(".audience-input").value.trim(),
+                    price: amountValue,
+                    quantity: Number(row.querySelector(".quantity-input").value),
+                    note: row.querySelector(".note-input").value.trim(),
+                };
+            });
+        }
+
+        function getItemsSummary(items) {
+            let itemCount = 0;
+            let ticketCount = 0;
+            let totalAmount = 0;
+
+            items.forEach((item) => {
+                const quantity = Number(item.quantity) || 0;
+                const price = item.price === "" ? 0 : Number(item.price) || 0;
+                const hasRowData = Boolean(item.audience_name || item.price !== "" || item.note);
+
+                if (!hasRowData) {
+                    return;
+                }
+
+                itemCount += 1;
+                ticketCount += quantity;
+                totalAmount += price;
+            });
+
+            return {
+                itemCount,
+                ticketCount,
+                totalAmount,
+            };
+        }
+
+        function updateSummary() {
+            const items = collectItems();
+            const summary = getItemsSummary(items);
+
+            itemCountEl.textContent = String(summary.itemCount);
+            ticketCountEl.textContent = String(summary.ticketCount);
+            totalAmountEl.textContent = `$${summary.totalAmount.toLocaleString("zh-TW")}`;
+        }
+
+        function validateItems(items) {
+            const nonEmptyItems = items.filter((item) => {
+                return Boolean(item.audience_name || item.price !== "" || item.note);
+            });
+
+            if (!nonEmptyItems.length) {
+                return "請至少新增一筆取票人資料";
+            }
+
+            for (const item of nonEmptyItems) {
+                const priceNumber = item.price === "" ? 0 : Number(item.price);
+
+                if (!item.audience_name) {
+                    return "每一筆都需要填寫取票人姓名";
+                }
+
+                if (Number.isNaN(priceNumber) || priceNumber < 0) {
+                    return `${item.audience_name} 的單筆應收金額不正確`;
+                }
+
+                if (!item.quantity || item.quantity <= 0) {
+                    return `${item.audience_name} 的張數不正確`;
+                }
+            }
+
+            return "";
+        }
+
+        function getNonEmptyItems(items) {
+            return items.filter((item) => {
+                return Boolean(item.audience_name || item.price !== "" || item.note);
+            });
+        }
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            clearMessage();
+
+            const isNewOwner = ownerMode === "new";
+            const ownerName = document.getElementById("owner-name").value.trim();
+            const password = document.getElementById("owner-password").value.trim();
+            const confirmPassword = document.getElementById("confirm-password").value.trim();
+            const concertCode = document.getElementById("concert-code").value;
+            const rawItems = collectItems();
+            const items = getNonEmptyItems(rawItems);
+
+            if (!ownerName) {
+                showMessage("請輸入您的姓名！");
+                return;
+            }
+
+            if (!password) {
+                showMessage("請輸入您的寄票密碼！");
+                return;
+            }
+
+            if (isNewOwner && password !== confirmPassword) {
+                showMessage("兩次輸入的密碼不一致！");
+                return;
+            }
+
+            if (!concertCode) {
+                showMessage("請選擇場次！");
+                return;
+            }
+
+            const itemError = validateItems(rawItems);
+
+            if (itemError) {
+                showMessage(itemError);
+                return;
+            }
+
+            const summary = getItemsSummary(items);
+
+            const payload = {
+                is_new_owner: isNewOwner,
+                owner_name: ownerName,
+                password,
+                confirm_password: confirmPassword,
+                concert_code: concertCode,
+                items,
+            };
+
+            openSubmitConfirmModal({
+                payload,
+                summary,
+                concertCode,
+            });
+        });
+
+        function openSubmitConfirmModal({ payload, summary, concertCode }) {
+            pendingSubmitPayload = payload;
+
+            confirmConcert.textContent = concertLabels[concertCode] || concertCode || "-";
+            confirmItemCount.textContent = `${summary.itemCount} 筆`;
+            confirmTicketCount.textContent = `${summary.ticketCount} 張`;
+            confirmTotalAmount.textContent = `$${summary.totalAmount.toLocaleString("zh-TW")}`;
+
+            submitConfirmModal.classList.remove("hidden");
+        }
+
+        async function sendConsignmentPayload(payload) {
+            submitBtn.disabled = true;
+            loadingText.textContent = "送出中...";
+            loadingOverlay.classList.remove("hidden");
+
+            try {
+                const response = await fetch("/api/consignment/submit", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    showMessage(result.message || "送出失敗，請稍後再試");
+                    return;
+                }
+
+                renderResult(result);
+                form.classList.add("hidden");
+                resultCard.classList.remove("hidden");
+                window.scrollTo({ top: 0, behavior: "smooth" });
+
+            } catch (error) {
+                showMessage("網路或伺服器錯誤，請稍後再試");
+            } finally {
+                submitBtn.disabled = false;
+                loadingOverlay.classList.add("hidden");
+            }
+        }
+
+        function renderResult(result) {
+            resultOwnerName.textContent = result.owner_name || "-";
+            resultBatchId.textContent = result.batch_id || "-";
+            resultConcert.textContent = concertLabels[result.concert_code] || result.concert_code || "-";
+
+            resultList.innerHTML = "";
+
+            (result.items || []).forEach((item) => {
+                resultList.appendChild(createConsignmentRecordCard({
+                    ...item,
+                    concert_code: result.concert_code,
+                    owner_name: result.owner_name,
+                }, {
+                    copyable: true,
+                }));
+            });
+        }
+
+        async function queryOwnerRecords() {
+            const ownerName = ownerQueryName.value.trim();
+            const password = ownerQueryPassword.value.trim();
+
+            if (!ownerName) {
+                showQueryEmpty("請輸入寄票人姓名");
+                return;
+            }
+
+            if (!password) {
+                showQueryEmpty("請輸入寄票密碼");
+                return;
+            }
+
+            loadingText.textContent = "查詢中...";
+            loadingOverlay.classList.remove("hidden");
+
+            try {
+                const response = await fetch("/api/consignment/my-records", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        owner_name: ownerName,
+                        password,
+                    }),
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    showQueryEmpty(result.message || "查詢失敗，請稍後再試");
+                    return;
+                }
+
+                ownerRecordsCache = result.records || { tp: [], kh: [] };
+
+                currentOwnerQuery = {
+                    owner_name: ownerName,
+                    password,
+                };
+
+                queryResultTitle.textContent = `${result.owner_name} 的寄票資料`;
+                queryResultNote.textContent = `共 ${result.summary?.total_count || 0} 筆寄票資料。請選擇場次查看。`;
+
+                ownerConcertTabs.classList.remove("hidden");
+
+                ownerConcertTabs
+                    .querySelectorAll("[data-owner-record-mode]")
+                    .forEach((btn) => btn.classList.remove("active"));
+
+                const defaultMode = (ownerRecordsCache.tp || []).length > 0 ? "tp" : "kh";
+                const defaultButton = ownerConcertTabs.querySelector(`[data-owner-record-mode="${defaultMode}"]`);
+
+                if (defaultButton) {
+                    defaultButton.classList.add("active");
+                }
+
+                renderQueryRecords(ownerRecordsCache[defaultMode] || []);
+
+            } catch (error) {
+                showQueryEmpty("網路或伺服器錯誤，請稍後再試");
+            } finally {
+                loadingOverlay.classList.add("hidden");
+            }
+        }
+
+        function renderQueryRecords(records) {
+            queryResultCard.classList.remove("hidden");
+            queryResultList.innerHTML = "";
+
+            renderQuerySummary(records);
+
+            if (!records.length) {
+                queryResultList.innerHTML = `
+                    <div class="empty-state consignment-empty-state">查無資料</div>
+                `;
+                return;
+            }
+
+            records.forEach((record) => {
+                queryResultList.appendChild(createConsignmentRecordCard(record, {
+                    deletable: true,
+                    copyable: true,
+                }));
+            });
+        }
+
+        function renderQuerySummary(records) {
+            let envelopeCount = records.length;
+            let ticketCount = 0;
+            let totalAmount = 0;
+            let pendingCount = 0;
+            let sentCount = 0;
+
+            records.forEach((record) => {
+                const quantity = Number(record.quantity || 0);
+                const price = Number(record.price || 0);
+                const pickupStatus = record.pickup_status || "pending";
+
+                ticketCount += quantity;
+                totalAmount += price;
+
+                if (pickupStatus === "pending") {
+                    pendingCount += 1;
+                }
+
+                if (pickupStatus === "sent") {
+                    sentCount += 1;
+                }
+            });
+
+            querySummaryGrid.classList.remove("hidden");
+            queryEnvelopeCount.textContent = `${envelopeCount} 筆`;
+            queryTicketCount.textContent = `${ticketCount} 張`;
+            queryTotalAmount.textContent = `$${totalAmount.toLocaleString("zh-TW")}`;
+            queryPendingCount.textContent = `${pendingCount} 筆`;
+            querySentCount.textContent = `${sentCount} 筆`;
+        }
+
+        function createConsignmentRecordCard(record, options = {}) {
+            const card = document.createElement("article");
+            card.className = "consignment-record-card compact";
+
+            const price = Number(record.price || 0);
+            const quantity = Number(record.quantity || 0);
+            const total = price;
+            const statusText = consignmentStatusLabel(record);
+            const statusClass = consignmentStatusClass(record);
+
+            const pickupStatus = record.pickup_status || "pending";
+            const canDelete = options.deletable && pickupStatus === "pending";
+            const canCopy = options.copyable === true;
+
+            const amountText = total > 0
+                ? `$${total.toLocaleString("zh-TW")}`
+                : "無需付款";
+
+            const noteText = record.note
+                ? `｜備註：${escapeHtml(record.note)}`
+                : "";
+
+            card.innerHTML = `
+                <div class="compact-record-top">
+                    <strong class="consignment-id-pill">${escapeHtml(record.consignment_id)}</strong>
+
+                    <div class="compact-record-main">
+                        <div class="compact-record-name">
+                            ${escapeHtml(record.audience_name)}
+                        </div>
+
+                        <div class="compact-record-sub">
+                            ${concertLabels[record.concert_code] || record.concert_code || "-"}
+                            ｜寄票人：${escapeHtml(record.owner_name || "-")}
+                            ｜${quantity} 張
+                            ｜${amountText}
+                            ${noteText}
+                        </div>
+                    </div>
+
+                    <div class="compact-record-actions">
+                        <span class="record-status-pill ${statusClass}">
+                            ${escapeHtml(statusText)}
+                        </span>
+
+                        ${canCopy ? `
+                            <button class="record-copy-btn" type="button">
+                                複製給取票人
+                            </button>
+                        ` : ""}
+
+                        ${canDelete ? `
+                            <button
+                                class="record-delete-btn"
+                                type="button"
+                                data-delete-id="${escapeHtml(record.consignment_id)}"
+                            >
+                                刪除此筆
+                            </button>
+                        ` : ""}
+
+                    </div>
+                </div>
+            `;
+
+            const deleteBtn = card.querySelector(".record-delete-btn");
+
+            if (deleteBtn) {
+                deleteBtn.addEventListener("click", () => {
+                    deleteConsignmentRecord(record);
+                });
+            }
+
+            const copyBtn = card.querySelector(".record-copy-btn");
+
+            if (copyBtn) {
+                copyBtn.addEventListener("click", () => {
+                    copyConsignmentMessage(record);
+                });
+            }
+
+            return card;
+        }
+
+        async function copyConsignmentMessage(record) {
+            const price = Number(record.price || 0);
+            const amountText = price > 0
+                ? `$${price.toLocaleString("zh-TW")}`
+                : "無需付款";
+
+            const concertText = concertLabels[record.concert_code] || record.concert_code || "-";
+
+            const message =
+                `您好！您的《嶋聲》取票資訊如下：\n\n` +
+                `場次：${concertText}\n` +
+                `取票編號：${record.consignment_id}\n` +
+                `取票人姓名：${record.audience_name}\n` +
+                `應付金額：${amountText}\n\n` +
+                `演出當天請至前台報取票編號取票，謝謝！`;
+
+            try {
+                await navigator.clipboard.writeText(message);
+                alert("已複製給取票人的訊息！");
+            } catch (error) {
+                window.prompt("請手動複製以下文字：", message);
+            }
+        }
+
+        async function deleteConsignmentRecord(record) {
+            const confirmed = window.confirm(
+                `確定要刪除 ${record.consignment_id} 這筆寄票資料嗎？\n\n` +
+                `刪除後將無法復原。\n` +
+                `若您已經將實體票交給票務，請不要自行刪除，請直接聯絡票務處理。`
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            loadingText.textContent = "刪除中...";
+            loadingOverlay.classList.remove("hidden");
+
+            try {
+                const response = await fetch("/api/consignment/delete", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        owner_name: currentOwnerQuery.owner_name,
+                        password: currentOwnerQuery.password,
+                        concert_code: record.concert_code,
+                        consignment_id: record.consignment_id,
+                    }),
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    alert(result.message || "刪除失敗，請稍後再試");
+                    return;
+                }
+
+                ownerRecordsCache[record.concert_code] = (ownerRecordsCache[record.concert_code] || [])
+                    .filter((item) => item.consignment_id !== record.consignment_id);
+
+                const activeTab = ownerConcertTabs.querySelector("[data-owner-record-mode].active");
+                const activeMode = activeTab?.dataset.ownerRecordMode || record.concert_code;
+
+                renderQueryRecords(ownerRecordsCache[activeMode] || []);
+
+                queryResultNote.textContent = `已刪除 ${record.consignment_id}。`;
+
+            } catch (error) {
+                alert("網路或伺服器錯誤，請稍後再試");
+            } finally {
+                loadingOverlay.classList.add("hidden");
+            }
+        }
+
+        function consignmentStatusLabel(record) {
+            const price = Number(record.price || 0);
+            const pickupStatus = record.pickup_status || "pending";
+            const paymentStatus = record.payment_status || "unpaid";
+
+            const amountText = price > 0
+                ? `$${price.toLocaleString("zh-TW")}`
+                : "";
+
+            let paymentText = "";
+
+            if (paymentStatus === "free" || price === 0) {
+                paymentText = "無需付款";
+            } else if (paymentStatus === "paid") {
+                paymentText = `已付款 ${amountText}`;
+            } else {
+                paymentText = `需付款 ${amountText}`;
+            }
+
+            let pickupText = "";
+
+            if (pickupStatus === "picked_up") {
+                pickupText = "已取票";
+            } else if (pickupStatus === "sent") {
+                pickupText = "已寄放前台";
+            } else {
+                pickupText = "等待交票";
+            }
+
+            return `${paymentText}｜${pickupText}`;
+        }
+
+        function consignmentStatusClass(record) {
+            const pickupStatus = record.pickup_status || "pending";
+            const paymentStatus = record.payment_status || "unpaid";
+
+            if (pickupStatus === "picked_up") {
+                return "done";
+            }
+
+            if (pickupStatus === "sent") {
+                return "open";
+            }
+
+            if (paymentStatus === "free") {
+                return "free-pending";
+            }
+
+            return "closed";
+        }
+
+        function showQueryEmpty(message) {
+            queryResultCard.classList.remove("hidden");
+            ownerConcertTabs.classList.add("hidden");
+            querySummaryGrid.classList.add("hidden");
+
+            queryResultTitle.textContent = "查詢結果";
+            queryResultNote.textContent = message;
+
+            queryResultList.innerHTML = `
+                <div class="empty-state consignment-empty-state">${escapeHtml(message)}</div>
+            `;
+        }
+
+        function showMessage(message) {
+            formMessage.textContent = message;
+            formMessage.classList.remove("hidden");
+        }
+
+        function clearMessage() {
+            formMessage.textContent = "";
+            formMessage.classList.add("hidden");
+        }
+
+        function escapeHtml(value) {
+            return String(value || "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
+
+        addItemRow();
+        updateSummary();
+    </script>
 </body>
 </html>

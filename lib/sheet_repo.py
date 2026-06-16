@@ -11,6 +11,8 @@ import random
 
 import gspread
 from google.oauth2.service_account import Credentials
+from werkzeug.security import check_password_hash, generate_password_hash
+
 PROJECT_ROOT = os.path.dirname(os.path.dirname(__file__))
 
 TAIPEI_TZ = ZoneInfo("Asia/Taipei")
@@ -27,6 +29,33 @@ WORKSHEET_NAMES = {
 }
 
 STATS_CONFIG_SHEET = "stats_config"
+CONSIGNMENT_USERS_SHEET = "consignment_users"
+
+CONSIGNMENT_SHEETS = {
+    "tp": "ticket_consignment_tp",
+    "kh": "ticket_consignment_kh",
+}
+
+CONSIGNMENT_USER_HEADERS = [
+    "created_at",
+    "owner_id",
+    "owner_name",
+    "password_hash",
+]
+
+CONSIGNMENT_HEADERS = [
+    "timestamp",
+    "consignment_id",
+    "batch_id",
+    "owner_id",
+    "owner_name",
+    "audience_name",
+    "price",
+    "quantity",
+    "payment_status",
+    "pickup_status",
+    "note",
+]
 
 _ws_cache = {}
 _sold_cache = {}
@@ -112,6 +141,16 @@ def get_config_worksheet(name: str):
 
 def get_section_members_worksheet():
     return get_config_worksheet("section_members")
+
+def get_consignment_users_worksheet():
+    return get_config_worksheet(CONSIGNMENT_USERS_SHEET)
+
+
+def get_consignment_worksheet(concert_code="tp"):
+    if concert_code not in CONSIGNMENT_SHEETS:
+        raise ValueError(f"未知寄票場次：{concert_code}")
+
+    return get_config_worksheet(CONSIGNMENT_SHEETS[concert_code])
 
 def clear_caches(concert_code=None):
     global _sold_cache
@@ -1412,3 +1451,452 @@ def calc_discount_amount(total_points, identity_code):
 
     discount_points = int(total_points - threshold)
     return discount_points * 100
+
+def ensure_consignment_users_headers():
+    ws = get_consignment_users_worksheet()
+    current = ws.row_values(1)
+
+    if current != CONSIGNMENT_USER_HEADERS:
+        ws.update("A1:D1", [CONSIGNMENT_USER_HEADERS])
+
+
+def ensure_consignment_headers(concert_code="tp"):
+    ws = get_consignment_worksheet(concert_code)
+    current = ws.row_values(1)
+
+    if current != CONSIGNMENT_HEADERS:
+        ws.update("A1:K1", [CONSIGNMENT_HEADERS])
+
+def get_consignment_users_rows():
+    ensure_consignment_users_headers()
+    ws = get_consignment_users_worksheet()
+
+    return ws.get_all_records(
+        expected_headers=CONSIGNMENT_USER_HEADERS
+    )
+
+
+def get_consignment_rows(concert_code="tp"):
+    ensure_consignment_headers(concert_code)
+    ws = get_consignment_worksheet(concert_code)
+
+    return ws.get_all_records(
+        expected_headers=CONSIGNMENT_HEADERS
+    )
+
+def append_consignment_user_row(row):
+    """
+    row 格式：
+    {
+        "created_at": "...",
+        "owner_id": "...",
+        "owner_name": "...",
+        "password_hash": "..."
+    }
+    """
+    ensure_consignment_users_headers()
+    ws = get_consignment_users_worksheet()
+
+    ws.append_row([
+        row.get("created_at", ""),
+        row.get("owner_id", ""),
+        row.get("owner_name", ""),
+        row.get("password_hash", ""),
+    ], value_input_option="USER_ENTERED")
+
+
+def append_consignment_rows(concert_code, rows):
+    """
+    rows 每筆格式：
+    {
+        "timestamp": "...",
+        "consignment_id": "...",
+        "batch_id": "...",
+        "owner_id": "...",
+        "owner_name": "...",
+        "audience_name": "...",
+        "price": 500,
+        "quantity": 2,
+        "payment_status": "unpaid",
+        "pickup_status": "pending",
+        "note": ""
+    }
+    """
+    ensure_consignment_headers(concert_code)
+    ws = get_consignment_worksheet(concert_code)
+
+    values = []
+
+    for row in rows:
+        values.append([
+            row.get("timestamp", ""),
+            row.get("consignment_id", ""),
+            row.get("batch_id", ""),
+            row.get("owner_id", ""),
+            row.get("owner_name", ""),
+            row.get("audience_name", ""),
+            row.get("price", ""),
+            row.get("quantity", ""),
+            row.get("payment_status", ""),
+            row.get("pickup_status", ""),
+            row.get("note", ""),
+        ])
+
+    if values:
+        ws.append_rows(values, value_input_option="USER_ENTERED")
+
+def make_running_id(prefix, current_count, width=4):
+    return f"{prefix}{current_count + 1:0{width}d}"
+
+
+def get_next_consignment_owner_id():
+    rows = get_consignment_users_rows()
+    return make_running_id("OWNER", len(rows), width=4)
+
+
+def get_next_consignment_batch_id(concert_code="tp"):
+    rows = get_consignment_rows(concert_code)
+
+    existing_batches = set()
+
+    for row in rows:
+        batch_id = normalize_text(row.get("batch_id"))
+        if batch_id:
+            existing_batches.add(batch_id)
+
+    prefix = {
+        "tp": "BTP",
+        "kh": "BKH",
+    }.get(concert_code, "BTP")
+
+    return make_running_id(prefix, len(existing_batches), width=4)
+
+
+def get_next_consignment_ids(concert_code="tp", count=1):
+    rows = get_consignment_rows(concert_code)
+    prefix = {"tp": "TP", "kh": "KH"}.get(concert_code, "TP")
+
+    max_number = 0
+
+    for row in rows:
+        consignment_id = normalize_text(row.get("consignment_id"))
+
+        if not consignment_id.startswith(prefix):
+            continue
+
+        number_part = consignment_id.replace(prefix, "", 1)
+
+        if number_part.isdigit():
+            max_number = max(max_number, int(number_part))
+
+    start = max_number + 1
+
+    return [
+        f"{prefix}{i:04d}"
+        for i in range(start, start + count)
+    ]
+
+def get_consignment_records_by_owner_id(owner_id: str):
+    owner_id = normalize_text(owner_id)
+
+    result = {
+        "tp": [],
+        "kh": [],
+    }
+
+    for concert_code in ["tp", "kh"]:
+        rows = get_consignment_rows(concert_code)
+
+        for row in rows:
+            if normalize_text(row.get("owner_id")) != owner_id:
+                continue
+
+            result[concert_code].append({
+                "timestamp": normalize_text(row.get("timestamp")),
+                "consignment_id": normalize_text(row.get("consignment_id")),
+                "batch_id": normalize_text(row.get("batch_id")),
+                "owner_id": normalize_text(row.get("owner_id")),
+                "owner_name": normalize_text(row.get("owner_name")),
+                "audience_name": normalize_text(row.get("audience_name")),
+                "price": normalize_int(row.get("price")) or 0,
+                "quantity": normalize_int(row.get("quantity")) or 0,
+                "payment_status": normalize_text(row.get("payment_status")),
+                "pickup_status": normalize_text(row.get("pickup_status")),
+                "note": normalize_text(row.get("note")),
+                "concert_code": concert_code,
+            })
+
+    return result
+
+
+def search_consignment_records_by_audience(concert_code: str, audience_name: str):
+    concert_code = normalize_text(concert_code).lower()
+    target = normalize_name(audience_name)
+
+    if concert_code not in CONSIGNMENT_SHEETS:
+        return []
+
+    rows = get_consignment_rows(concert_code)
+    result = []
+
+    for row in rows:
+        row_audience_name = normalize_name(row.get("audience_name"))
+
+        if not target or row_audience_name != target:
+            continue
+
+        result.append({
+            "timestamp": normalize_text(row.get("timestamp")),
+            "consignment_id": normalize_text(row.get("consignment_id")),
+            "batch_id": normalize_text(row.get("batch_id")),
+            "owner_id": normalize_text(row.get("owner_id")),
+            "owner_name": normalize_text(row.get("owner_name")),
+            "audience_name": normalize_text(row.get("audience_name")),
+            "price": normalize_int(row.get("price")) or 0,
+            "quantity": normalize_int(row.get("quantity")) or 0,
+            "payment_status": normalize_text(row.get("payment_status")),
+            "pickup_status": normalize_text(row.get("pickup_status")),
+            "note": normalize_text(row.get("note")),
+            "concert_code": concert_code,
+        })
+
+    return result
+
+def delete_consignment_record(concert_code, consignment_id, owner_id):
+    concert_code = normalize_text(concert_code).lower()
+    consignment_id = normalize_text(consignment_id)
+    owner_id = normalize_text(owner_id)
+
+    if concert_code not in CONSIGNMENT_SHEETS:
+        return False, "未知場次"
+
+    ensure_consignment_headers(concert_code)
+    ws = get_consignment_worksheet(concert_code)
+
+    rows = ws.get_all_records(expected_headers=CONSIGNMENT_HEADERS)
+
+    for index, row in enumerate(rows, start=2):
+        row_consignment_id = normalize_text(row.get("consignment_id"))
+        row_owner_id = normalize_text(row.get("owner_id"))
+        pickup_status = normalize_text(row.get("pickup_status"))
+
+        if row_consignment_id != consignment_id:
+            continue
+
+        if row_owner_id != owner_id:
+            return False, "您沒有權限刪除此筆寄票資料"
+
+        if pickup_status != "pending":
+            return False, "此筆資料已進入前台流程，無法自行刪除"
+
+        ws.delete_rows(index)
+        return True, "已刪除此筆寄票資料"
+
+    return False, "找不到這筆寄票資料"
+
+def format_consignment_record_for_front(row, concert_code):
+    price = normalize_int(row.get("price")) or 0
+    quantity = normalize_int(row.get("quantity")) or 0
+
+    return {
+        "timestamp": normalize_text(row.get("timestamp")),
+        "consignment_id": normalize_text(row.get("consignment_id")),
+        "batch_id": normalize_text(row.get("batch_id")),
+        "owner_id": normalize_text(row.get("owner_id")),
+        "owner_name": normalize_text(row.get("owner_name")),
+        "audience_name": normalize_text(row.get("audience_name")),
+        "price": price,
+        "quantity": quantity,
+        "payment_status": normalize_text(row.get("payment_status")),
+        "pickup_status": normalize_text(row.get("pickup_status")),
+        "note": normalize_text(row.get("note")),
+        "concert_code": concert_code,
+    }
+
+def normalize_consignment_lookup_id(value, concert_code):
+    value = normalize_text(value).upper()
+
+    if not value:
+        return ""
+
+    prefix = {
+        "tp": "TP",
+        "kh": "KH",
+    }.get(concert_code, "TP")
+
+    # 已經是 TP0001 / KH0001
+    if value.startswith(prefix):
+        number_part = value.replace(prefix, "", 1)
+        if number_part.isdigit():
+            return f"{prefix}{int(number_part):04d}"
+        return value
+
+    # 輸入 0001 / 1
+    if value.isdigit():
+        return f"{prefix}{int(value):04d}"
+
+    return value
+
+def search_consignment_front_records(concert_code, keyword):
+    concert_code = normalize_text(concert_code).lower()
+    keyword = normalize_text(keyword)
+
+    if concert_code not in CONSIGNMENT_SHEETS:
+        return []
+
+    rows = get_consignment_rows(concert_code)
+
+    if not keyword:
+        return []
+
+    target_id = normalize_consignment_lookup_id(keyword, concert_code)
+    target_name = normalize_name(keyword)
+
+    result = []
+
+    for row in rows:
+        consignment_id = normalize_text(row.get("consignment_id")).upper()
+        owner_name = normalize_name(row.get("owner_name"))
+        audience_name = normalize_name(row.get("audience_name"))
+
+        matched = False
+
+        if consignment_id == target_id:
+            matched = True
+
+        if target_name and target_name in owner_name:
+            matched = True
+
+        if target_name and target_name in audience_name:
+            matched = True
+
+        if matched:
+            result.append(format_consignment_record_for_front(row, concert_code))
+
+    return result
+
+def get_all_consignment_front_records(concert_code):
+    concert_code = normalize_text(concert_code).lower()
+
+    if concert_code not in CONSIGNMENT_SHEETS:
+        return []
+
+    rows = get_consignment_rows(concert_code)
+
+    return [
+        format_consignment_record_for_front(row, concert_code)
+        for row in rows
+    ]
+
+def mark_consignment_paid_and_picked_up(concert_code, consignment_id):
+    concert_code = normalize_text(concert_code).lower()
+    consignment_id = normalize_text(consignment_id).upper()
+
+    if concert_code not in CONSIGNMENT_SHEETS:
+        return False, "未知場次"
+
+    ensure_consignment_headers(concert_code)
+    ws = get_consignment_worksheet(concert_code)
+    rows = ws.get_all_records(expected_headers=CONSIGNMENT_HEADERS)
+
+    for index, row in enumerate(rows, start=2):
+        row_id = normalize_text(row.get("consignment_id")).upper()
+
+        if row_id != consignment_id:
+            continue
+
+        price = normalize_int(row.get("price")) or 0
+        payment_status = "free" if price == 0 else "paid"
+
+        ws.update(f"I{index}:J{index}", [[payment_status, "picked_up"]])
+
+        return True, "已更新為完成付款且完成取票"
+
+    return False, "找不到這筆寄票資料"
+
+def mark_consignment_sent_to_front(concert_code, consignment_id):
+    concert_code = normalize_text(concert_code).lower()
+    consignment_id = normalize_text(consignment_id).upper()
+
+    if concert_code not in CONSIGNMENT_SHEETS:
+        return False, "未知場次"
+
+    ensure_consignment_headers(concert_code)
+    ws = get_consignment_worksheet(concert_code)
+    rows = ws.get_all_records(expected_headers=CONSIGNMENT_HEADERS)
+
+    for index, row in enumerate(rows, start=2):
+        row_id = normalize_text(row.get("consignment_id")).upper()
+
+        if row_id != consignment_id:
+            continue
+
+        # J 欄 pickup_status
+        ws.update(f"J{index}", [["sent"]])
+
+        return True, "已更新為已寄放前台"
+
+    return False, "找不到這筆寄票資料"
+
+def infer_concert_code_from_consignment_id(consignment_id):
+    consignment_id = normalize_text(consignment_id).upper()
+
+    if consignment_id.startswith("TP"):
+        return "tp"
+
+    if consignment_id.startswith("KH"):
+        return "kh"
+
+    return ""
+
+
+def reset_consignment_owner_password(owner_name, consignment_id, new_password):
+    owner_name = normalize_text(owner_name)
+    consignment_id = normalize_text(consignment_id).upper()
+    new_password = normalize_text(new_password)
+
+    if not owner_name or not consignment_id or not new_password:
+        return False, "請完整填寫資料"
+
+    if len(new_password) < 4:
+        return False, "新密碼至少需要 4 個字"
+
+    concert_code = infer_concert_code_from_consignment_id(consignment_id)
+
+    if concert_code not in CONSIGNMENT_SHEETS:
+        return False, "取票編號格式錯誤，請輸入 TP 或 KH 開頭的取票編號"
+
+    ensure_consignment_headers(concert_code)
+
+    consignment_ws = get_consignment_worksheet(concert_code)
+    consignment_rows = consignment_ws.get_all_records(expected_headers=CONSIGNMENT_HEADERS)
+
+    matched_owner_id = ""
+
+    for row in consignment_rows:
+        row_id = normalize_text(row.get("consignment_id")).upper()
+        row_owner_name = normalize_name(row.get("owner_name"))
+
+        if row_id == consignment_id and row_owner_name == normalize_name(owner_name):
+            matched_owner_id = normalize_text(row.get("owner_id"))
+            break
+
+    if not matched_owner_id:
+        return False, "寄票人姓名或取票編號不正確"
+
+    ensure_consignment_users_headers()
+
+    user_ws = get_consignment_users_worksheet()
+    user_rows = user_ws.get_all_records(expected_headers=CONSIGNMENT_USER_HEADERS)
+
+    new_password_hash = generate_password_hash(new_password)
+
+    for index, row in enumerate(user_rows, start=2):
+        row_owner_id = normalize_text(row.get("owner_id"))
+
+        if row_owner_id == matched_owner_id:
+            # D 欄 password_hash
+            user_ws.update(f"D{index}", [[new_password_hash]])
+            return True, "密碼已重設"
+
+    return False, "找不到寄票人帳號"
