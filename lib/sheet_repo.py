@@ -327,6 +327,10 @@ def append_order_rows(name: str, seat_rows: List[Dict], note: str = "", concert_
     ws = get_worksheet(concert_code)
     order_id = generate_order_id(name, concert_code)
     dt = now_str()
+    safe_note = normalize_text(note)
+
+    if safe_note:
+        safe_note = "'" + safe_note
 
     values = []
 
@@ -340,7 +344,7 @@ def append_order_rows(name: str, seat_rows: List[Dict], note: str = "", concert_
             str(seat["row_label"]),
             int(seat["seat_number"]),
             int(seat["price"]),
-            note,                       # I 訂單備註
+            safe_note,                # I 訂單備註
             False,
             False,
             False,
@@ -1472,7 +1476,8 @@ def get_consignment_users_rows():
     ws = get_consignment_users_worksheet()
 
     return ws.get_all_records(
-        expected_headers=CONSIGNMENT_USER_HEADERS
+        expected_headers=CONSIGNMENT_USER_HEADERS,
+        numericise_ignore=["all"],
     )
 
 
@@ -1481,7 +1486,8 @@ def get_consignment_rows(concert_code="tp"):
     ws = get_consignment_worksheet(concert_code)
 
     return ws.get_all_records(
-        expected_headers=CONSIGNMENT_HEADERS
+        expected_headers=CONSIGNMENT_HEADERS,
+        numericise_ignore=["all"],
     )
 
 def append_consignment_user_row(row):
@@ -1528,6 +1534,11 @@ def append_consignment_rows(concert_code, rows):
     values = []
 
     for row in rows:
+        note = normalize_text(row.get("note", ""))
+
+        if note:
+            note = "'" + note
+            
         values.append([
             row.get("timestamp", ""),
             row.get("consignment_id", ""),
@@ -1539,7 +1550,7 @@ def append_consignment_rows(concert_code, rows):
             row.get("quantity", ""),
             row.get("payment_status", ""),
             row.get("pickup_status", ""),
-            row.get("note", ""),
+            note,
         ])
 
     if values:
@@ -1916,7 +1927,10 @@ def reset_consignment_owner_password(owner_name, consignment_id, new_password):
     ensure_consignment_headers(concert_code)
 
     consignment_ws = get_consignment_worksheet(concert_code)
-    consignment_rows = consignment_ws.get_all_records(expected_headers=CONSIGNMENT_HEADERS)
+    consignment_rows = consignment_ws.get_all_records(
+        expected_headers=CONSIGNMENT_HEADERS,
+        numericise_ignore=["all"],
+    )
 
     matched_owner_id = ""
 
@@ -1934,7 +1948,10 @@ def reset_consignment_owner_password(owner_name, consignment_id, new_password):
     ensure_consignment_users_headers()
 
     user_ws = get_consignment_users_worksheet()
-    user_rows = user_ws.get_all_records(expected_headers=CONSIGNMENT_USER_HEADERS)
+    user_rows = user_ws.get_all_records(
+        expected_headers=CONSIGNMENT_USER_HEADERS,
+        numericise_ignore=["all"],
+    )
 
     new_password_hash = generate_password_hash(new_password)
 

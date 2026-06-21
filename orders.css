@@ -535,12 +535,18 @@ body.orders-page {
 }
 
 .orders-table-scroll {
+    max-width: 100%;
+    max-height: 420px;
+
     overflow-x: auto;
+    overflow-y: auto;
+
+    -webkit-overflow-scrolling: touch;
 }
 
 table.orders-table {
     width: 100%;
-    min-width: 100%;
+    min-width: 1270px;
 
     border-collapse: collapse;
     table-layout: fixed;
@@ -558,6 +564,9 @@ table.orders-table {
     text-align: center;
     white-space: nowrap;
     letter-spacing: .5px;
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 .orders-table tbody td {

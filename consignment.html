@@ -1147,8 +1147,12 @@
                 ? `$${total.toLocaleString("zh-TW")}`
                 : "無需付款";
 
-            const noteText = record.note
-                ? `｜備註：${escapeHtml(record.note)}`
+            const noteValue = record.note === null || record.note === undefined
+                ? ""
+                : String(record.note).trim().replace(/^'/, "");
+
+            const noteText = noteValue !== ""
+                ? `｜備註：${escapeHtml(noteValue)}`
                 : "";
 
             card.innerHTML = `
@@ -1227,7 +1231,7 @@
                 `取票編號：${record.consignment_id}\n` +
                 `取票人姓名：${record.audience_name}\n` +
                 `應付金額：${amountText}\n\n` +
-                `演出當天請至前台報取票編號取票，謝謝！`;
+                `演出當天請至前台報取票編號進行取票，謝謝！`;
 
             try {
                 await navigator.clipboard.writeText(message);

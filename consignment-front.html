@@ -786,6 +786,9 @@
             const statusText = consignmentStatusLabel(record);
             const statusClass = consignmentStatusClass(record);
             const concertText = concertLabels[record.concert_code] || record.concert_code || "-";
+            const isVipConsignment = String(record.consignment_id || "")
+                .toUpperCase()
+                .includes("VIP");
 
             const amountText = price > 0
                 ? `$${price.toLocaleString("zh-TW")}`
@@ -811,7 +814,9 @@
                 <div class="front-fast-main with-id">
                     <div class="front-fast-id-block">
                         <span class="front-fast-label">取票編號</span>
-                        <strong class="front-fast-id">${escapeHtml(record.consignment_id)}</strong>
+                        <strong class="front-fast-id ${isVipConsignment ? "vip-id-text" : ""}">
+                            ${escapeHtml(record.consignment_id)}
+                        </strong>
                     </div>
 
                     <div class="front-fast-name-block">
@@ -872,6 +877,9 @@
             const statusText = consignmentStatusLabel(record);
             const statusClass = consignmentStatusClass(record);
             const concertText = concertLabels[record.concert_code] || record.concert_code || "-";
+            const isVipConsignment = String(record.consignment_id || "")
+                .toUpperCase()
+                .includes("VIP");
 
             const amountText = price > 0
                 ? `$${price.toLocaleString("zh-TW")}`
@@ -891,7 +899,9 @@
 
             card.innerHTML = `
                 <div class="compact-record-top">
-                    <strong class="consignment-id-pill">${escapeHtml(record.consignment_id)}</strong>
+                    <strong class="consignment-id-pill ${isVipConsignment ? "vip-id-pill" : ""}">
+                        ${escapeHtml(record.consignment_id)}
+                    </strong>
 
                     <div class="compact-record-main">
                         <div class="compact-record-name">

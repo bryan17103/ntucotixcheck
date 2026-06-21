@@ -348,7 +348,12 @@ body.admin-page {
 }
 
 .admin-table-scroll {
+    max-width: 100%;
+    max-height: 520px;
+
     overflow-x: auto;
+    overflow-y: auto;
+
     -webkit-overflow-scrolling: touch;
 }
 
@@ -412,7 +417,7 @@ body.admin-page {
 
 .admin-table th:nth-child(2),
 .admin-table td:nth-child(2) {
-    width: 140px;
+    width: 100px;
 }
 
 .admin-table th:nth-child(3),
@@ -427,7 +432,7 @@ body.admin-page {
 
 .admin-table th:nth-child(5),
 .admin-table td:nth-child(5) {
-    width: 220px;
+    width: 180px;
 }
 
 .admin-table th:nth-child(6),

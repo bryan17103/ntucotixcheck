@@ -813,3 +813,118 @@
     font-weight: 900;
     letter-spacing: 0.04em;
 }
+
+/* =========================
+   Frontdesk result list scroll
+   統計卡固定，下面列表滾動
+========================= */
+
+#frontdesk-result-card {
+    max-height: calc(100vh - 260px);
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#frontdesk-result-card .result-header,
+#frontdesk-summary-grid {
+    flex-shrink: 0;
+}
+
+#frontdesk-result-list {
+    flex: 1;
+    min-height: 0;
+    max-height: 560px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding-right: 8px;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(95, 129, 120, 0.28) transparent;
+    -webkit-overflow-scrolling: touch;
+}
+
+#frontdesk-result-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+#frontdesk-result-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#frontdesk-result-list::-webkit-scrollbar-thumb {
+    background: rgba(95, 129, 120, 0.28);
+    border-radius: 999px;
+}
+
+#frontdesk-result-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(95, 129, 120, 0.42);
+}
+
+#ticket-result-card {
+    max-height: calc(100vh - 260px);
+
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#ticket-result-card .result-header,
+#ticket-summary-grid {
+    flex-shrink: 0;
+}
+
+#ticket-result-list {
+    flex: 1;
+    min-height: 0;
+    max-height: 560px;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding-right: 8px;
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(95, 129, 120, 0.28) transparent;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 760px) {
+    #frontdesk-result-card,
+    #ticket-result-card {
+        max-height: none;
+    }
+
+    #frontdesk-result-list,
+    #ticket-result-list {
+        max-height: 60vh;
+    }
+}
+
+
+/* =========================
+   VIP Consignment ID
+========================= */
+
+.front-fast-id.vip-id-text {
+    color: #c0392b;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.75);
+}
+
+.front-fast-id-block:has(.vip-id-text) {
+    background: linear-gradient(135deg, #fff1ee, #ffe6e1);
+    border-color: rgba(192, 57, 43, 0.22);
+    box-shadow:
+        0 12px 24px rgba(192, 57, 43, 0.08),
+        inset 0 1px 0 rgba(255,255,255,0.88);
+}
+
+.consignment-id-pill.vip-id-pill {
+    background: #fff1ee;
+    border: 1.5px solid rgba(192, 57, 43, 0.22);
+    color: #c0392b;
+    box-shadow: 0 8px 18px rgba(192, 57, 43, 0.08);
+}
