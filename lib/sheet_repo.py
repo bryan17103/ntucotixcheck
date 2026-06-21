@@ -80,7 +80,7 @@ HEADERS = [
     "排數",
     "座位",
     "票價",
-    "訂單備註",
+    "訂單備註"
     "是否開放取票",
     "是否已取票",
     "付款狀態",
@@ -1868,7 +1868,6 @@ def infer_concert_code_from_consignment_id(consignment_id):
         return "kh"
 
     return ""
-
 
 def reset_consignment_owner_password(owner_name, consignment_id, new_password):
     owner_name = normalize_text(owner_name)

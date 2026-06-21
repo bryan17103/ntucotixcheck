@@ -1,6 +1,5 @@
 import os
 import time
-from datetime import datetime
 from functools import wraps
 from threading import Lock
 
@@ -10,6 +9,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from lib.seat_parser import parse_seat_map
 from lib.sheet_repo import (
+    now_str,
     append_order_rows,
     append_consignment_rows,
     append_consignment_user_row,
@@ -578,7 +578,7 @@ def find_consignment_owner(owner_name):
 
 
 def create_consignment_owner(owner_name, password):
-    created_at = datetime.now().strftime("%Y/%m/%d %H:%M")
+    created_at = now_str()
     owner_id = get_next_consignment_owner_id()
     password_hash = generate_password_hash(password)
 
@@ -761,7 +761,7 @@ def api_consignment_submit():
                 "note": note,
             })
 
-        timestamp = datetime.now().strftime("%Y/%m/%d %H:%M")
+        timestamp = now_str()
         batch_id = get_next_consignment_batch_id(concert_code)
         consignment_ids = get_next_consignment_ids(
             concert_code=concert_code,
