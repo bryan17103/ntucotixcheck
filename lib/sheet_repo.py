@@ -1719,23 +1719,43 @@ def normalize_consignment_lookup_id(value, concert_code):
     if not value:
         return ""
 
-    prefix = {
-        "tp": "TP",
-        "kh": "KH",
-    }.get(concert_code, "TP")
+    prefix = {"tp": "TP", "kh": "KH"}.get(concert_code, "TP")
 
-    # 已經是 TP0001 / KH0001
-    if value.startswith(prefix):
-        number_part = value.replace(prefix, "", 1)
+    # 支援 TPVIP01 / KHV​​IP01
+    full_vip_prefix = f"{prefix}VIP"
+
+    if value.startswith(full_vip_prefix):
+        number_part = value.replace(full_vip_prefix, "", 1)
+
         if number_part.isdigit():
-            return f"{prefix}{int(number_part):04d}"
+            return f"{prefix}VIP{int(number_part):02d}"
+
         return value
 
-    # 輸入 0001 / 1
+    # 支援 VIP01 / VIP1 / VIP10 / VIP15
+    if value.startswith("VIP"):
+        number_part = value.replace("VIP", "", 1)
+
+        if number_part.isdigit():
+            return f"{prefix}VIP{int(number_part):02d}"
+
+        return ""
+
+    # 原本一般票：TP0001 / KH0001
+    if value.startswith(prefix):
+        number_part = value.replace(prefix, "", 1)
+
+        if number_part.isdigit():
+            return f"{prefix}{int(number_part):04d}"
+
+        return value
+
+    # 原本一般票：1 / 0001
     if value.isdigit():
         return f"{prefix}{int(value):04d}"
 
     return value
+
 
 def search_consignment_front_records(concert_code, keyword):
     concert_code = normalize_text(concert_code).lower()

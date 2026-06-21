@@ -110,7 +110,7 @@
 
                     <label class="consignment-field front-keyword-field">
                         <span>查詢內容</span>
-                        <input id="frontdesk-keyword" type="text" placeholder="TP0001、0001、1、取票人或寄票人">
+                        <input id="frontdesk-keyword" type="text" placeholder="TP0001、1、VIP1、TPVIP01、取票人或寄票人">
                     </label>
 
                     <button id="frontdesk-search-btn" class="consignment-search-btn" type="button">
@@ -575,6 +575,29 @@
 
             const prefix = concertCode === "kh" ? "KH" : "TP";
 
+            // 支援 T​​PVIP01 / KHVIP01
+            if (raw.startsWith(`${prefix}VIP`)) {
+                const numberPart = raw.replace(`${prefix}VIP`, "");
+
+                if (numberPart && /^\d+$/.test(numberPart)) {
+                    return `${prefix}VIP${String(Number(numberPart)).padStart(2, "0")}`;
+                }
+
+                return raw;
+            }
+
+            // 支援 VIP01 / VIP1 / VIP10 / VIP15
+            if (raw.startsWith("VIP")) {
+                const numberPart = raw.replace("VIP", "");
+
+                if (numberPart && /^\d+$/.test(numberPart)) {
+                    return `${prefix}VIP${String(Number(numberPart)).padStart(2, "0")}`;
+                }
+
+                return "";
+            }
+
+            // 原本的一般票：TP0001 / KH0001
             if (raw.startsWith(prefix)) {
                 const numberPart = raw.replace(prefix, "");
 
@@ -585,13 +608,14 @@
                 return raw;
             }
 
+            // 原本的一般票：1 / 0001
             if (/^\d+$/.test(raw)) {
                 return `${prefix}${String(Number(raw)).padStart(4, "0")}`;
             }
 
             return "";
         }
-
+        
         function normalizeSearchText(value) {
             return String(value || "")
                 .trim()
