@@ -46,6 +46,7 @@ from lib.sheet_repo import (
     update_order_note,
     update_order_pickup_status,
     reset_consignment_owner_password,
+    get_next_vip_consignment_ids,
 )
 
 load_dotenv()
@@ -763,10 +764,19 @@ def api_consignment_submit():
 
         timestamp = now_str()
         batch_id = get_next_consignment_batch_id(concert_code)
-        consignment_ids = get_next_consignment_ids(
-            concert_code=concert_code,
-            count=len(cleaned_items),
-        )
+
+        is_vip_owner = normalize_name(owner_name) == "貴賓票"
+
+        if is_vip_owner:
+            consignment_ids = get_next_vip_consignment_ids(
+                concert_code=concert_code,
+                count=len(cleaned_items),
+            )
+        else:
+            consignment_ids = get_next_consignment_ids(
+                concert_code=concert_code,
+                count=len(cleaned_items),
+            )
 
         rows_to_append = []
 

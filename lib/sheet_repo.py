@@ -1596,6 +1596,34 @@ def get_next_consignment_ids(concert_code="tp", count=1):
         for i in range(start, start + count)
     ]
 
+def get_next_vip_consignment_ids(concert_code="tp", count=1):
+    rows = get_consignment_rows(concert_code)
+
+    prefix = {
+        "tp": "TPVIP",
+        "kh": "KHVIP",
+    }.get(concert_code, "TPVIP")
+
+    max_number = 0
+
+    for row in rows:
+        consignment_id = normalize_text(row.get("consignment_id")).upper()
+
+        if not consignment_id.startswith(prefix):
+            continue
+
+        number_part = consignment_id.replace(prefix, "", 1)
+
+        if number_part.isdigit():
+            max_number = max(max_number, int(number_part))
+
+    start = max_number + 1
+
+    return [
+        f"{prefix}{i:02d}"
+        for i in range(start, start + count)
+    ]
+
 def get_consignment_records_by_owner_id(owner_id: str):
     owner_id = normalize_text(owner_id)
 
