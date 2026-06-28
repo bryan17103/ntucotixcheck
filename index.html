@@ -1,82 +1,1037 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>《嶋聲》團內購票系統</title>
-  <link rel="icon" type="image/png" href="/NTUCO.png">
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-  <!-- CSS -->
-  <link rel="stylesheet" href="./index.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>《嶋聲》團內購票取票查詢系統</title>
+    <link rel="icon" type="image/png" href="/NTUCO.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --orders-main: #4f6f73;
+            --orders-accent: #7f9f98;
+            --orders-accent-hover: #6d8d87;
+            --orders-bg-start: #5f7f82;
+            --orders-bg-end: #8ea7a3;
+            --orders-shell-bg: rgba(255,255,255,0.88);
+        }
+
+        * { box-sizing: border-box; }
+
+        body.consignment-page {
+            margin: 0;
+            min-height: 100vh;
+            padding: 12px;
+            font-family: Arial, "Noto Sans TC", sans-serif;
+            color: #3f4642;
+            background: linear-gradient(135deg, var(--orders-bg-start), var(--orders-bg-end));
+        }
+
+        .consignment-shell {
+            position: relative;
+            min-height: calc(100vh - 24px - 38px);
+            overflow-y: auto;
+            background:
+                radial-gradient(circle at 88% 12%, rgba(255,255,255,0.34), transparent 26%),
+                var(--orders-shell-bg);
+            border-radius: 28px;
+            padding: 28px 32px 26px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        }
+
+        .consignment-hero {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 24px;
+        }
+
+        .consignment-title-wrap { padding-right: 180px; }
+
+        .consignment-title-wrap h1 {
+            margin: 0;
+            font-family: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            line-height: 1.35;
+            color: #37403d;
+        }
+
+        .consignment-note.main {
+            margin: 8px 0 0;
+            font-size: 14px;
+            font-weight: 700;
+            color: rgba(55, 64, 61, 0.72);
+        }
+
+        .back-link-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            height: 44px;
+            padding: 0 20px;
+            border-radius: 16px;
+            border: 1.5px solid rgba(120,130,126,0.24);
+            background: rgba(255,255,255,0.72);
+            color: #4a5652;
+            font-size: 15px;
+            font-weight: 800;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audience-query-card,
+        .consignment-result-card {
+            background: rgba(255,255,255,0.9);
+            border: 1px solid rgba(255,255,255,0.72);
+            border-radius: 28px;
+            box-shadow: 0 18px 42px rgba(45, 65, 62, 0.13), inset 0 1px 0 rgba(255,255,255,0.86);
+        }
+
+        .audience-query-card { padding: 22px; margin-bottom: 22px; }
+
+        .summary-card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .summary-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(127,159,152,0.16);
+            box-shadow: 0 8px 18px rgba(79,111,115,0.16);
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .summary-label {
+            margin: 0;
+            font-family: "Noto Serif TC", "Songti TC", serif;
+            font-size: 20px;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            line-height: 1.15;
+            color: #2f3c39;
+        }
+
+        .query-card-note {
+            margin: 5px 0 0;
+            color: rgba(55,64,61,0.62);
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1.45;
+        }
+
+        .audience-query-form {
+            display: grid;
+            grid-template-columns: 160px minmax(240px, 1fr) 140px;
+            gap: 14px;
+            align-items: end;
+        }
+
+        .consignment-field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .consignment-field span {
+            color: #4e5b58;
+            font-size: 14px;
+            font-weight: 900;
+        }
+
+        .consignment-field input,
+        .consignment-field select {
+            width: 100%;
+            height: 46px;
+            border: 2px solid #d8d8d8;
+            border-radius: 18px;
+            padding: 0 18px;
+            font-size: 15px;
+            outline: none;
+            background: #fff;
+            color: #3f4642;
+        }
+
+        .consignment-field input:focus,
+        .consignment-field select:focus {
+            border-color: var(--orders-accent);
+            box-shadow: 0 0 0 4px rgba(127,159,152,0.16);
+        }
+
+        .consignment-search-btn {
+            height: 46px;
+            padding: 0 24px;
+            border: none;
+            border-radius: 18px;
+            background: var(--orders-accent);
+            color: white;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .consignment-search-btn:hover { background: var(--orders-accent-hover); }
+        .consignment-search-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+        .form-message {
+            margin: 12px 0 0;
+            padding: 14px 18px;
+            border-radius: 18px;
+            background: #fff8f7;
+            border: 1.5px solid #f0a59a;
+            color: #d64545;
+            font-size: 14px;
+            font-weight: 800;
+            line-height: 1.55;
+        }
+
+        .form-message.success {
+            background: #f2fbf6;
+            border-color: rgba(36,145,103,0.2);
+            color: #249167;
+        }
+
+        .hidden { display: none !important; }
+
+        .consignment-result-card { padding: 18px; }
+
+        .result-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            margin-bottom: 12px;
+        }
+
+        .result-header h2 {
+            margin: 0;
+            font-family: "Noto Serif TC", "Songti TC", serif;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            color: #2f3c39;
+        }
+
+        .result-header p {
+            margin: 4px 0 0;
+            color: rgba(55,64,61,0.62);
+            font-size: 14px;
+            font-weight: 800;
+            line-height: 1.45;
+        }
+
+        .query-summary-grid {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 10px;
+            margin: 0 0 14px;
+        }
+
+        .query-summary-item {
+            padding: 12px 14px;
+            border-radius: 18px;
+            border: 1.5px solid rgba(120,130,126,0.16);
+            background: rgba(255,255,255,0.78);
+        }
+
+        .query-summary-item span {
+            display: block;
+            margin-bottom: 4px;
+            color: rgba(55,64,61,0.66);
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .query-summary-item strong {
+            color: var(--orders-main);
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .query-summary-item.highlight { background: #e9f7ef; border-color: rgba(36,145,103,0.16); }
+        .query-summary-item.highlight strong { color: #249167; }
+        .query-summary-item.warning { background: #fff7e8; border-color: rgba(199,143,45,0.18); }
+        .query-summary-item.warning strong { color: #9a6b24; }
+        .query-summary-item.blue { background: #eaf1ff; border-color: rgba(53,111,203,0.16); }
+        .query-summary-item.blue strong { color: #356fcb; }
+
+        .consignment-record-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .consignment-record-card {
+            padding: 15px 16px;
+            border-radius: 22px;
+            border: 1.5px solid rgba(120,130,126,0.14);
+            background: rgba(255,255,255,0.84);
+        }
+
+        .compact-record-top {
+            display: grid;
+            grid-template-columns: 96px 1fr auto;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .consignment-id-pill {
+            min-width: 88px;
+            padding: 8px 10px;
+            border-radius: 999px;
+            background: var(--orders-main);
+            color: white;
+            font-size: 14px;
+            font-weight: 900;
+            text-align: center;
+            letter-spacing: 0.03em;
+        }
+
+        .vip-id-pill { background: #9a6b24; }
+
+        .compact-record-name {
+            font-size: 19px;
+            font-weight: 900;
+            color: #2f3c39;
+        }
+
+        .compact-record-sub {
+            margin-top: 4px;
+            color: rgba(55,64,61,0.68);
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1.55;
+        }
+
+        .record-status-pill {
+            min-width: 180px;
+            min-height: 38px;
+            padding: 0 14px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .record-status-pill.open { background: #e9f7ef; color: #249167; }
+        .record-status-pill.done { background: #eaf1ff; color: #356fcb; }
+        .record-status-pill.closed { background: #fff7e8; color: #9a6b24; }
+        .record-status-pill.free-pending { background: #f1f5f4; color: #65716e; }
+
+        .audience-note-box {
+            margin-top: 14px;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: #fff7e8;
+            border: 1.5px solid rgba(199,143,45,0.18);
+            color: #7b5a27;
+            font-size: 14px;
+            font-weight: 900;
+            line-height: 1.65;
+            text-align: center;
+        }
+
+
+        /* Old-site style result display */
+        .audience-table-wrap {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .audience-result-table {
+            width: 100%;
+            min-width: 760px;
+            border-collapse: collapse;
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .audience-result-table th,
+        .audience-result-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(120,130,126,0.14);
+            text-align: center;
+            font-size: 14px;
+            font-weight: 800;
+            color: #3f4642;
+            vertical-align: middle;
+        }
+
+        .audience-result-table th {
+            background: rgba(127,159,152,0.16);
+            color: #2f3c39;
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .audience-result-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .audience-id-capsule,
+        .audience-money-capsule {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 86px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 900;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .audience-id-capsule {
+            background: var(--orders-main);
+            color: white;
+        }
+
+        .audience-id-capsule.vip {
+            background: #9a6b24;
+        }
+
+        .audience-money-capsule {
+            background: #fff7e8;
+            color: #9a6b24;
+            border: 1.5px solid rgba(199,143,45,0.18);
+        }
+
+        .audience-status-text {
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .audience-status-text.ready {
+            color: #249167;
+        }
+
+        .audience-status-text.done {
+            color: #356fcb;
+        }
+
+        .audience-status-text.pending {
+            color: #9a6b24;
+        }
+
+        .audience-status-text.free {
+            color: #9a6b24;
+        }
+
+        .audience-mobile-list {
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .audience-ticket-card {
+            padding: 16px;
+            border-radius: 20px;
+            border: 1.5px solid rgba(120,130,126,0.16);
+            background: rgba(255,255,255,0.86);
+        }
+
+        .audience-ticket-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 7px 0;
+            border-bottom: 1px solid rgba(120,130,126,0.10);
+            font-size: 15px;
+            line-height: 1.45;
+        }
+
+        .audience-ticket-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .audience-ticket-label {
+            color: rgba(55,64,61,0.66);
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .audience-ticket-value {
+            color: #2f3c39;
+            font-weight: 900;
+            text-align: right;
+        }
+
+        .empty-state {
+            padding: 20px;
+            color: rgba(55,64,61,0.66);
+            font-size: 15px;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .updated-time {
+            margin-top: 12px;
+            color: rgba(55,64,61,0.62);
+            font-size: 13px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .page-footer {
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-family: Arial, "Noto Sans TC", sans-serif;
+            color: rgba(255,255,255,0.68);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .orders-loading-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(31, 42, 40, 0.35);
+            backdrop-filter: blur(4px);
+        }
+
+        .orders-loading-card {
+            min-width: 180px;
+            padding: 22px 24px;
+            border-radius: 24px;
+            background: rgba(255,255,255,0.94);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.18);
+            color: #37403d;
+            font-size: 15px;
+            font-weight: 900;
+            text-align: center;
+        }
+
+        .orders-loading-spinner {
+            width: 34px;
+            height: 34px;
+            margin: 0 auto 12px;
+            border-radius: 50%;
+            border: 4px solid rgba(127,159,152,0.25);
+            border-top-color: var(--orders-accent);
+            animation: spin 0.9s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        @media (max-width: 860px) {
+            .consignment-shell { padding: 24px 18px; }
+            .consignment-title-wrap { padding-right: 0; }
+            .back-link-btn { position: static; margin-top: 2px; }
+            .consignment-hero { flex-direction: column; }
+            .audience-query-form { grid-template-columns: 1fr; }
+            .query-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .query-summary-item.highlight { grid-column: 1 / -1; }
+            .compact-record-top { grid-template-columns: 1fr; gap: 8px; }
+            .compact-record-sub { white-space: normal; }
+            .record-status-pill { width: 100%; min-width: 0; }
+            .consignment-id-pill { width: fit-content; min-width: 88px; }
+            .audience-table-wrap { display: none; }
+            .audience-mobile-list { display: flex; }
+        }
+
+        @media (max-width: 560px) {
+            body.consignment-page { padding: 8px; }
+            .consignment-shell { min-height: calc(100vh - 16px - 38px); border-radius: 24px; }
+            .consignment-title-wrap h1 { font-size: 24px; }
+            .query-summary-grid { grid-template-columns: 1fr; }
+            .query-summary-item.highlight { grid-column: auto; }
+        }
+    </style>
 </head>
 
-<body>
-  <main class="home-page">
-    <section class="hero">
-      <div class="poster-info">
-        <p class="concert-label">台大薰風國樂團丙午年夏季巡迴公演《嶋聲》</p>
-        <h1>2026 NTUCO Summer Concert</h1>
-      </div>
+<body class="consignment-page audience-query-page">
+    <main class="consignment-shell">
+        <header class="consignment-hero">
+            <div class="consignment-title-wrap">
+                <h1>《嶋聲》團內購票取票查詢系統</h1>
+                <p class="consignment-note main">
+                    請輸入取票人中文全名以查詢寄票資料。
+                </p>
+            </div>
+        </header>
 
-      <div class="birds">⌁ ⌁ ⌁</div>
-    </section>
+        <section class="audience-query-card">
+            <div class="summary-card-header">
+                <div class="summary-icon">🎫</div>
+                <div>
+                    <div class="summary-label">取票資料查詢</div>
+                    <p class="query-card-note">
+                        請選擇場次並輸入「取票人」的完整中文姓名。
+                    </p>
+                </div>
+            </div>
 
-    <section class="system-title">
-      <div class="boat">⛵</div>
-      <h2>團內購票系統</h2>
-      <p>NTUCO TICKETING SYSTEM</p>
-    </section>
+            <form id="audience-query-form" class="audience-query-form">
+                <label class="consignment-field">
+                    <span>場次</span>
+                    <select id="concert-code">
+                        <option value="tp">台北場</option>
+                        <option value="kh">高雄場</option>
+                    </select>
+                </label>
 
-    <section class="menu-panel">
-      <a href="/taipei.html" class="menu-card">
-        <div class="icon">🏛️</div>
-        <h3>台北場購票</h3>
-        <p>Taipei Concert</p>
-        <span>→</span>
-      </a>
+                <label class="consignment-field">
+                    <span>取票人中文全名</span>
+                    <input id="audience-name" type="text" inputmode="text" autocomplete="name" placeholder="例如：王小明">
+                </label>
 
-      <a href="/kaohsiung.html" class="menu-card">
-        <div class="icon">🎼</div>
-        <h3>高雄場購票</h3>
-        <p>Kaohsiung Concert</p>
-        <span>→</span>
-      </a>
+                <button id="search-btn" class="consignment-search-btn" type="submit">
+                    查詢
+                </button>
+            </form>
 
-      <a href="/orders.html" class="menu-card">
-        <div class="icon">🔍</div>
-        <h3>訂單查詢</h3>
-        <p>Order Lookup</p>
-        <span>→</span>
-      </a>
+            <div id="form-message" class="form-message hidden"></div>
+        </section>
 
-      <a href="/stats.html" class="menu-card">
-        <div class="icon">📊</div>
-        <h3>推票統計</h3>
-        <p>Ticket Statistics</p>
-        <span>→</span>
-      </a>
+        <section id="result-card" class="consignment-result-card query-result-card hidden">
+            <div class="result-header">
+                <div>
+                    <h2 id="result-title">查詢結果</h2>
+                    <p id="result-note">請確認以下資料。</p>
+                </div>
+            </div>
 
-      <a href="/consignment.html" class="menu-card">
-        <div class="icon">📃</div>
-        <h3>寄票表單</h3>
-        <p>Ticket Consignment</p>
-        <span>→</span>
-      </a>
+            <div id="summary-grid" class="query-summary-grid hidden">
+                <div class="query-summary-item">
+                    <span>取票筆數</span>
+                    <strong id="record-count">0 筆</strong>
+                </div>
+                <div class="query-summary-item">
+                    <span>總張數</span>
+                    <strong id="ticket-count">0 張</strong>
+                </div>
+                <div class="query-summary-item highlight">
+                    <span>應付金額</span>
+                    <strong id="total-amount">$0</strong>
+                </div>
+                <div class="query-summary-item warning">
+                    <span>尚未可取</span>
+                    <strong id="pending-count">0 筆</strong>
+                </div>
+                <div class="query-summary-item blue">
+                    <span>可取／已取</span>
+                    <strong id="ready-count">0 筆</strong>
+                </div>
+            </div>
 
-      <a href="/admin.html" class="menu-card">
-        <div class="icon">⚙️</div>
-        <h3>票務專用</h3>
-        <p>Staff Only</p>
-        <span>→</span>
-      </a>
-    </section>
+            <div id="result-list" class="consignment-record-list"></div>
+            <div id="audience-note" class="audience-note-box hidden"></div>
+            <div id="updated-time" class="updated-time"></div>
+        </section>
+    </main>
 
-    <footer>
-      © 2026 NTUCO All Rights Reserved.
+    <footer class="page-footer">
+        © 2026 NTUCO All Rights Reserved.
     </footer>
-  </main>
+
+    <div id="loading-overlay" class="orders-loading-overlay hidden">
+        <div class="orders-loading-card">
+            <div class="orders-loading-spinner"></div>
+            <div>查詢中...</div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById("audience-query-form");
+        const concertCodeInput = document.getElementById("concert-code");
+        const audienceNameInput = document.getElementById("audience-name");
+        const searchBtn = document.getElementById("search-btn");
+        const formMessage = document.getElementById("form-message");
+        const resultCard = document.getElementById("result-card");
+        const resultTitle = document.getElementById("result-title");
+        const resultNote = document.getElementById("result-note");
+        const summaryGrid = document.getElementById("summary-grid");
+        const resultList = document.getElementById("result-list");
+        const audienceNote = document.getElementById("audience-note");
+        const updatedTime = document.getElementById("updated-time");
+        const loadingOverlay = document.getElementById("loading-overlay");
+
+        const recordCountEl = document.getElementById("record-count");
+        const ticketCountEl = document.getElementById("ticket-count");
+        const totalAmountEl = document.getElementById("total-amount");
+        const pendingCountEl = document.getElementById("pending-count");
+        const readyCountEl = document.getElementById("ready-count");
+
+        const concertLabels = {
+            tp: "台北場",
+            kh: "高雄場",
+        };
+
+        let searching = false;
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+            await searchAudienceRecords();
+        });
+
+        audienceNameInput.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                searchAudienceRecords();
+            }
+        });
+
+        async function searchAudienceRecords() {
+            if (searching) return;
+
+            const concertCode = concertCodeInput.value;
+            const audienceName = audienceNameInput.value.trim();
+
+            clearMessage();
+
+            if (!audienceName) {
+                showMessage("請輸入取票人中文全名");
+                return;
+            }
+
+            if (!isValidChineseFullName(audienceName)) {
+                showMessage("請輸入完整中文姓名；本系統不接受暱稱、英文、空白或部分姓名查詢。");
+                return;
+            }
+
+            searching = true;
+            searchBtn.disabled = true;
+            loadingOverlay.classList.remove("hidden");
+
+            try {
+                const response = await fetch("/api/consignment/audience-lookup", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        concert_code: concertCode,
+                        audience_name: audienceName,
+                    }),
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    showEmpty(result.message || "查詢失敗，請稍後再試");
+                    return;
+                }
+
+                // 保險：即使後端日後改成支援模糊搜尋，觀眾頁仍只顯示完全符合姓名的資料。
+                const records = (result.records || []).filter((record) => {
+                    return normalizeName(record.audience_name) === normalizeName(audienceName);
+                });
+
+                if (!records.length) {
+                    showEmpty("查無資料，請確認姓名與寄票人填寫的取票人姓名完全一致，或至前台確認。");
+                    return;
+                }
+
+                renderRecords(records, concertCode, audienceName);
+            } catch (error) {
+                showEmpty("網路或伺服器錯誤，請稍後再試");
+            } finally {
+                searching = false;
+                searchBtn.disabled = false;
+                loadingOverlay.classList.add("hidden");
+            }
+        }
+
+        function renderRecords(records, concertCode, audienceName) {
+            resultCard.classList.remove("hidden");
+            summaryGrid.classList.add("hidden");
+
+            const sortedRecords = [...records].sort((a, b) => {
+                const aPicked = (a.pickup_status || "pending") === "picked_up";
+                const bPicked = (b.pickup_status || "pending") === "picked_up";
+                return Number(aPicked) - Number(bPicked);
+            });
+
+            const ticketCount = sortedRecords.reduce((sum, record) => {
+                return sum + Number(record.quantity || 0);
+            }, 0);
+
+            resultTitle.textContent = `${maskChineseName(audienceName)} 的取票資料`;
+            resultNote.textContent = `${concertLabels[concertCode] || concertCode}｜共 ${sortedRecords.length} 筆資料。請向前台告知畫面上的編號。`;
+
+            const tableRows = sortedRecords.map(createTableRow).join("");
+            const mobileCards = sortedRecords.map(createMobileCard).join("");
+
+            resultList.innerHTML = `
+                <div class="audience-table-wrap">
+                    <table class="audience-result-table">
+                        <thead>
+                            <tr>
+                                <th>編號</th>
+                                <th>取票人</th>
+                                <th>張數</th>
+                                <th>付款情況</th>
+                                <th>寄票人</th>
+                                <th>取票狀態</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRows}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="audience-mobile-list">
+                    ${mobileCards}
+                </div>
+            `;
+
+            const hasVipTicket = sortedRecords.some((record) => {
+                const ownerName = String(record.owner_name || "");
+                const id = String(record.consignment_id || "").toUpperCase();
+                return ownerName.includes("貴賓票") || ownerName.includes("高手觀摩") || id.includes("VIP");
+            });
+
+            audienceNote.classList.remove("hidden");
+            audienceNote.innerHTML = hasVipTicket
+                ? "🎟️ 領取貴賓票者可直接前往前台領票，前台人員將會給予協助～祝您聆聽愉快！"
+                : "請備好整數零錢，並於前台告知畫面上的編號，謝謝！";
+
+            updatedTime.textContent = `資料查詢時間：${formatNow()}`;
+            resultCard.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+
+        function displayConsignmentId(record) {
+            const raw = String(record.consignment_id || record.number || "").trim();
+
+            // 觀眾頁隱藏場次前綴 TP / KH：TP0005 → 0005；KH0005 → 0005；TPVIP01 → VIP01。
+            return raw.replace(/^(TP|KH)/i, "") || "-";
+        }
+
+        function createTableRow(record) {
+            const rawConsignmentId = record.consignment_id || "-";
+            const consignmentId = displayConsignmentId(record);
+            const isVipConsignment = String(rawConsignmentId).toUpperCase().includes("VIP");
+            const quantity = Number(record.quantity || 0);
+            const payDisplay = paymentDisplay(record);
+            const pickup = pickupDisplay(record);
+
+            return `
+                <tr>
+                    <td>
+                        <span class="audience-id-capsule ${isVipConsignment ? "vip" : ""}">
+                            ${escapeHtml(consignmentId)}
+                        </span>
+                    </td>
+                    <td>${escapeHtml(maskChineseName(record.audience_name || "-"))}</td>
+                    <td>${quantity} 張</td>
+                    <td>${payDisplay}</td>
+                    <td>${escapeHtml(displayOwnerName(record.owner_name || "-"))}</td>
+                    <td>
+                        <span class="audience-status-text ${pickup.className}">
+                            ${escapeHtml(pickup.text)}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        }
+
+        function createMobileCard(record) {
+            const rawConsignmentId = record.consignment_id || "-";
+            const consignmentId = displayConsignmentId(record);
+            const isVipConsignment = String(rawConsignmentId).toUpperCase().includes("VIP");
+            const quantity = Number(record.quantity || 0);
+            const payDisplay = paymentDisplay(record);
+            const pickup = pickupDisplay(record);
+
+            return `
+                <article class="audience-ticket-card">
+                    <div class="audience-ticket-row">
+                        <span class="audience-ticket-label">編號</span>
+                        <span class="audience-ticket-value">
+                            <span class="audience-id-capsule ${isVipConsignment ? "vip" : ""}">
+                                ${escapeHtml(consignmentId)}
+                            </span>
+                        </span>
+                    </div>
+                    <div class="audience-ticket-row">
+                        <span class="audience-ticket-label">取票人</span>
+                        <span class="audience-ticket-value">${escapeHtml(maskChineseName(record.audience_name || "-"))}</span>
+                    </div>
+                    <div class="audience-ticket-row">
+                        <span class="audience-ticket-label">張數</span>
+                        <span class="audience-ticket-value">${quantity} 張</span>
+                    </div>
+                    <div class="audience-ticket-row">
+                        <span class="audience-ticket-label">付款</span>
+                        <span class="audience-ticket-value">${payDisplay}</span>
+                    </div>
+                    <div class="audience-ticket-row">
+                        <span class="audience-ticket-label">寄票人</span>
+                        <span class="audience-ticket-value">${escapeHtml(displayOwnerName(record.owner_name || "-"))}</span>
+                    </div>
+                    <div class="audience-ticket-row">
+                        <span class="audience-ticket-label">取票狀態</span>
+                        <span class="audience-ticket-value audience-status-text ${pickup.className}">${escapeHtml(pickup.text)}</span>
+                    </div>
+                </article>
+            `;
+        }
+
+        function paymentDisplay(record) {
+            const price = Number(record.price || 0);
+            const paymentStatus = record.payment_status || "unpaid";
+
+            if (paymentStatus === "free" || price === 0) {
+                return "無需付款";
+            }
+
+            const amountText = `$${price.toLocaleString("zh-TW")}`;
+
+            if (paymentStatus === "paid") {
+                return `已完成付款 <span class="audience-money-capsule">${amountText}</span>`;
+            }
+
+            return `需要付款 <span class="audience-money-capsule">${amountText}</span>`;
+        }
+
+        function pickupDisplay(record) {
+            const pickupStatus = record.pickup_status || "pending";
+
+            // 取票狀態的顏色只依 pickup_status 判斷，
+            // 不受是否需要付款影響。
+            if (pickupStatus === "picked_up") {
+                return { text: "已取票", className: "done" };
+            }
+
+            if (pickupStatus === "sent") {
+                return { text: "尚未取票", className: "ready" };
+            }
+
+            return { text: "尚未寄放前台", className: "pending" };
+        }
+
+        function consignmentStatusLabel(record) {
+            const price = Number(record.price || 0);
+            const pickupStatus = record.pickup_status || "pending";
+            const paymentStatus = record.payment_status || "unpaid";
+            const amountText = price > 0 ? `$${price.toLocaleString("zh-TW")}` : "";
+
+            let paymentText = "";
+            if (paymentStatus === "free" || price === 0) {
+                paymentText = "無需付款";
+            } else if (paymentStatus === "paid") {
+                paymentText = `已付款 ${amountText}`;
+            } else {
+                paymentText = `需付款 ${amountText}`;
+            }
+
+            let pickupText = "";
+            if (pickupStatus === "picked_up") {
+                pickupText = "已取票";
+            } else if (pickupStatus === "sent") {
+                pickupText = "已寄放前台，可取票";
+            } else {
+                pickupText = "尚未寄放前台";
+            }
+
+            return `${paymentText}｜${pickupText}`;
+        }
+
+        function consignmentStatusClass(record) {
+            const pickupStatus = record.pickup_status || "pending";
+            const paymentStatus = record.payment_status || "unpaid";
+
+            if (pickupStatus === "picked_up") return "done";
+            if (pickupStatus === "sent") return "open";
+            if (paymentStatus === "free") return "free-pending";
+            return "closed";
+        }
+
+        function showEmpty(message) {
+            resultCard.classList.remove("hidden");
+            summaryGrid.classList.add("hidden");
+            audienceNote.classList.add("hidden");
+            updatedTime.textContent = "";
+            resultTitle.textContent = "查詢結果";
+            resultNote.textContent = message;
+            resultList.innerHTML = `<div class="empty-state">${escapeHtml(message)}</div>`;
+        }
+
+        function showMessage(message, type = "error") {
+            formMessage.textContent = message;
+            formMessage.classList.remove("hidden");
+            formMessage.classList.toggle("success", type === "success");
+        }
+
+        function clearMessage() {
+            formMessage.textContent = "";
+            formMessage.classList.add("hidden");
+            formMessage.classList.remove("success");
+        }
+
+        function isValidChineseFullName(value) {
+            const text = String(value || "").trim();
+            return /^[\u4e00-\u9fff]{2,8}$/.test(text);
+        }
+
+        function normalizeName(value) {
+            return String(value || "").replace(/\s+/g, "").replace(/　/g, "").trim();
+        }
+
+        function maskChineseName(name) {
+            const text = String(name || "").trim();
+            if (text.length <= 1) return text;
+            if (text.length === 2) return `${text[0]}〇`;
+            return `${text[0]}〇${text.slice(2)}`;
+        }
+
+        function displayOwnerName(ownerName) {
+            const visibleLabels = ["貴賓票", "高手觀摩", "粉專購票", "戴瑋老師", "陳廷宇老師"];
+            const text = String(ownerName || "").trim();
+            if (visibleLabels.some((label) => text.includes(label))) return text;
+            return maskChineseName(text);
+        }
+
+        function formatNow() {
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, "0");
+            const d = String(now.getDate()).padStart(2, "0");
+            const hh = String(now.getHours()).padStart(2, "0");
+            const mm = String(now.getMinutes()).padStart(2, "0");
+            return `${y}/${m}/${d} ${hh}:${mm}`;
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+    </script>
 </body>
 </html>

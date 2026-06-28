@@ -16,3 +16,4 @@
 2. `data/section_members.txt`
 3. `data/stats_config.txt`
 4. Vercel project settings 已設定 `GOOGLE_CREDENTIALS_JSON`
+# ntucotixcheck
