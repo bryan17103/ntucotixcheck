@@ -150,6 +150,9 @@ def api_search():
 
     return jsonify(data), status
 
+@app.route("/NTUCO.png")
+def favicon_png():
+    return send_from_directory(BASE_DIR, "NTUCO.png")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
